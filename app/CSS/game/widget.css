@@ -1,0 +1,162 @@
+/* HoverTxt code - Start */
+.hoverTxt {
+	position: relative;
+	top: 5px;
+	vertical-align: text-bottom;
+	height: 30px;
+}
+.hoverTxt:hover span {
+	visibility: visible;
+}
+.hoverTxt span {
+	position: absolute;
+	background-color: #e5e5f5;
+	padding: 8px 10px;
+	border: 1px solid #666;
+	border-radius: 10px;
+	visibility: hidden;
+	color: black;
+	text-decoration: none;
+	font-size: 80%;
+	line-height: initial;
+	text-rendering: geometricPrecision;
+}
+.hoverBox {
+	top: -100px;
+	text-align: left;
+	box-shadow: 0px 0px 12px 2px rgba(0, 0, 0, 0.5);
+	z-index: 100;
+}
+/* HoverTxt code - End */
+
+.content .hoverTxt span{
+	font-family: "筑紫古典";
+	font-size: 70%;
+}
+
+
+#commandzone {
+  width: 80%;
+  max-height: 7.5em;
+  overflow-y: scroll;
+  display: inline-block;
+  position: relative;
+}
+
+.command {
+	float: left;
+	position: relative;
+	margin-right: .5em;
+	width: 120px;
+}
+.command button {
+	width: 120px;
+}
+
+.unable button {
+	color: #666;
+	text-decoration: line-through;
+}
+
+
+#commandmenu {
+	display: inline-block;
+	margin: 1em 0em;
+
+	font-size: .6em;
+}
+
+#commandmenu a{
+	font-size: 1.5em;
+}
+
+#commandmenu .filter a{
+	color:#8fbcdb;
+	min-width: 50px;
+	max-height: 26px;
+	display: inline-block;
+	text-align: center;
+}
+#commandmenu .filter a:hover{
+	color:#fff000;
+	text-decoration: none;
+}
+#commandmenu .filter a:hover::before{
+	content: '<';
+}
+#commandmenu .filter a:hover::after{
+	content:'>'
+}
+
+#mapzone {
+    width:100%;
+    height:100%;
+    max-height: 800px;
+    max-width: 1800px;
+    display: block;
+    background-color: #111;
+    border: 1px solid black;
+    color: brown;
+    overflow: scroll;
+}
+
+#mapfield {
+    width:1600px;
+    height:100%;
+}
+
+.mapcell {
+    border: solid 1px #666;
+    width: 32px;
+    height: 28px;
+    border-radius: 6px;
+    margin: 1px;
+    display: inline-flex;
+    position:relative;
+    text-align:center;
+    font-size: 0.5em;
+}
+
+.fillcell {
+    background-color: beige;
+}
+
+.pathcell {
+    background-color: #f36fa6 !important;
+}
+
+#editor_menu{
+    font-size: 16px;
+    line-height: 18px;
+}
+
+#editor_menu input, #editor_menu select, #editor_menu button, #kojoEditor input, #kojoEditor select, #kojoEditor button {
+    max-height: 24px;
+    padding: 1px 4px;
+    margin: 2px;
+}
+
+#editor_menu .macro-listbox, #kojoEditor .macro-listbox{
+    max-width: 200px;
+    font-size: 14px;
+}
+
+#editor_menu .macro-textbox, #kojoEditor .macro-textbox{
+    width: 60px;
+    max-width: 80px;
+    max-height: 20px;
+    font-size: 14px;
+}
+
+#kojoEditor{
+    font-size: 16px;
+}
+
+#kojoEditor textarea{
+    width: 80%;
+    height: 60%;
+    min-width: 400px;
+    min-height: 300px;
+    max-height: 600px;
+    font-size: 16px;
+}

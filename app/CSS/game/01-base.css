@@ -1,0 +1,182 @@
+html{
+    background-color: #222;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body{
+    background-color: transparent;
+    margin: -1% 0 0 0;
+    font-family: "Sawarabi", "NotoSerifL";
+    letter-spacing: 1px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+canvas {
+  overflow: hidden;
+}
+
+
+::-webkit-scrollbar {
+	background-color: #222;
+	width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: #444;
+}
+
+#main {
+  z-index: -1;
+}
+
+#story {
+  margin:0em;
+  margin-top:1em;
+}
+
+#passages {
+  float:left;
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin-left:1em;
+}
+
+#content {
+    width: 80%;
+    height: 50%;
+    min-height: 5em;
+    max-height: 25em;
+
+    overflow-y: scroll;
+    display:inline-block;
+    position:relative;
+
+    border: 1px solid rgba(50, 50, 50);
+}
+
+.content {
+  padding: 1em;
+  font-size: 110%;
+  line-height: 125%;
+}
+
+.passage {
+  margin: 0px;
+  margin-bottom: 20px;
+  /* Inner margin within the box */
+  padding: 0px;
+  padding-top: 2.5em;
+  /* Text formatting */
+  font-family: "NotoSerifL";
+  font-size: 110%;
+  line-height: 180%;
+  text-align: justify;
+}
+
+button {
+    background-color: transparent;
+    width: fit-content;
+    height: fit-content;
+    max-height: 2.5em;
+    padding: 0.3em 0.6em 0.15em;
+    font-size: 90%;
+    font-family: "珍珠体";
+}
+
+button:hover {
+    background-color: #444;
+    border: 1px solid #eee;
+    color:#eee;
+}
+
+a {
+    color: #e6a10d;
+    font-family: "珍珠体";
+}
+a:hover {
+    color: #d3ffc1;
+    text-decoration-style: none;
+}
+
+a.hoverTxt {
+  color:#ffa58f;
+  text-decoration-style: wavy;
+  text-decoration-line: underline;
+
+}
+a.hoverTxt:hover {
+  color:#ffa58f;
+}
+
+label {
+  cursor: pointer;
+}
+
+
+a.macro-link {
+    color:#d3c20c;
+}
+
+a.macro-link:hover{
+    color:#f3ffaf;
+    text-decoration-style: solid;
+}
+
+a.link-broken{
+  color: #9e939e;
+  text-decoration: line-through;
+  font-family: "NotoSansL";
+}
+
+/* Shrink the page when viewed on devices with a low screen width */
+@media screen and (max-width: 1920px) {
+  #content {
+    width: 80%;
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  #content {
+    width: 85%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  #content {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  #content {
+    width: 92%;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  #content {
+    width: 96%;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  #content {
+    width: 100%;
+  }
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  vertical-align: middle;
+  border: 0;
+}
+
+input[type=range]:focus {
+  outline: none;
+}

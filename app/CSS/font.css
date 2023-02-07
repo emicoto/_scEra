@@ -1,0 +1,44 @@
+@font-face {
+  font-family: "筑紫古典";
+  src: url("./font/FZFWZhuZGDSMCJW.otf");
+}
+
+@font-face {
+  font-family: "珍珠体";
+  src: url("./font/FZFWZZTJW.otf");
+}
+
+@font-face {
+  font-family: "新综艺";
+  src: url("./font/FZXinZYHJW_M.otf");
+}
+
+@font-face {
+  font-family: "NotoSansL";
+  src: url("./font/NotoSansSC-Light.otf");
+}
+
+@font-face {
+  font-family: "NotoSerifL";
+  src: url("./Font/NotoSerifSC-Light.otf");
+}
+
+@font-face {
+  font-family: 'Raleway';
+  src: url("./font/Raleway-Regular.ttf");
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url("./font/Lato-Regular.ttf");
+}
+
+@font-face {
+  font-family: 'Sawarabi';
+  src: url("./font/SawarabiMincho-Regular.ttf");
+}
+
+@font-face {
+  font-family: 'Aboreto';
+  src: url("./font/Aboreto-Regular.ttf");
+}

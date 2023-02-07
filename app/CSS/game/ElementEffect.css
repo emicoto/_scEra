@@ -1,0 +1,64 @@
+﻿.none {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.delay {
+  animation: fadeIn linear 0.75s;
+  -webkit-animation: fadeIn linear 0.75s;
+  -moz-animation: fadeIn linear 0.75s;
+  -o-animation: fadeIn linear 0.75s;
+  -ms-animation: fadeIn linear 0.75s;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.show {
+  visibility: visible !important;
+}
+
+.Abc {
+  text-transform: capitalize;
+}
+
+.ABC {
+  text-transform: uppercase;
+}
+
+.abc {
+  text-transform: lowercase;
+}
+
+.graytext {
+  color: #888;
+}
+.goldtext {
+    color: #e7bd00;
+}
+
+.gray, .gray a, .gray button {
+    color:#888 !important
+}
+
+.gold{
+    color:#d3c20c !important
+}
+
+.orange, .orange a, .orange button{
+    color: rgb(248, 169, 104) !important
+}
+
+.blue, .blue a, .blue button{
+    color: cornflowerblue !important
+}
+
+.red, .red a, .red button{
+    color: rgb(255, 65, 80) !important;
+}
+

@@ -1,0 +1,103 @@
+[
+	{
+		"name": ["酒心巧克力", "Wine Chocolate"],
+		"des": [
+			"一种经典的糖果，甜美的外表下，包裹着醉人的香醇。",
+			"A classic candy, sweet appearance, wrapped in a drunken sweet."
+		],
+		"group": "items",
+		"category": "food",
+		"tags": ["sweet"],
+		"source": {
+			"nutrition": 5,
+			"alcohol": 10
+		},
+		"method": "onetime"
+	},
+	{
+		"name": ["空心巧克力", "Hollow Chocolate"],
+		"des": [
+			"看上去和普通巧克力完全一样，但酒心的部分已经抽空了。",
+			"Looks exactly the same as ordinary chocolate, but the wine heart part has been hollowed out."
+		],
+		"group": "items",
+		"category": "food",
+		"tags": ["material", "sweet"],
+		"source": {
+			"nutrition": 5
+		},
+		"method": "onetime/craft"
+	},
+	{
+		"name": ["巧克力", "Chocolate"],
+		"des": ["普通的巧克力，可以作为食物或者材料。", "Ordinary chocolate, can be used as food or material."],
+		"group": "items",
+		"category": "food",
+		"tags": ["material", "sweet"],
+		"source": {
+			"nutrition": 5
+		},
+		"method": "onetime/craft"
+	},
+	{
+		"name": ["巧克力蛋糕", "Chocolate Cake"],
+		"des": ["被甜甜的巧克力包裹着的蛋糕，看上去很诱人。", "A cake wrapped in sweet chocolate, looks very tempting."],
+		"group": "items",
+		"category": "food",
+		"tags": ["sweet"],
+		"source": {
+			"nutrition": 10
+		},
+		"method": "onetime"
+	},
+	{
+		"name": ["钉子", "Nail"],
+		"des": ["一根普通的钉子。", "A common nail."],
+		"group": "material",
+		"category": "metal"
+	},
+	{
+		"name": ["铁锭", "Iron Ingot"],
+		"des": ["一块普通的铁锭。", "A common iron ingot."],
+		"group": "material",
+		"category": "metal"
+	},
+	{
+		"name": ["废木料", "Waste Wood"],
+		"des": ["一些废弃的木料，只能用来生火。", "Some discarded wood, can only be used to make fire."],
+		"group": "material",
+		"category": "wood"
+	},
+	{
+		"name": ["纸张", "Paper"],
+		"des": ["一张普通的空白纸张。", "A common blank piece of paper."],
+		"group": "material",
+		"category": "misc"
+	},
+	{
+		"name": ["毛巾", "Towel"],
+		"des": ["一条素色的普通毛巾，能给你带来一点安全感。", "A common plain towel, can give you a little of comfort."],
+		"group": "material",
+		"category": "misc",
+		"tags": ["wrap"]
+	},
+	{
+		"name": ["破布", "Rag"],
+		"des": ["一条破烂的布料，可以用来包扎伤口。", "A ragged piece of cloth, can be used to bandage wounds."],
+		"group": "material",
+		"category": "misc"
+	},
+	{
+		"name": ["杯子", "Cup"],
+		"des": ["一个普通的木杯子，可以用来装水。", "A common wooden cup, can be used to hold water."],
+		"group": "items",
+		"category": "misc",
+		"tags": ["container"]
+	},
+	{
+		"name": ["金属零件", "metal components"],
+		"des": ["一个金属制的零件，可以用于制作。", "A metal components, can be used to craft."],
+		"group": "material",
+		"category": "metal"
+	}
+]

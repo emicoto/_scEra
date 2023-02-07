@@ -1,0 +1,21 @@
+#actionMenu_1,
+#actionMenu_2,
+#actionMenu_3,
+#actionOption {
+    width: 80%;
+    position: relative;
+    display: inline-block;
+    margin-bottom: .1em;
+}
+
+.actions {
+	float: left;
+	position: relative;
+	margin-left: .5em;
+	padding: 0em .25em;
+}
+
+.actionMenu{
+	float:left;
+	position: relative;
+}

@@ -1,0 +1,138 @@
+@keyframes chaos {
+  0%{
+    color:#e22222;
+    text-shadow: 1px 1px #e22222;
+  }
+  20%{
+    color:#e22222;
+    text-shadow:1px 1px #e22222;
+  }
+  30%{
+    color:#eee;
+    text-shadow:1px 1px #e22222;
+  }
+  35%{ 
+   color:#e22222; 
+   text-shadow:1px 1px #eee; 
+   transform: translateX(0px)；
+  }
+  40%{
+    color: #eee;
+    text-shadow: 1px 1px #e22222;
+    transform: translateX(-15px)
+  }
+  45%{
+    color: #e22222;
+    text-shadow: 1px 1px #e22222;
+    transform: translateX(15px)
+  }
+  50%{
+    color: #eee;
+    text-shadow: 1px 1px #e22222;
+    transform: translateX(-8px)
+  }
+  
+  55%{
+    color: #e22222;
+    text-shadow: 1px 1px #e22222;
+    transform: translateX(8px)
+  }
+  60%{
+    color: #e22222;
+    text-shadow: 1px 1px #e22222;
+    transform: translateX(0px)
+  }
+  65%{
+    color: #eee;
+    text-shadow: 1px 1px #e22222;
+  }
+  70%{
+    color:#e22222;
+    text-shadow: 1px 1px #e22222;
+  }
+  100%{
+    color:#e22222;
+    text-shadow:1px 1px #e22222;
+  }
+}
+
+
+@keyframes chaosimg {
+  0%{
+    content:url('../../image/cursedEye.png')
+  }
+  20%{
+    content:url('../../image/cursedEye.png')
+  }
+  30%{
+    content:url('../../image/cursedEye2.png')
+  }
+  35%{ 
+   content:url('../../image/cursedEye.png')
+  }
+  40%{
+    content:url('../../image/cursedEye2.png')
+  }
+  45%{
+    content:url('../../image/cursedEye.png')
+  }
+  50%{
+    content:url('../../image/cursedEye2.png')
+  }
+  
+  55%{
+    content:url('../../image/cursedEye.png')
+  }
+  60%{
+    content:url('../../image/cursedEye.png')
+  }
+  65%{
+    content:url('../../image/cursedEye2.png')
+  }
+  70%{
+    content:url('../../image/cursedEye.png')
+  }
+  100%{
+    content:url('../../image/cursedEye.png')
+  }
+}
+
+
+@keyframes law {
+  0%{
+    color:#ffdc64;
+    text-shadow:0px 0px 30px;
+    box-shadow:0px 0px 10px inset;
+  }
+  40%{
+    color:#eee;
+    text-shadow:5px 0px 10px;
+    box-shadow:0px 0px 0px inset;
+  }
+  70%{
+    color:#eee;
+    text-shadow:-5px 0px 10px;
+    box-shadow:0px 0px 0px inset;
+  }
+  100%{
+    color:#ffdc64;
+    text-shadow:0px 0px 30px;
+    box-shadow:0px 0px 10px inset;
+  }
+}
+
+
+@keyframes neutral {
+	0%{
+	opacity: .3;
+
+	}
+	50%{
+	opacity: 1;
+
+	}
+	100%{
+	opacity: .3;
+
+	}
+}

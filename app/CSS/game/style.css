@@ -1,0 +1,45 @@
+#gametitle{
+    width: 90%;
+    display: block;
+    margin: 1em 0em 0.2em 0em;
+    font-size: 4em;
+    font-family: '珍珠体';
+    text-align: center;
+    color: gold;
+}
+
+#gamesubtitle{
+   width: 90%;
+   margin: 1em 0em;
+   font-size: 1.5em;
+   text-align: center;
+   font-family: '珍珠体';
+   color: #e9cd45;
+}
+
+#gametitle_selection{
+    width: 90%;
+    margin: .5em 0em;
+    font-size: 2em;
+    text-align: center;
+    line-height: 200%;
+}
+
+#gametitle_selection a{
+   color:aliceblue
+}
+
+#gametitle_selection a:hover{
+   color:lightpink;
+   text-decoration: none;
+}
+
+
+#gametitle_selection a:hover::before{
+   content: '[ ';
+}
+
+#gametitle_selection a:hover::after{
+   content: ' ]';
+}
+

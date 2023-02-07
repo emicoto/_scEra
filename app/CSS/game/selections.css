@@ -1,0 +1,167 @@
+
+#chaoslink button{
+  display: inline-grid;
+  position:relative;
+  width:100%;
+  text-align:center;
+  padding:0.3em;
+  font-size:1.2em;
+  font-family:'珍珠体';
+  color:#ffdc64;
+  border-top:1px solid #ffdc64;
+  border-bottom:1px solid #ffdc64;
+  border-left:none;
+  border-right:none;
+}
+
+#chaoslink button:hover {
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-name: chaos;
+  animation-timing-function: step-start;
+  color: #e22222;
+  border-left:none;
+  border-right:none;
+  border-top:1px solid #e22222;
+  border-bottom:1px solid #e22222;
+  background:none;
+}
+
+#chaoslink button:hover::before {
+  position: absolute;
+  width:72px;
+  height:36px;
+  z-index:0;
+  left:20px;
+  top:4px;
+  content:'';
+  animation: chaosimg 2s linear infinite alternate;
+}
+
+
+#chaoslink button:hover::after {
+  position: absolute;
+  width:72px;
+  height:36px;
+  z-index:0;
+  right:20px;
+  top:4px;
+  content:'';
+  animation: chaosimg 2s linear infinite alternate;
+}
+
+#lawlink button{
+  width:100%;
+  text-align:center;
+  padding:0.3em;
+  font-size:1.2em;
+  font-family:'珍珠体';
+  color:#ffdc64;
+  border-top:1px solid #ffdc64;
+  border-bottom:1px solid #ffdc64;
+  border-left:none;
+  border-right:none;
+}
+
+#lawlink button:hover {
+  animation: law 3s linear infinite alternate;
+  color: #ffdc64;
+  border-left:none;
+  border-right:none;
+  border-top:1px solid #ffdc64;
+  border-bottom:1px solid #ffdc64;
+  background:none;
+}
+
+#lawlink button:hover::before{
+  content:'＜　'
+}
+
+#lawlink button:hover::after{
+  content:'　＞'
+}
+
+#neutrallink button{
+  width:100%;
+  text-align:center;
+  padding:0.3em;
+  font-size:1.2em;
+  font-family:'珍珠体';
+  color:#ffdc64;
+  border-top:1px solid #ffdc64;
+  border-bottom:1px solid #ffdc64;
+  border-left:none;
+  border-right:none;
+}
+
+#neutrallink button:hover {
+  color: #88e7ff;
+  border-left:none;
+  border-right:none;
+  border-top:1px solid #88e7ff;
+  border-bottom:1px solid #88e7ff;
+  background:none;
+  animation: neutral 3s linear infinite alternate;
+}
+
+
+#neutrallink button:hover::before{
+  content:'[　'
+}
+
+#neutrallink button:hover::after{
+  content:'　]'
+}
+
+#cursedlink a{
+  color:#ffdc64;
+  font-size:24px;
+  width: 250px;
+  display: inline-block;
+  text-align: center;
+  color:#ffdc64;
+}
+
+#cursedlink a::before{
+    content:'>> ';
+}
+
+#cursedlink a:hover {
+  color: #e22222;
+  text-decoration: none;
+}
+
+#cursedlink a:hover::before {
+  content:url('../../image/cursedEye1x.png')
+}
+
+
+#cursedlink a:hover::after {
+  content:url('../../image/cursedEye1x.png')
+}
+
+#selectlink a{
+  color:#ffdc64;
+  font-size:24px;
+  min-width: 250px;
+  display: inline-block;
+  text-align: center;
+  color:#ffdc64;
+}
+
+#selectlink a::before{
+    content: '>> ';
+}
+
+#selectlink a:hover {
+    color:azure;
+    text-decoration: none;
+}
+
+#selectlink a:hover::before{
+    content: '[ ';
+}
+
+#selectlink a:hover::after{
+    content:' ]';
+}
