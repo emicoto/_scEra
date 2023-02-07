@@ -1,0 +1,115 @@
+:: Species_Human [xml]
+<?xml version='1.0' encoding='utf-8'?>
+<race type='chara' id='human'>
+<name lan='EN'>Human</name>
+<name lan='CN'>人类</name>
+<des lan='EN'>Humans are the most common intelligent creatures on this planet. They are ordinary, but because of their balanced abilities, their great adaptability, allowed their feet to tread across the main land.</des>
+<des lan='CN'>人类是这个星球上最普遍的智慧生物。他们普通，但因为均衡的能力、强大的适应能力，让他们的子子孙孙踏遍了整片大陆。</des>
+<gender>male||female</gender>
+<lifespan>100</lifespan>
+<talent>
+	<li>
+		<name>FastAdaption</name>
+		<rate>0.4</rate>
+	</li>
+</talent>
+<buffs>
+	<health>1.1</health>
+	<stamina>1.1</stamina>
+	<mana>1.1</mana>
+	<ATK>1.1</ATK>
+	<DEF>1.1</DEF>
+	<MTK>1.1</MTK>
+	<MDF>1.1</MDF>
+</buffs>
+<basicStats min='5' max='18'></basicStats>
+
+<bodysize scale='1' min='1300' max='2100'></bodysize>
+<!-- the comfortable temperature  -->
+<tempe min='16' max='30' best='23' body='37'></tempe>
+<bodygroup type='natural'>
+	<!-- pos: s=side, f=front, b=back, t=top, d=bottom, l=left, r=right, i=inside, o=outside, e=end, rt=root -->
+	<head name="head" group='head'></head>
+	<ears name='ear' group='head' pos='s' count='2' side='l/r'></ears>
+	<brain name='brain' group='head' pos='i'></brain>
+
+	<eyes name='eye' group='face' pos='t' count='2' side='l/r'></eyes>
+	<nose name='nose' group='face' pos='c'></nose>
+	<mouth name='mouth' group='face' pos='b'></mouth>
+
+	<torso name='torso' group='torso'></torso>
+	<neck name='neck' group='torso' pos='t'></neck>
+	<breasts name='breasts' group='torso' pos='f' count='1'></breasts>
+
+	<shoulders group='shoulders' count='2' pos='s' side='l/r'></shoulders>
+	<arms group='shoulders' name='arm' pos='s' count='2' side='l/r'></arms>
+	<hands group='shoulders' name='hand' pos='s' count='2' side='l/r'></hands>
+
+	<organs group='torso' name='organ' pos='i'>
+		<li>heart</li>
+		<li>liver</li>
+		<li>kidney</li>
+		<li>lung</li>
+		<li>stomach</li>
+		<li>intestine</li>
+		<li>bladder</li>
+      <li>uterus</li>
+	</organs>
+
+	<legs group='legs' name='leg' pos='s' count='2' side='l/r'></legs>
+	<thighs group='legs' name='thigh' pos='s' count='2' side='l/r'></thighs>
+	<feet group='legs' name='foot' pos='s' count='2' side='l/r'></feet>
+   
+	<butts name='buttock' group='hips' pos='b' count='2' side='l/r'></butts>
+   
+   <vagina name='vagina' group='genitals' pos='i'>
+      <sens default='1'></sens>
+      <shape>human</shape>
+      <!-- scale is times of height(mm), unit is ml -->
+      <capacity scale='0.8'></capacity>
+   </vagina>
+   <clitoris name='clitoris' group='genitals' pos='i' herm='false'></clitoris>
+
+   <penis name='penis' group='genitals' pos='f'>
+      <size default='3' max='5'></size>
+      <shape>human</shape>
+   </penis>
+   <testicles name='testicles' group='genitals' pos='rt' herm='false'></testicles>
+
+   <urethral name='urethral' pos='i'>
+      <group female='vagina' male='penis' herm='penis'></group>
+      <capacity default='500'></capacity>
+   </urethral>
+
+   <prostate name='prostate' pos='i' group='anus' herm='true'></prostate>
+
+   <anus name='anus' pos='i' group='anus'>
+      <capacity scale='1.2'></capacity>
+   </anus>
+
+</bodygroup>
+
+<produce>
+   <breasts type='milk' amountPerSize='100' amountPerDay='30'></breasts>
+   <penis type='cum' amountPerSize='50' amountPerDay='10'></penis>
+   <vagina type='lovejuice'></vagina>
+</produce>
+
+<cycle type='menst' maleHasIntestinalWomb='false'>
+	<circleDays min='3' max='5'></circleDays>
+	<circleRng min='3' max='5'></circleRng>
+	<pregDays>300</pregDays>
+	<pregType>babies</pregType>
+	<ovulateNum>1</ovulateNum>
+	<frng min='0' max='2'></frng>
+	<wombSlot>3</wombSlot>
+</cycle>
+
+<avatar>
+	<headtype>pointy||round||square</headtype>
+	<bodytype>human</bodytype>
+	<eartype>human</eartype>
+	<skincolor>pale||white||health||black||chocolate||copper||sunset</skincolor>
+	<defaulthaircolor>brown</defaulthaircolor>
+</avatar>
+</race>

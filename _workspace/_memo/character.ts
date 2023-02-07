@@ -122,7 +122,7 @@ export interface Chara extends Creature {
 	wallet?: number;
 	debt?: number;
 	invetory?: any;
-	tempture?: { low: number; high: number; best: number; current: number };
+	tempe?: { low: number; high: number; best: number; current: number };
 }
 
 interface iName {
@@ -207,7 +207,6 @@ export class Creature {
 			};
 		});
 		return this;
-		
 	}
 
 	initSexAbl() {
@@ -221,13 +220,13 @@ export class Creature {
 		if (this.gender === "female") {
 			this.setOrgan("v");
 			this.setOrgan("c");
-			this.setOrgan('w');
+			this.setOrgan("w");
 		} else if (this.gender === "male") {
 			this.setOrgan("p");
 		} else {
 			this.setOrgan("p");
 			this.setOrgan("v");
-			this.setOrgan('w');
+			this.setOrgan("w");
 		}
 
 		this.setOrgan("a");
@@ -238,11 +237,11 @@ export class Creature {
 	}
 
 	setOrgan(part, adj?) {
-		console.log(this,adj)
+		console.log(this, adj);
 		this.sexstats[part] = {
 			lv: adj?.lv ? adj.lv : 0,
 			size: adj?.size ? adj.size : 0,
-			storeable: adj?.storeable ? adj.storeable:0,
+			storeable: adj?.storeable ? adj.storeable : 0,
 		};
 		if (groupmatch(part, "p", "a", "v")) {
 			this.sexstats[part].wet = 0;
@@ -256,7 +255,7 @@ export class Creature {
 		if (part == "b") this.setBreast(adj);
 		if (part == "u") this.setUrin(adj);
 		if (part == "m") this.setMouth(adj);
-		if (part == 'w') this.setWomb(adj);
+		if (part == "w") this.setWomb(adj);
 		return this;
 	}
 
@@ -287,13 +286,13 @@ export class Creature {
 		};
 
 		P.maxcum = this.fixPenisCapacity();
-		this.sexstats.p.trait = adj?.trait ? adj.trait : [];;
+		this.sexstats.p.trait = adj?.trait ? adj.trait : [];
 		return this;
 	}
 
 	setCrit(adj?) {
 		this.sexstats.c.d = this.sexstats.c.size + 5;
-		this.sexstats.c.trait = adj?.trait ? adj.trait : []; 
+		this.sexstats.c.trait = adj?.trait ? adj.trait : [];
 		return this;
 	}
 	setVagi(adj?) {
@@ -330,20 +329,20 @@ export class Creature {
 		const days = circle.basedays;
 		circle.lastCircleDays = circle.basedays;
 		circle.stages = [0, Math.floor(days / 3 + 0.5), days + 0.5];
-		
+
 		this.sexstats.w.parasite = {
 			maxslot: 6,
 			type: "",
 			eggs: [],
 			active: false,
 		};
-		
+
 		this.sexstats.w.storeable = 1;
 		this.sexstats.w.capacity = this.fixWombCapacity();
 		this.sexstats.w.storelist = {};
 	}
-	fixWombCapacity(){
-		return this.bodysize()*10 + 20 +random(-5,5);
+	fixWombCapacity() {
+		return this.bodysize() * 10 + 20 + random(-5, 5);
 	}
 	maxHoleSize() {
 		return this.bodysize() * 2 - 2.4;
@@ -374,7 +373,7 @@ export class Creature {
 		const max = this.maxHoleSize();
 		return this.sexstats.a.size * max + 12 + random(-2, 4);
 	}
-	fixAnalCapacity(){
+	fixAnalCapacity() {
 		return this.bodysize() * 1000 + 2000 + random(-400, 800);
 	}
 	GenerateAnalDepth() {
@@ -383,7 +382,7 @@ export class Creature {
 	setBreast(adj?) {
 		this.sexstats.b.maxmilk = adj?.maxmilk ? adj.maxmilk : 0;
 		this.sexstats.b.milk = this.sexstats.b.maxmilk;
-		this.sexstats.b.trait = adj?.trait ? adj.trait : [];;
+		this.sexstats.b.trait = adj?.trait ? adj.trait : [];
 		this.sexstats.b.storeable = 1;
 		this.sexstats.b.capacity = adj?.maxmilk ? adj.maxmilk : 0;
 		this.sexstats.b.storelist = {};
@@ -418,7 +417,7 @@ export class Creature {
 
 		return this;
 	}
-	fixUrinCapacity(){
+	fixUrinCapacity() {
 		return this.bodysize() * 200 + 500 + random(-50, 100);
 	}
 	bodysize() {
@@ -458,31 +457,37 @@ export class Creature {
 
 		return this;
 	}
-	fixMouthCapacity(){
+	fixMouthCapacity() {
 		return this.bodysize() * 300 + 300 + random(-50, 100);
 	}
-	
+
 	GenerateTall(size?) {
 		const bodysize = size !== undefined ? size : this.appearance.bodysize;
-		switch(bodysize){
+		switch (bodysize) {
 			//0=tiny 90~124, 1=small 124~154, 2=normal 154~174, 3=tall 174~184, 4=huge 184~200, 5=giant 200+
-			case 0:return random(90,124);
-			case 1:return random(124,154);
-			case 2:return random(154,174);
-			case 3:return random(174,184);
-			case 4:return random(184,200);
-			case 5:return random(200,250);
+			case 0:
+				return random(90, 124);
+			case 1:
+				return random(124, 154);
+			case 2:
+				return random(154, 174);
+			case 3:
+				return random(174, 184);
+			case 4:
+				return random(184, 200);
+			case 5:
+				return random(200, 250);
 		}
 	}
 
 	GenerateBodysize(_tall?) {
 		const tall = _tall ? _tall : this.appearance.tall;
-		if (inrange(tall,90,124))return 0;
-		if (inrange(tall,124,154))return 1;
-		if (inrange(tall,154,174))return 2;
-		if (inrange(tall,174,184))return 3;
-		if (inrange(tall,184,200))return 4;
-		if (inrange(tall,200,250))return 5;
+		if (inrange(tall, 90, 124)) return 0;
+		if (inrange(tall, 124, 154)) return 1;
+		if (inrange(tall, 154, 174)) return 2;
+		if (inrange(tall, 174, 184)) return 3;
+		if (inrange(tall, 184, 200)) return 4;
+		if (inrange(tall, 200, 250)) return 5;
 	}
 
 	GenerateWeight(_tall) {
@@ -563,13 +568,13 @@ export class Chara extends Creature {
 		this.initFlag();
 		this.wallet = 1000;
 		this.invetory = [];
-		this.tempture = {
+		this.tempe = {
 			low: 16,
 			high: 28,
 			best: 23,
 			current: 36,
 		}; //最低适应温度， 最高适应温度, 最佳适应温度， 当前体温. 单位摄氏度
-		console.log(this,'finishinit')
+		console.log(this, "finishinit");
 		return this;
 	}
 
@@ -772,7 +777,7 @@ export class Chara extends Creature {
 			tall: tall ? tall : bodysize ? this.GenerateTall() : 1704,
 			weight: weight,
 		};
-		console.log('begin setApp')
+		console.log("begin setApp");
 
 		if (!appearance.weight) {
 			appearance.weight = this.GenerateWeight(appearance.tall);

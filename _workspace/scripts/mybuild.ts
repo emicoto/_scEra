@@ -16,9 +16,9 @@ const parseArgs = () => {
 	const [, , ...flags] = process.argv;
 	return [
 		"--output=./app/index.html",
-		"./_workspace/gamecode",
+		"./_workspace/Game",
 		"--head=./_workspace/head.html",
-		`--module=./_workspace/modules`,
+		`--module=./_workspace/Core`,
 		...flags,
 	];
 };

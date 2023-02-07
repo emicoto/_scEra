@@ -25,9 +25,9 @@ const scbuild = function () {
 	const options = {
 		html: `--output=${_resolve("app/index.html")}`,
 		Head: `--head=${_resolve("_workspace/head.html")}`,
-		src: _resolve("_workspace/gamecode"),
+		src: _resolve("_workspace/Game"),
 		isWatch: "-w",
-		modules: `--module=${_resolve("_workspace/modules")}`,
+		modules: `--module=${_resolve("_workspace/Core")}`,
 	};
 
 	for (const key of ["html", "Head", "isWatch", "modules", "src"]) {

@@ -2,7 +2,7 @@
 	"name": "scEra",
 	"version": "0.4.0",
 	"main": "app/init.html",
-	"author": "Lune Xie <lolidrop@icloud.com>",
+	"author": "Lune Fox <lolidrop@icloud.com>",
 	"description": "A modable, open-source, cross-platform, text-based 2D game engine. Build with SugarCube 2.36.2, NW.js and phaser 3.55.2.",
 	"license": "BSD-2-Clause",
 	"window": {
@@ -16,9 +16,9 @@
 	},
 	"scripts": {
 		"start": "nw --remote-debugging-port=9222 . --watch",
-		"build": "cross-env NODE_ENV=production tsx ./_workspace/scripts/mybuild.ts",
-		"install-compiler": "tsx  ./_workspace/scripts/install-compiler.ts",
-		"dev": "tsx  ./_workspace/scripts/mybuild.ts --watch"
+		"build": "cross-env NODE_ENV=production tsx ./_workspace/Scripts/mybuild.ts",
+		"install-compiler": "tsx  ./_workspace/Scripts/install-compiler.ts",
+		"dev": "tsx  ./_workspace/Scripts/mybuild.ts --watch"
 	},
 	"devDependencies": {
 		"rollup-plugin-delete": "^2.0.0",

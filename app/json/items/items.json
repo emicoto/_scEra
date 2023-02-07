@@ -12,6 +12,7 @@
 			"nutrition": 5,
 			"alcohol": 10
 		},
+		"sourceMethod": "add",
 		"method": "onetime"
 	},
 	{
@@ -26,6 +27,7 @@
 		"source": {
 			"nutrition": 5
 		},
+		"sourceMethod": "add",
 		"method": "onetime/craft"
 	},
 	{
@@ -37,6 +39,7 @@
 		"source": {
 			"nutrition": 5
 		},
+		"sourceMethod": "add",
 		"method": "onetime/craft"
 	},
 	{
@@ -48,6 +51,8 @@
 		"source": {
 			"nutrition": 10
 		},
+
+		"sourceMethod": "add",
 		"method": "onetime"
 	},
 	{
