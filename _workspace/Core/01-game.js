@@ -983,18 +983,16 @@
 	}
 	class Trait extends Talent {
 	  static init() {
-	    return __async$2(this, null, function* () {
-	      D.traits.forEach((obj) => {
-	        let id;
-	        if (typeof obj.name == "string")
-	          id = obj.name;
-	        else
-	          id = `${obj.name[1] || obj.name[0]}`;
-	        obj.id = id;
-	        Trait.data[id] = new Trait(obj);
-	      });
-	      console.log(Trait.data);
+	    D.traits.forEach((obj) => {
+	      let id;
+	      if (typeof obj.name == "string")
+	        id = obj.name;
+	      else
+	        id = `${obj.name[1] || obj.name[0]}`;
+	      obj.id = id;
+	      Trait.data[id] = new Trait(obj);
 	    });
+	    console.log(Trait.data);
 	  }
 	  static set(type, name) {
 	    const traitdata = Object.values(Trait.data).filter((trait) => {

@@ -55,7 +55,7 @@ export class Talent {
 
 export class Trait extends Talent {
 	static data: Dict<Trait>;
-	public static async init() {
+	public static init() {
 		D.traits.forEach((obj) => {
 			let id;
 			if (typeof obj.name == "string") id = obj.name;

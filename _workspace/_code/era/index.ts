@@ -140,20 +140,29 @@ $(document).one(":initstory", () => {
 //   apply the module
 //
 //-------------------------------------------------------------
-$(document).one("scEra:ready", () => {
+$(document).one("scEra:ready", async () => {
 	slog("log", "Start to apply modules:", Object.keys(scEra.modules).join(", "));
 
-	scEra.loadorder.forEach(async (key) => {
-		await scEra.applyMod(key);
-	});
-
-	Object.keys(scEra.modules).forEach(async (key) => {
-		if (scEra.loadorder.includes(key)) {
-			return;
-		} else {
-			await scEra.applyMod(key);
+	for (let i = 0; i < scEra.loadorder.length; i++) {
+		if (!scEra.modules[scEra.loadorder[i]]) {
+			slog("warn", `Module ${scEra.loadorder[i]} is not loaded. Skipping this module.`);
+			scEra.loadorder.splice(i, 1);
+			i--;
 		}
-	});
+
+		const key = scEra.loadorder[i];
+
+		await scEra.applyMod(key);
+	}
+
+	for (const key in scEra.modules) {
+		if (scEra.loadorder.includes(key)) {
+			continue;
+		}
+
+		await scEra.applyMod(key);
+	}
+
 	console.timeLog("scEra startup");
 	slog("log", "Finish to apply modules.");
 
@@ -177,14 +186,14 @@ $(document).one("scEra:apply", async function () {
 	console.timeLog("scEra startup");
 
 	console.log(scEra.startupInit);
-
-	scEra.startupInit.forEach(async (key) => {
-		slog("log", `Start to run initialization function ${key}...`);
-		let func = scEra.initialization[key];
+	for (let i = 0, iend = scEra.startupInit.length; i < iend; i++) {
+		slog("log", `Start to run initialization function ${scEra.startupInit[i]}...`);
+		let func = scEra.initialization[scEra.startupInit[i]];
 		if (func && typeof func === "function") await func();
-		else slog("warn", `Initialization function ${key} is not found, skipping...`);
-	});
+		else slog("warn", `Initialization function ${scEra.startupInit[i]} is not found, skipping...`);
+	}
 
+	console.timeLog("scEra startup");
 	slog("log", "All initialization functions are applied successfully.");
 	jQuery(document).trigger(":modulesloaded");
 	jQuery.event.trigger({ type: ":afterload" });

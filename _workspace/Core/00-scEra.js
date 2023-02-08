@@ -371,18 +371,23 @@
 	    clearInterval(checkId);
 	  }, 50);
 	});
-	$(document).one("scEra:ready", () => {
+	$(document).one("scEra:ready", () => __async(void 0, null, function* () {
 	  slog("log", "Start to apply modules:", Object.keys(scEra.modules).join(", "));
-	  scEra.loadorder.forEach((key) => __async(void 0, null, function* () {
-	    yield scEra.applyMod(key);
-	  }));
-	  Object.keys(scEra.modules).forEach((key) => __async(void 0, null, function* () {
-	    if (scEra.loadorder.includes(key)) {
-	      return;
-	    } else {
-	      yield scEra.applyMod(key);
+	  for (let i = 0; i < scEra.loadorder.length; i++) {
+	    if (!scEra.modules[scEra.loadorder[i]]) {
+	      slog("warn", `Module ${scEra.loadorder[i]} is not loaded. Skipping this module.`);
+	      scEra.loadorder.splice(i, 1);
+	      i--;
 	    }
-	  }));
+	    const key = scEra.loadorder[i];
+	    yield scEra.applyMod(key);
+	  }
+	  for (const key in scEra.modules) {
+	    if (scEra.loadorder.includes(key)) {
+	      continue;
+	    }
+	    yield scEra.applyMod(key);
+	  }
 	  console.timeLog("scEra startup");
 	  slog("log", "Finish to apply modules.");
 	  slog("log", "Applying classes to global namespace...");
@@ -390,20 +395,21 @@
 	  console.timeLog("scEra startup");
 	  slog("log", "Finish to apply classes.");
 	  jQuery(document).trigger("scEra:apply");
-	});
+	}));
 	$(document).one("scEra:apply", function() {
 	  return __async(this, null, function* () {
 	    slog("log", "All modules are applied successfully. Start to initialization...");
 	    console.timeLog("scEra startup");
 	    console.log(scEra.startupInit);
-	    scEra.startupInit.forEach((key) => __async(this, null, function* () {
-	      slog("log", `Start to run initialization function ${key}...`);
-	      let func = scEra.initialization[key];
+	    for (let i = 0, iend = scEra.startupInit.length; i < iend; i++) {
+	      slog("log", `Start to run initialization function ${scEra.startupInit[i]}...`);
+	      let func = scEra.initialization[scEra.startupInit[i]];
 	      if (func && typeof func === "function")
 	        yield func();
 	      else
-	        slog("warn", `Initialization function ${key} is not found, skipping...`);
-	    }));
+	        slog("warn", `Initialization function ${scEra.startupInit[i]} is not found, skipping...`);
+	    }
+	    console.timeLog("scEra startup");
 	    slog("log", "All initialization functions are applied successfully.");
 	    jQuery(document).trigger(":modulesloaded");
 	    jQuery.event.trigger({ type: ":afterload" });
