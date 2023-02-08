@@ -1,5 +1,8 @@
+import { Species } from "./Species";
 import { bodyDict, bodyGroup, posDict } from "./bodyparts";
 declare function groupmatch(arg, ...args): boolean;
+declare function slog(type: string, ...args: any[]): void;
+declare function dlog(type: string, ...args: any[]): void;
 
 export function fixLanArr(obj) {
 	const lang = ["CN", "EN", "JP"];
@@ -103,4 +106,18 @@ export function listAllParts(obj) {
 	parts = [...new Set(parts)];
 	parts = parts.filter((part) => bodyDict.hasOwnProperty(part) && !bodyGroup.includes(part));
 	return parts;
+}
+
+declare var scEra: typeof window.scEra;
+
+export function InitSpecies() {
+	let xml: Map<string, any> = scEra.xml;
+	xml.forEach((value, key) => {
+		if (key.includes("Species")) {
+			let obj = value.race;
+			fixLanArr(obj);
+			Species.data[obj.id] = new Species(obj);
+		}
+	});
+	slog("log", "All Species Loaded: ", Species.data);
 }

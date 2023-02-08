@@ -1,19 +1,21 @@
-import { Dict, cycleInfo, creaturetype, bodypart, existency, P, sexStats, genderFull, statskey } from "../types";
+import { Dict, cycleInfo, genderFull, statskey } from "../types";
+import { BodyRatio } from "./CommonFunc";
 import { initBodyObj } from "./InitFunc";
 import { Organs } from "./Organs";
-import { bodysize } from "./bodyparts";
 declare function groupmatch(arg, ...args): boolean;
 declare function slog(type: "log" | "warn" | "error", ...args): void;
 
 export interface Species {
 	type: "chara" | "monster";
-
+	id: string;
 	name: string[]; //CN, EN
 	des: string[]; //CN, EN
+	lifespan?: number; //lifespan
 
 	availableGender?: genderFull[];
 	speciesTalent?: Array<{ name: string; rate: number }>; //species talents
 	speciesTraits?: Array<{ name: string; rate: number }>; //species traits
+	speciesSkill?: Array<{ name: string; rate: number }>; //species skills
 	speciesBuffs?: Dict<number>; //species buffs
 	basicStats?: {
 		[key in statskey | "min" | "max"]: number;
@@ -49,6 +51,8 @@ export interface Species {
 		tailtype?: string[];
 		wingtype?: string[];
 		skincolor?: string[];
+		eyecolor?: string[];
+		haircolor?: string[];
 	};
 
 	options?: any; // any other options
@@ -92,6 +96,7 @@ export class Species {
 			buffs = {},
 			bodysize = { scale: 1, min: 1300, max: 2000 },
 			trait = [],
+			skill = [],
 		} = obj;
 
 		//main information of the species
@@ -101,19 +106,27 @@ export class Species {
 		this.availableGender = gender;
 		this.speciesTalent = talent;
 		this.speciesTraits = trait;
+		this.speciesSkill = skill;
 		this.speciesBuffs = buffs;
 		this.bodyScale = bodysize.scale;
 		this.bodyheight = [bodysize.min, bodysize.max];
 
 		//the optional information of the species
-		const { basicStats, cycle, avatar, temper, threesize, bodygroup } = obj;
-		if (basicStats) this.basicStats = basicStats;
+
+		const { cycle, threesize, bodygroup } = obj;
+		const list = ["id", "basicStats", "avatar", "temper", "lifespan", "produce"];
+
+		list.forEach((item) => {
+			if (obj[item]) {
+				this[item] = obj[item];
+			}
+		});
+
 		if (cycle) this.cycleInfo = cycle;
-		if (avatar) this.avatar = avatar;
-		if (temper) this.temper = temper;
 		if (threesize) this.threeSizeScale = threesize;
 
 		const ignore = Object.keys(this);
+		ignore.push("bodygroup", "bodysize", "threesize", "cycle", "gender", "talent", "buffs", "trait", "skill");
 
 		//the other options of the species
 		this.options = {};
@@ -163,13 +176,24 @@ export class Species {
 		return traits;
 	}
 
+	initSkill() {
+		if (!this.speciesSkill || !this.speciesSkill.length) return;
+
+		const skill = [];
+		for (const t of this.speciesSkill) {
+			if (Math.random() < t.rate) {
+				skill.push(t.name);
+			}
+		}
+		return skill;
+	}
+
 	//common configuration for all species
 	configureBody(gender: genderFull, height: number, adj?: any) {
 		//configure the organs
 		const body: Dict<Organs> = {};
 
 		const set = clone(this.bodyConfig.settings);
-
 		//add produce to bodyparts
 		for (const key in this.produce) {
 			if (set[key]) {
@@ -221,7 +245,7 @@ export class Species {
 					body[key].initMouth(height);
 					break;
 				case "clitoris":
-					body[key].initClitoris(this.BodyRatio(height));
+					body[key].initClitoris(BodyRatio(height));
 					break;
 			}
 			if (part.produce && key !== "penis") {
@@ -240,38 +264,6 @@ export class Species {
 		return body;
 	}
 
-	BodySizeCalc(height: number) {
-		return Math.floor((height / this.bodyScale - 1300) / 1500);
-	}
-	BodyRatio(height: number) {
-		const select = new SelectCase();
-		select
-			.case([240, 800], 3.5)
-			.case([800, 1240], 4)
-			.case([1300, 1400], 4.5)
-			.case([1400, 1500], 5)
-			.case([1500, 1660], 6)
-			.case([1660, 1740], 6.5)
-			.case([1740, 1800], 7)
-			.else(7.5);
-		return select.has(height);
-	}
-	GenerateHeight(size: number) {
-		if (typeof size !== "number") {
-			size = random(5);
-		}
-		const r = bodysize[size];
-		const height = random(r[0], r[1]);
-		return height * this.bodyScale;
-	}
-	GenerateWeight(height: number) {
-		const r = height / 1000;
-		const BMI = 19 + random(-2, 4);
-		return Math.floor(r * r * BMI + 0.5) + random(30) / 10;
-	}
-	HeadSize(height: number) {
-		return height / this.BodyRatio(height);
-	}
 	GenerateBust(height: number, gender: genderFull, cup: number) {
 		//r is the ratio of bust to height
 		const r = gender == "male" ? 0.61 : 0.51;

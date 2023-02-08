@@ -37,13 +37,13 @@ export const configs: RollupOptions[] = [
 		external: ["phaser"],
 		output: {
 			format: "iife",
-			file: "_workspace/Core/02-game.js",
+			file: "_workspace/Core/01-game.js",
 			//sourcemap: "inline",
 			globals: { phaser: "Phaser" },
 		},
 	},
 	{
-		input: "_workspace/_code/lib/index.ts",
+		input: "_workspace/_code/era/index.ts",
 		plugins,
 		output: {
 			format: "iife",
@@ -55,7 +55,7 @@ export const configs: RollupOptions[] = [
 		plugins,
 		output: {
 			format: "iife",
-			file: "_workspace/Core/01-utils.js",
+			file: "_workspace/Core/00-utils.js",
 		},
 	},
 

@@ -1,41 +1,16 @@
 ;(function () {
 	'use strict';
 
-	var __async$4 = (__this, __arguments, generator) => {
-	  return new Promise((resolve, reject) => {
-	    var fulfilled = (value) => {
-	      try {
-	        step(generator.next(value));
-	      } catch (e) {
-	        reject(e);
-	      }
-	    };
-	    var rejected = (value) => {
-	      try {
-	        step(generator.throw(value));
-	      } catch (e) {
-	        reject(e);
-	      }
-	    };
-	    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-	    step((generator = generator.apply(__this, __arguments)).next());
-	  });
-	};
-	function lan(txt, ...txts) {
-	  let CN, EN;
-	  if (Array.isArray(txt)) {
-	    CN = txt[0];
-	    EN = txt[1] ? txt[1] : CN;
-	  }
-	  if (typeof txt === "string") {
-	    CN = txt;
-	    EN = txts[0] ? txts[0] : txt;
-	  }
-	  if (Config.lan == "EN" && EN)
-	    return EN;
-	  else if (CN)
-	    return CN;
-	  return txt;
+	const support = ["CN", "EN", "JP"];
+	function lan$1(...txts) {
+	  let first = Config.lan || "CN", sec = Config.secLan || "EN";
+	  let i = support.indexOf(first);
+	  if (txts[i])
+	    return txts[i];
+	  i = support.indexOf(sec);
+	  if (txts[i])
+	    return txts[i];
+	  return txts[0];
 	}
 	function percent(...num) {
 	  let min = num[0], max = num[1];
@@ -45,33 +20,9 @@
 	  }
 	  return Math.clamp(Math.trunc(min / max * 100), 1, 100);
 	}
-	function getJson$1(path) {
-	  return __async$4(this, null, function* () {
-	    const files = [];
-	    const response = yield fetch(path);
-	    const filelist = yield response.json();
-	    slog("log", `Loading json files from ${path}:`, filelist);
-	    const requests = filelist.map((file) => __async$4(this, null, function* () {
-	      return new Promise((resolve, reject) => __async$4(this, null, function* () {
-	        const response2 = yield fetch("./json/" + file);
-	        const json = yield response2.json();
-	        if (!json || !isValid(json))
-	          resolve(`[error] ${now()} | Failed to load json file: ${file}`);
-	        files.push([file, json]);
-	        slog("log", `[log] ${now()} | Loaded json file: ${file}:`, json);
-	        resolve(json);
-	      }));
-	    }));
-	    slog("log", `Waiting for json files to load...`);
-	    yield Promise.all(requests);
-	    slog("log", `All json files loaded!`);
-	    return files;
-	  });
-	}
 	Object.defineProperties(window, {
 	  percent: { value: percent },
-	  lan: { value: lan },
-	  getJson: { value: getJson$1 }
+	  lan: { value: lan$1 }
 	});
 
 	const moveableTile = ["road", "glass", "field", "passable", "area"];
@@ -988,7 +939,8 @@
 	  },
 	  setup: {
 	    setTagByBoardType
-	  }
+	  },
+	  Init: ["initWorldMap"]
 	};
 	addModule(modules$2);
 
@@ -1013,13 +965,16 @@
 	  });
 	};
 	class Talent {
-	  constructor(name, des, rate = 0.1) {
+	  constructor({ name, des, rate = 0.5, conflict = [], group = "Netural" } = {}) {
 	    this.type = "talent";
 	    this.name = name;
 	    this.des = des;
+	    this.group = group;
+	    this.conflict = conflict;
+	    this.group = "";
+	    this.rate = rate;
 	    this.effect = function() {
 	    };
-	    this.rate = rate;
 	  }
 	  Effects(callback) {
 	    this.effect = callback;
@@ -1076,14 +1031,14 @@
 	      return trait.group == type;
 	    });
 	  }
-	  constructor({ id, name, des, order, group, rate, sourceEffect, conflict } = {}) {
+	  constructor({ id, name, des, order, group = "mental", rate = 0.5, sourceEffect = [], conflict = [] } = {}) {
 	    if (typeof name == "string") {
 	      name = [name, name];
 	    }
 	    if (typeof des == "string") {
 	      des = [des, des];
 	    }
-	    super(name, des, rate);
+	    super({ name, des, rate, conflict, group });
 	    this.type = "trait";
 	    this.id = id;
 	    this.order = order;
@@ -1740,6 +1695,7 @@
 	    let conflict = [];
 	    const filesData = yield getJson("./json/traits.json").then((res) => {
 	      slog("log", "Get file list from traits.json:", res);
+	      return res;
 	    });
 	    if (filesData) {
 	      filesData.forEach(([filename, trait]) => {
@@ -1790,7 +1746,8 @@
 	      findConflic
 	    },
 	    globaldata: true
-	  }
+	  },
+	  Init: ["Traitlist"]
 	};
 	addModule(modules$1);
 
@@ -1860,8 +1817,8 @@
 	Items.data = [];
 
 	class Clothes extends Items {
-	  constructor(cate, name, des, gender2 = "n") {
-	    super(name, des, "clothes", cate);
+	  constructor(category, name, des, gender2 = "n") {
+	    super({ name, des, group: "clothes", category });
 	    this.gender = gender2;
 	    this.uid = "0";
 	    this.tags = [];
@@ -1980,7 +1937,7 @@
 	});
 	function loadItems() {
 	  return __async(this, null, function* () {
-	    const filesdata = yield getJson$1("./json/items.json").then((res) => {
+	    const filesdata = yield getJson("./json/items.json").then((res) => {
 	      slog("log", "Items loaded:", res);
 	      return res;
 	    });
@@ -2027,13 +1984,1308 @@
 	    Init: {
 	      loadItems
 	    }
-	  }
+	  },
+	  Init: ["loadItems"]
 	};
 	addModule(modules);
 
+	const bodyDict = {
+	  head: "\u5934\u90E8",
+	  eyes: "\u53CC\u773C",
+	  eyeL: "\u5DE6\u773C",
+	  eyeR: "\u53F3\u773C",
+	  eye: "\u773C\u775B",
+	  ears: "\u8033\u6735",
+	  earL: "\u5DE6\u8033",
+	  earR: "\u53F3\u8033",
+	  ear: "\u8033\u6735",
+	  face: "\u9762\u90E8",
+	  nose: "\u9F3B\u5B50",
+	  mouth: "\u5634\u5DF4",
+	  hairs: "\u5934\u53D1",
+	  hair: "\u5934\u53D1",
+	  brain: "\u5927\u8111",
+	  beak: "\u5599",
+	  neck: "\u8116\u5B50",
+	  shoulders: "\u80A9\u90E8",
+	  shoulderL: "\u5DE6\u80A9",
+	  shoulderR: "\u53F3\u80A9",
+	  shoulder: "\u80A9\u90E8",
+	  arms: "\u624B\u81C2",
+	  armL: "\u5DE6\u81C2",
+	  armR: "\u53F3\u81C2",
+	  arm: "\u624B\u81C2",
+	  hands: "\u53CC\u624B",
+	  handL: "\u5DE6\u624B",
+	  handR: "\u53F3\u624B",
+	  hand: "\u624B",
+	  wrists: "\u624B\u8155",
+	  wristL: "\u5DE6\u624B\u8155",
+	  wristR: "\u53F3\u624B\u8155",
+	  wrist: "\u624B\u8155",
+	  fingers: "\u624B\u6307",
+	  finger: "\u624B\u6307",
+	  torso: "\u80F4\u4F53",
+	  body: "\u8EAB\u4F53",
+	  top: "\u4E0A\u8EAB",
+	  organ: "\u5668\u5B98",
+	  organs: "\u5668\u5B98",
+	  slimebody: "\u53F2\u83B1\u59C6\u8EAB",
+	  snakebody: "\u86C7\u8EAB",
+	  tailbody: "\u5C3E\u8EAB",
+	  hoursebody: "\u9A6C\u8EAB",
+	  abdomen: "\u8179\u90E8",
+	  belly: "\u809A\u5B50",
+	  back: "\u80CC\u90E8",
+	  waist: "\u8170\u90E8",
+	  chest: "\u80F8\u8154",
+	  nipple: "\u4E73\u5934",
+	  breasts: "\u80F8\u90E8",
+	  breastL: "\u5DE6\u80F8",
+	  breastR: "\u53F3\u80F8",
+	  breast: "\u80F8\u90E8",
+	  heart: "\u5FC3\u810F",
+	  hearts: "\u5FC3\u810F",
+	  lung: "\u80BA",
+	  lungs: "\u80BA\u90E8",
+	  lungL: "\u5DE6\u80BA",
+	  lungR: "\u53F3\u80BA",
+	  liver: "\u809D",
+	  stomach: "\u80C3",
+	  intestine: "\u80A0\u9053",
+	  bladder: "\u8180\u80F1",
+	  ovary: "\u5375\u5DE2",
+	  testicles: "\u777E\u4E38",
+	  testicle: "\u777E\u4E38",
+	  prostate: "\u524D\u5217\u817A",
+	  uetrus: "\u5B50\u5BAB",
+	  womb: "\u5B50\u5BAB",
+	  fetus: "\u80CE\u513F",
+	  bottom: "\u4E0B\u8EAB",
+	  groin: "\u8179\u80A1\u6C9F",
+	  crotch: "\u88C6\u90E8",
+	  privates: "\u79C1\u5904",
+	  private: "\u79C1\u5904",
+	  genital: "\u751F\u6B96\u5668",
+	  genitals: "\u751F\u6B96\u5668",
+	  clitoris: "\u9634\u8482",
+	  anal: "\u809B\u95E8",
+	  penis: "\u9634\u830E",
+	  vagina: "\u9634\u9053",
+	  anus: "\u809B\u95E8",
+	  urin: "\u5C3F\u9053",
+	  urinary: "\u5C3F\u9053",
+	  urethral: "\u5C3F\u9053\u53E3",
+	  hips: "\u81C0\u90E8",
+	  butts: "\u5C41\u80A1",
+	  buttL: "\u5DE6\u81C0",
+	  buttR: "\u53F3\u81C0",
+	  thighs: "\u5927\u817F",
+	  thighL: "\u5DE6\u5927\u817F",
+	  thighR: "\u53F3\u5927\u817F",
+	  thigh: "\u5927\u817F",
+	  legs: "\u817F\u90E8",
+	  legL: "\u5DE6\u817F",
+	  legR: "\u53F3\u817F",
+	  leg: "\u817F",
+	  feet: "\u53CC\u811A",
+	  footL: "\u5DE6\u811A",
+	  footR: "\u53F3\u811A",
+	  foot: "\u811A",
+	  hoofs: "\u53CC\u8E44",
+	  hoof: "\u8E44",
+	  hoofL: "\u5DE6\u8E44",
+	  hoofR: "\u53F3\u8E44",
+	  ankles: "\u811A\u8E1D",
+	  ankleL: "\u5DE6\u811A\u8E1D",
+	  ankleR: "\u53F3\u811A\u8E1D",
+	  wings: "\u7FC5\u8180",
+	  wingL: "\u5DE6\u7FFC",
+	  wingR: "\u53F3\u7FFC",
+	  horns: "\u89D2",
+	  horn: "\u89D2",
+	  hornL: "\u5DE6\u89D2",
+	  hornR: "\u53F3\u89D2",
+	  tails: "\u5C3E\u5DF4",
+	  tail: "\u5C3E\u5DF4",
+	  tentacles: "\u89E6\u624B",
+	  skin: "\u76AE\u80A4",
+	  fur: "\u76AE\u6BDB",
+	  furs: "\u76AE\u6BDB"
+	};
+	const bodyGroup = [
+	  "organs",
+	  "bottom",
+	  "genital",
+	  "privates",
+	  "belly",
+	  "abdomen",
+	  "chest",
+	  "waist",
+	  "back",
+	  "top",
+	  "chest"
+	];
+	const posDict = {
+	  s: "side",
+	  l: "left",
+	  r: "right",
+	  f: "front",
+	  b: "back",
+	  t: "top",
+	  d: "bottom",
+	  c: "center",
+	  e: "end",
+	  i: "inside",
+	  o: "outside",
+	  rt: "root"
+	};
+	const Psize = [
+	  { l: [40, 60], d: [10, 20] },
+	  { l: [60, 90], d: [20, 36] },
+	  { l: [90, 134], d: [30, 48] },
+	  { l: [130, 152], d: [40, 52] },
+	  { l: [150, 170], d: [42, 58] },
+	  { l: [164, 184], d: [54, 70] },
+	  { l: [176, 210], d: [64, 90] },
+	  { l: [200, 250], d: [72, 100] },
+	  { l: [250, 400], d: [90, 148] }
+	];
+	const bodysize = [
+	  [1300, 1450],
+	  [1450, 1600],
+	  [1600, 1750],
+	  [1750, 1900],
+	  [1900, 2050],
+	  [2050, 2200]
+	];
+	const existency = ["natural", "ionic", "slime", "artifact", "hideable", "none", "invisible"];
+
+	const species = {
+	  human: ["\u4EBA\u7C7B", "Human"],
+	  elvin: ["\u7CBE\u7075", "Elvin"],
+	  deamon: ["\u9B54\u4EBA", "Half Deamon"],
+	  wolves: ["\u72FC\u4EBA", "Wolves"],
+	  drawf: ["\u77EE\u4EBA", "Drawf"],
+	  goblin: ["\u5730\u7CBE", "Goblin"],
+	  catvinx: ["\u72D0\u732B", "Catvinx"],
+	  centaur: ["\u9A6C\u5934\u4EBA", "Centaur"],
+	  bestiary: ["\u517D\u5316\u4EBA", "Bestiary Human"],
+	  orc: ["\u5965\u514B\u4EBA", "Orc"],
+	  titan: ["\u5DE8\u4EBA", "Titan"],
+	  dracon: ["\u9F99\u4EBA", "Dracon"],
+	  kijin: ["`\u9B3C\u4EBA", "Kijin"]
+	};
+
+	function GenerateHeight(size, scale = 1) {
+	  if (typeof size !== "number") {
+	    size = random(5);
+	  }
+	  const r = D.bodysize[size];
+	  const height = random(r[0], r[1]) + random(30);
+	  return height * scale;
+	}
+	function GenerateWeight(height) {
+	  const r = height / 1e3;
+	  const BMI = 19 + random(-2, 4);
+	  return Math.floor(r * r * BMI + 0.5) + random(30) / 10;
+	}
+	function BodyRatio(height) {
+	  const select = new SelectCase();
+	  select.case([240, 800], 3.5).case([800, 1240], 4).case([1300, 1400], 4.5).case([1400, 1500], 5).case([1500, 1660], 6).case([1660, 1740], 6.5).case([1740, 1800], 7).else(7.5);
+	  return select.has(height);
+	}
+	function BodySizeCalc(height) {
+	  return Math.floor((height / this.bodyScale - 1300) / 1500);
+	}
+	function HeadSize(height) {
+	  return height / BodyRatio(height);
+	}
+	function RandomSpeciesName(species) {
+	  return lan(draw(D.randomCharaNamePool));
+	}
+
+	var __defProp = Object.defineProperty;
+	var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+	var __hasOwnProp = Object.prototype.hasOwnProperty;
+	var __propIsEnum = Object.prototype.propertyIsEnumerable;
+	var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+	var __spreadValues = (a, b) => {
+	  for (var prop in b || (b = {}))
+	    if (__hasOwnProp.call(b, prop))
+	      __defNormalProp(a, prop, b[prop]);
+	  if (__getOwnPropSymbols)
+	    for (var prop of __getOwnPropSymbols(b)) {
+	      if (__propIsEnum.call(b, prop))
+	        __defNormalProp(a, prop, b[prop]);
+	    }
+	  return a;
+	};
+	class Organs {
+	  constructor(obj) {
+	    if (!isValid(obj)) {
+	      slog("warn", "Invalid organs object:", obj);
+	      return;
+	    }
+	    const { type, pos, group, name } = obj;
+	    this.name = name;
+	    this.type = type;
+	    this.pos = pos;
+	    this.group = group;
+	    this.initSexStats(name);
+	    this.init(obj);
+	    if (!this.hediff)
+	      this.hediff = [];
+	  }
+	  init(obj) {
+	    const { side, count, size, sens, shape, trait } = obj;
+	    if (side)
+	      this.side = side;
+	    if (count)
+	      this.count = count;
+	    if (size)
+	      this.sizeLv = size.default;
+	    if (sens)
+	      this.sens = sens.default;
+	    if (typeof shape === "string")
+	      this.shape = shape;
+	    if (trait)
+	      this.initTrait(trait);
+	    const { adj } = obj;
+	    if (adj) {
+	      this.initStats(adj);
+	    }
+	  }
+	  initSexStats(part) {
+	    switch (part) {
+	      case "vagina":
+	      case "anus":
+	      case "penis":
+	      case "urethral":
+	        if (!this.size)
+	          this.size = [0, 0];
+	      case "mouth":
+	      case "clitoris":
+	        if (!this.size)
+	          this.size = 0;
+	      case "breasts":
+	        if (!this.sizeLv)
+	          this.sizeLv = 0;
+	        if (!this.sens)
+	          this.sens = 0;
+	        break;
+	    }
+	    return this;
+	  }
+	  initStats(adj) {
+	    const { sens, d, l, size, trait } = adj;
+	    if (sens)
+	      this.sens = sens;
+	    if (d)
+	      this.size[0] = d;
+	    if (l)
+	      this.size[1] = l;
+	    if (size)
+	      this.sizeLv = size;
+	    if (trait)
+	      this.initTrait(trait);
+	    return this;
+	  }
+	  initProduce(config) {
+	    this.produce = config.type;
+	    if (config.amountPerDay || config.amountPerSize) {
+	      this.amount = { cur: 0 };
+	    }
+	    if (config.amountPerDay) {
+	      this.amount.day = config.amountPerDay;
+	    }
+	    if (config.amountPerSize) {
+	      this.amount.max = config.amountPerSize * (this.sizeLv || 1);
+	    }
+	    return this;
+	  }
+	  initCapacity(config, size) {
+	    if (!this.capacity) {
+	      this.capacity = [0, 0];
+	    }
+	    if (config.default) {
+	      this.capacity[1] = config.default;
+	    }
+	    if (config.scale) {
+	      this.capacity[1] = size * config.scale;
+	    }
+	    return this;
+	  }
+	  initTrait(config) {
+	    if (!this.trait) {
+	      this.trait = [];
+	    }
+	    if (typeof config === "string") {
+	      this.trait.push(config);
+	    } else if (Array.isArray(config)) {
+	      this.trait.push(...config);
+	    }
+	    return this;
+	  }
+	  initClitoris(BodyRatio) {
+	    this.size = this.sizeLv + BodyRatio;
+	    return this;
+	  }
+	  initMouth(height) {
+	    this.size = Organs.MouthDiameter(height, this.sizeLv);
+	    return this;
+	  }
+	  initUrethral(gender, config, height) {
+	    const option = this.group;
+	    if (typeof option === "object" && option[gender]) {
+	      this.group = option[gender];
+	    }
+	    this.initCapacity(config, height);
+	    if (this.group === "penis") {
+	      this.capacity[1] /= 5;
+	    }
+	    return this;
+	  }
+	  initUrethralSize(height, penis) {
+	    switch (this.group) {
+	      case "penis":
+	        if (!penis) {
+	          slog(
+	            "error",
+	            "Caught error on init urethral size. the urethral depent on penis, but not penis data found:",
+	            this,
+	            penis
+	          );
+	          return;
+	        }
+	        this.size[0] = Organs.UrethralDiameter(penis.size[0], this.sizeLv);
+	        this.size[1] = Math.floor(penis.size[1] * 1.2 + 0.5);
+	        break;
+	      default:
+	        this.size[0] = Organs.UrethralGeneralDiameter(height, this.sizeLv);
+	        this.size[1] = Organs.UrethralGeneralDepth(height);
+	    }
+	    return this;
+	  }
+	  initVagina(height, config) {
+	    this.size[0] = Organs.VagiDiameter(height, this.sizeLv);
+	    this.size[1] = Organs.VagiDepth(height);
+	    this.initCapacity(config, height);
+	    return this;
+	  }
+	  initAnal(height, config) {
+	    this.size[0] = Organs.AnalDiameter(height, this.sizeLv);
+	    this.size[1] = Organs.AnalDepth(height);
+	    if (config == null ? void 0 : config.trait)
+	      this.trait = config.trait;
+	    this.initCapacity(config, height);
+	    return this;
+	  }
+	  initPenis() {
+	    const size = D.Psize[this.sizeLv];
+	    const d = random(size.d[0], size.d[1]) + random(8);
+	    const l = random(size.l[0], size.l[1]) + random(8);
+	    if (!this.size[0])
+	      this.size[0] = d;
+	    if (!this.size[1])
+	      this.size[1] = l;
+	    return this;
+	  }
+	  static theoriticalMaxiumHoleSize(height) {
+	    return height / 10 * 0.9;
+	  }
+	  static strechLevelSize(height) {
+	    return this.theoriticalMaxiumHoleSize(height) / 12;
+	  }
+	  static VagiDiameter(height, sizeLv) {
+	    const max = this.strechLevelSize(height) * 1.1;
+	    return Math.floor(max + sizeLv * max) + random(-2, 2);
+	  }
+	  static VagiDepth(height) {
+	    return Math.floor(height / 21 + 0.5) + random(-4, 8);
+	  }
+	  static AnalDiameter(height, sizeLv) {
+	    const max = this.strechLevelSize(height);
+	    return Math.floor(max + sizeLv * max) + random(-2, 2);
+	  }
+	  static AnalDepth(height) {
+	    return Math.floor(height / 12 + 0.5) + random(-4, 8);
+	  }
+	  static MaxUrethralSize(height) {
+	    return this.theoriticalMaxiumHoleSize(height) / 4;
+	  }
+	  static UrethralStrechLevelSize(height) {
+	    return this.MaxUrethralSize(height) / 12;
+	  }
+	  static UrethralGeneralDiameter(height, sizeLv) {
+	    const max = this.UrethralStrechLevelSize(height);
+	    return Math.floor(max + sizeLv * max) + random(-2, 4) / 10;
+	  }
+	  static UrethralGeneralDepth(height) {
+	    return Math.floor(height / 30) + random(-4, 8);
+	  }
+	  static UrethralDiameter(penisDiameter, sizeLv) {
+	    const max = penisDiameter * 0.8 / 12;
+	    return Math.floor(max + sizeLv * max) + random(-2, 2) / 10;
+	  }
+	  static MouthDiameter(height, sizeLv) {
+	    const multip = 1 + sizeLv * 0.15;
+	    return Math.floor(height / 40 * multip) + random(10);
+	  }
+	  static addHediff(organ, type, hediff) {
+	    organ.hediff.push(__spreadValues({ type }, hediff));
+	    return organ;
+	  }
+	}
+
+	function fixLanArr(obj) {
+	  const lang = ["CN", "EN", "JP"];
+	  let result = [];
+	  for (const [key, value] of Object.entries(obj)) {
+	    if (Array.isArray(value) && value[0].lan) {
+	      value.forEach((obj2) => {
+	        const i = lang.indexOf(obj2.lan);
+	        delete obj2.lan;
+	        let k = Object.keys(obj2)[0];
+	        result[i] = obj2[k];
+	      });
+	      obj[key] = result;
+	      result = [];
+	    }
+	  }
+	}
+	function initBodyObj(body) {
+	  const bodytype = body.type;
+	  const fixkey = function(obj, key) {
+	    if (obj[key] && Array.isArray(obj[key])) {
+	      obj.parts = obj[key];
+	      delete obj[key];
+	    } else if (obj[key] && typeof obj[key] === "string") {
+	      obj.name = obj[key];
+	      delete obj[key];
+	    }
+	  };
+	  const fillObj = function(obj, key, parent) {
+	    if (groupmatch(key, "group", "option", "sens", "size", "config", "setting", "tags"))
+	      return;
+	    if (!obj.name)
+	      obj.name = key;
+	    if ((parent == null ? void 0 : parent.name) && !obj.group)
+	      obj.group = parent.name;
+	    if (!obj.type)
+	      obj.type = (parent == null ? void 0 : parent.type) || bodytype || "natural";
+	    if (!obj.count && key !== "organs")
+	      obj.count = 1;
+	  };
+	  const fixObj = function(obj) {
+	    for (let [key, value] of Object.entries(obj)) {
+	      if (typeof value === "string" && posDict[value]) {
+	        obj[key] = posDict[value];
+	      } else if (typeof value === "string" && value.includes("/")) {
+	        let side = value.split("/");
+	        side = side.map((s) => posDict[s]);
+	        obj[key] = side;
+	      } else if (typeof value === "object" && !Array.isArray(value)) {
+	        let v = value;
+	        fixkey(v, key);
+	        fillObj(v, key, obj);
+	        fixObj(value);
+	      } else {
+	        obj[key] = value;
+	      }
+	    }
+	  };
+	  fixObj(body);
+	  body.parts = listAllParts(body);
+	  body.settings = {};
+	  for (const [key, value] of Object.entries(body)) {
+	    if (bodyDict[key]) {
+	      body.settings[key] = value;
+	      delete body[key];
+	    }
+	  }
+	  return body;
+	}
+	function listAllParts(obj) {
+	  let parts = Object.keys(obj);
+	  const listObj = function(obj2) {
+	    for (let key in obj2) {
+	      let value = obj2[key];
+	      if (value.parts) {
+	        parts = parts.concat(value.parts);
+	      }
+	      if (typeof value === "object" && !Array.isArray(value)) {
+	        parts = parts.concat(Object.keys(value));
+	        listObj(value);
+	      }
+	    }
+	  };
+	  listObj(obj);
+	  parts = [...new Set(parts)];
+	  parts = parts.filter((part) => bodyDict.hasOwnProperty(part) && !bodyGroup.includes(part));
+	  return parts;
+	}
+	function InitSpecies() {
+	  let xml = scEra.xml;
+	  xml.forEach((value, key) => {
+	    if (key.includes("Species")) {
+	      let obj = value.race;
+	      fixLanArr(obj);
+	      Species.data[obj.id] = new Species(obj);
+	    }
+	  });
+	  slog("log", "All Species Loaded: ", Species.data);
+	}
+
+	class Species {
+	  static get(name, type, ...args) {
+	    const data = this.data[name];
+	    if (type === "buffs" && data.speciesBuffs) {
+	      if (args[0] && data.speciesBuffs[args[0]]) {
+	        return data.speciesBuffs[args[0]];
+	      } else if (args[0]) {
+	        slog("warn", "Caught Error on Species.get, no such buff", name, args[0]);
+	      }
+	      return data.speciesBuffs;
+	    }
+	    if (type && data[type]) {
+	      return data[type];
+	    } else if (type) {
+	      slog("warn", "Caught Error on Species.get, no such type", name, type);
+	    }
+	    if (data) {
+	      return data;
+	    } else {
+	      slog("warn", "Caught Error on Species.get, no such species", name);
+	    }
+	  }
+	  constructor(obj) {
+	    const {
+	      type,
+	      name,
+	      des,
+	      gender = ["male", "female"],
+	      talent = [],
+	      buffs = {},
+	      bodysize = { scale: 1, min: 1300, max: 2e3 },
+	      trait = [],
+	      skill = []
+	    } = obj;
+	    this.type = type;
+	    this.name = name;
+	    this.des = des;
+	    this.availableGender = gender;
+	    this.speciesTalent = talent;
+	    this.speciesTraits = trait;
+	    this.speciesSkill = skill;
+	    this.speciesBuffs = buffs;
+	    this.bodyScale = bodysize.scale;
+	    this.bodyheight = [bodysize.min, bodysize.max];
+	    const { cycle, threesize, bodygroup } = obj;
+	    const list = ["id", "basicStats", "avatar", "temper", "lifespan", "produce"];
+	    list.forEach((item) => {
+	      if (obj[item]) {
+	        this[item] = obj[item];
+	      }
+	    });
+	    if (cycle)
+	      this.cycleInfo = cycle;
+	    if (threesize)
+	      this.threeSizeScale = threesize;
+	    const ignore = Object.keys(this);
+	    ignore.push("bodygroup", "bodysize", "threesize", "cycle", "gender", "talent", "buffs", "trait", "skill");
+	    this.options = {};
+	    for (let key in obj) {
+	      if (ignore.includes(key))
+	        continue;
+	      this.options[key] = obj[key];
+	    }
+	    this.initBody(bodygroup);
+	  }
+	  Options(key, obj) {
+	    this.options[key] = obj;
+	    return this;
+	  }
+	  InitFunc(callback) {
+	    this.initFunc = callback;
+	    return this;
+	  }
+	  initBody(body) {
+	    this.bodyConfig = initBodyObj(body);
+	  }
+	  initTalent() {
+	    if (!this.speciesTalent || !this.speciesTalent.length)
+	      return;
+	    const talent = [];
+	    for (const t of this.speciesTalent) {
+	      if (Math.random() < t.rate) {
+	        talent.push(t.name);
+	      }
+	    }
+	    return talent;
+	  }
+	  initTraits() {
+	    if (!this.speciesTraits || !this.speciesTraits.length)
+	      return;
+	    const traits = [];
+	    for (const t of this.speciesTraits) {
+	      if (Math.random() < t.rate) {
+	        traits.push(t.name);
+	      }
+	    }
+	    return traits;
+	  }
+	  initSkill() {
+	    if (!this.speciesSkill || !this.speciesSkill.length)
+	      return;
+	    const skill = [];
+	    for (const t of this.speciesSkill) {
+	      if (Math.random() < t.rate) {
+	        skill.push(t.name);
+	      }
+	    }
+	    return skill;
+	  }
+	  configureBody(gender, height, adj) {
+	    const body = {};
+	    const set = clone(this.bodyConfig.settings);
+	    for (const key in this.produce) {
+	      if (set[key]) {
+	        set[key].produce = this.produce[key];
+	      }
+	    }
+	    if (adj) {
+	      for (const key in adj) {
+	        if (set[key]) {
+	          set[key].adj = adj[key];
+	        }
+	      }
+	    }
+	    for (const key in set) {
+	      const part = set[key];
+	      if (gender == "female" && groupmatch(key, "penis", "prostate", "testicles")) {
+	        continue;
+	      }
+	      if (gender == "male" && groupmatch(key, "vagina", "clitoris", "uterus")) {
+	        continue;
+	      }
+	      if (gender == "herm") {
+	        if (key == "clitoris" && !part.herm)
+	          continue;
+	        if (key == "prostate" && !part.herm)
+	          continue;
+	        if (key == "testicles" && !part.herm)
+	          continue;
+	      }
+	      body[key] = new Organs(part);
+	      switch (key) {
+	        case "vagina":
+	          body[key].initVagina(height, part);
+	          break;
+	        case "anus":
+	          body[key].initAnal(height, part);
+	          break;
+	        case "penis":
+	          body[key].initPenis();
+	          break;
+	        case "urethral":
+	          body[key].initUrethral(gender, part, height);
+	          break;
+	        case "mouth":
+	          body[key].initMouth(height);
+	          break;
+	        case "clitoris":
+	          body[key].initClitoris(BodyRatio(height));
+	          break;
+	      }
+	      if (part.produce && key !== "penis") {
+	        body[key].initProduce(part.produce);
+	      }
+	      if (part.capacity && !body[key].capacity) {
+	        body[key].initCapacity(part.capacity, height);
+	      }
+	    }
+	    if (body.urethral) {
+	      body.urethral.initUrethralSize(height, body.penis);
+	    }
+	    return body;
+	  }
+	  GenerateBust(height, gender, cup) {
+	    const r = gender == "male" ? 0.61 : 0.51;
+	    const standard = height * r + random(-5, 5);
+	    const cupsize = standard / 12 * cup;
+	    let result = cupsize + standard * (this.threeSizeScale.bust || 1);
+	    return result.fixed(2);
+	  }
+	  GenerateWaist(height, gender) {
+	    const r = gender == "male" ? 0.4 : 0.42;
+	    const standard = height * r + random(-5, 5);
+	    let result = standard * (this.threeSizeScale.waist || 1);
+	    return result.fixed(2);
+	  }
+	  GenerateHip(height, gender) {
+	    const r = gender == "male" ? 0.51 : 0.54;
+	    const standard = height * r + random(-5, 5);
+	    let result = standard * (this.threeSizeScale.hip || 1);
+	    return result.fixed(2);
+	  }
+	}
+	Species.data = {};
+
+	class Creature {
+	  static newId(species) {
+	    const len = Object.keys(Creature.data).length;
+	    return `${species}_${len}`;
+	  }
+	  constructor(obj = {}) {
+	    const { type = "charatemplate", species = "human" } = obj;
+	    this.type = type;
+	    this.species = species;
+	    this.id = Creature.newId(species);
+	    this.name = "";
+	    this.gender = "none";
+	    this.traits = [];
+	    this.talent = [];
+	    this.skill = [];
+	    this.stats = {};
+	    this.base = {};
+	    this.palam = {};
+	    this.appearance = {};
+	    this.body = {};
+	    this.bodysize = 1;
+	    this.source = {};
+	    this.state = [];
+	    this.tsv = {};
+	    this.abl = {};
+	    this.sbl = {};
+	  }
+	  Init(obj = {}) {
+	    const { name = "", gender = "" } = obj;
+	    console.log("init creature:", obj);
+	    this.r = Species.data[this.species];
+	    this.name = name;
+	    if (gender) {
+	      this.gender = gender;
+	    } else {
+	      let g = ["female", "herm", "male"];
+	      this.gender = g[random(2)];
+	    }
+	    if (!this.name) {
+	      if (!this.r)
+	        this.name = lan(draw(D.randomCharaNamePool));
+	      else
+	        this.name = RandomSpeciesName(this.species);
+	      this.randomchara = true;
+	    }
+	    this.InitCommon();
+	    if (this.r) {
+	      this.initSpecies(obj);
+	    }
+	    if (this.randomchara) {
+	      this.RandomInitDefault();
+	    }
+	    return this;
+	  }
+	  InitCommon() {
+	    this.initStats();
+	    this.initBase();
+	    this.initPalam();
+	    this.initAbility();
+	    this.initEquipment();
+	  }
+	  RandomInitDefault() {
+	    this.randomStats();
+	    this.randomAbility();
+	    this.randomSituAbility();
+	    if (!this.r) {
+	      this.RandomInitBody();
+	      this.RandomInitApp();
+	    } else {
+	      let adj = { bodysize: random(5), breasts: { sizeLv: this.gender === "male" ? 0 : random(10) } };
+	      this.initSpecies(adj);
+	    }
+	  }
+	  initSpecies(obj = {}) {
+	    this.bodysize = obj.bodysize || random(5);
+	    this.initApp(obj);
+	    this.body = this.r.configureBody(this.gender, this.appearance.height, obj);
+	    this.initTalent(obj);
+	    this.initTraits(obj);
+	    this.initSkill(obj);
+	    if (this.r.temper)
+	      this.temper = this.r.temper;
+	  }
+	  initTraits(obj = {}) {
+	    this.traits = this.r.initTraits() || [];
+	    if (!obj.traits)
+	      return;
+	    if (typeof obj.traits === "string") {
+	      this.traits.push(obj.traits);
+	    } else if (Array.isArray(obj.traits)) {
+	      this.traits = this.traits.concat(obj.traits);
+	    } else {
+	      slog("error", "TypeError: traits must be string or array:", obj.traits);
+	    }
+	  }
+	  initTalent(obj = {}) {
+	    this.talent = this.r.initTalent() || [];
+	    if (!obj.talent)
+	      return;
+	    if (typeof obj.talent === "string") {
+	      this.talent.push(obj.talent);
+	    } else if (Array.isArray(obj.talent)) {
+	      this.talent = this.talent.concat(obj.talent);
+	    } else {
+	      slog("error", "TypeError: talent must be string or array:", obj.talent);
+	    }
+	  }
+	  initSkill(obj = {}) {
+	    this.skill = this.r.initSkill() || [];
+	    if (!obj.skill)
+	      return;
+	    if (typeof obj.skill === "string") {
+	      this.skill.push(obj.skill);
+	    } else if (Array.isArray(obj.skill)) {
+	      this.skill = this.skill.concat(obj.skill);
+	    } else {
+	      slog("error", "TypeError: skill must be string or array:", obj.skill);
+	    }
+	  }
+	  initApp(obj = {}) {
+	    const app = this.appearance;
+	    app.height = obj.height || GenerateHeight(this.bodysize);
+	    app.weight = obj.weight || GenerateWeight(app.height);
+	    app.beauty = 1e3;
+	    const list = ["haircolor", "eyecolor", "skincolor", "hairstyle"];
+	    list.forEach((key) => {
+	      var _a;
+	      if (obj[key])
+	        app[key] = obj[key];
+	      else if ((_a = this.r) == null ? void 0 : _a.avatar[key])
+	        app[key] = draw(this.r.avatar[key]);
+	      else
+	        app[key] = draw(D[key + "Pool"]);
+	    });
+	  }
+	  initBody(obj = {}) {
+	    const size = obj.bodysize || random[5];
+	    let range = D.bodysize[size];
+	    this.appearance.height = obj.height || random(range[0], range[1]);
+	  }
+	  initBust(obj) {
+	    const app = this.appearance;
+	    const breast = this.body.breasts;
+	    if (this.r || obj.bust)
+	      app.bust = obj.bust || this.r.GenerateBust(app.height, this.gender, breast.sizeLv);
+	    else
+	      app.bust = Math.floor(app.height * 0.52) + random(-10, 10);
+	  }
+	  initWaist(obj) {
+	    const app = this.appearance;
+	    if (this.r || obj.waist)
+	      app.waist = obj.waist || this.r.GenerateWaist(app.height, this.gender);
+	    else
+	      app.waist = Math.floor(app.height * 0.37) + random(-10, 10);
+	  }
+	  initHip(obj) {
+	    const app = this.appearance;
+	    if (this.r || obj.hip)
+	      app.hip = obj.hip || this.r.GenerateHip(app.height, this.gender);
+	    else
+	      app.hip = Math.floor(app.height * 0.54) + random(-10, 10);
+	  }
+	  init3Size(obj = {}) {
+	    this.initBust(obj);
+	    this.initWaist(obj);
+	    this.initHip(obj);
+	  }
+	  initStats() {
+	    this.stats = {};
+	    D.stats.forEach((key) => {
+	      this.stats[key] = [10, 10];
+	    });
+	    return this;
+	  }
+	  initBase() {
+	    this.base = {};
+	    Object.keys(D.basicNeeds).forEach((key) => {
+	      this.base[key] = [1e3, 1e3];
+	    });
+	    Object.keys(D.basicPalam).forEach((key) => {
+	      this.base[key] = [0, 1200];
+	    });
+	    return this;
+	  }
+	  initPalam() {
+	    this.palam = {};
+	    this.source = {};
+	    Object.keys(D.palam).forEach((key) => {
+	      this.palam[key] = [0, 1200];
+	      this.source[key] = 0;
+	    });
+	    return this;
+	  }
+	  initAbility() {
+	    this.abl = {};
+	    Object.keys(D.abl).forEach((key) => {
+	      this.abl[key] = { lv: 0, exp: 0 };
+	    });
+	  }
+	  initSituAbility() {
+	    this.sbl = {};
+	    Object.keys(D.sbl).forEach((key) => {
+	      this.sbl[key] = 0;
+	    });
+	  }
+	  initEquipment() {
+	    this.equip = {};
+	    Object.keys(D.equipSlot).forEach((key) => {
+	      this.equip[key] = {};
+	    });
+	    return this;
+	  }
+	  getRandomStats(key) {
+	    var _a, _b;
+	    if (Species.data[this.species]) {
+	      let r = Species.data[this.species].basicStats;
+	      if (((_a = r[key]) == null ? void 0 : _a.min) && ((_b = r[key]) == null ? void 0 : _b.max))
+	        return [r[key].min, r[key].max];
+	      else if ((r == null ? void 0 : r.min) && (r == null ? void 0 : r.max))
+	        return [r.min, r.max];
+	    }
+	    return [5, 18];
+	  }
+	  randomStats() {
+	    D.stats.forEach((key) => {
+	      const v = this.getRandomStats(key);
+	      const value = random(v[0], v[1]);
+	      this.stats[key] = [value, value];
+	    });
+	  }
+	  randomAbility() {
+	    Object.keys(D.abl).forEach((key) => {
+	      this.abl[key].lv = random(0, 8);
+	    });
+	  }
+	  randomSituAbility() {
+	    Object.keys(D.sbl).forEach((key) => {
+	      this.sbl[key] = random(0, 6);
+	    });
+	  }
+	  RandomInitBody() {
+	    this.body = {};
+	    this.bodysize = random(0, 5);
+	    D.basicBodypart.forEach((key) => {
+	      this.body[key] = {
+	        type: random(100) < 12 ? "artifact" : "natural",
+	        dp: [10, 10],
+	        hediff: []
+	      };
+	    });
+	  }
+	  RandomInitApp() {
+	    this.appearance = {
+	      eyecolor: draw(D.eyecolorPool),
+	      haircolor: draw(D.haircolorPool),
+	      skincolor: draw(D.skincolorPool),
+	      hairstyle: draw(D.hairstylePool),
+	      beauty: 1e3,
+	      height: GenerateHeight(this.bodysize)
+	    };
+	    const app = this.appearance;
+	    this.appearance.weight = GenerateWeight(app.height);
+	    this.init3Size();
+	  }
+	  End() {
+	    delete this.r;
+	  }
+	  Freeze() {
+	    Object.freeze(this);
+	  }
+	}
+	Creature.data = {};
+
+	class Chara extends Creature {
+	  static get(charaId) {
+	    let chara = new Chara(charaId, {});
+	    Object.assign(chara, Chara.data[charaId]);
+	    return chara;
+	  }
+	  static new(CharaId, obj) {
+	    let chara = new Chara(CharaId, obj).Init(obj);
+	    this.data[CharaId] = chara;
+	    return chara;
+	  }
+	  static combineName(chara) {
+	    const { name, midname, surname } = chara;
+	    const fullname = `${name}${midname ? "\xB7" + midname : ""}${surname ? "\xB7" + surname : ""}`.trim();
+	    return fullname;
+	  }
+	  constructor(CharaId, obj) {
+	    super(obj);
+	    this.cid = CharaId;
+	    if (obj.name)
+	      this.name = obj.name;
+	    else if (!this.name)
+	      this.name = lan(draw(D.randomCharaNamePool));
+	    this.midname = obj.midname || "";
+	    this.surname = obj.surname || "";
+	    this.nickname = obj.nickname || "";
+	    this.callname = obj.callname || "";
+	    this.fullname = Chara.combineName(this);
+	    this.title = obj.title || "";
+	    this.class = obj.class || "common";
+	    this.guildRank = obj.guildRank || 0;
+	    this.birthday = obj.birthday || [S.startyear - 20, 1, 1];
+	    this.mood = 50;
+	    this.intro = obj.intro || [lan("\u89D2\u8272\u7B80\u4ECB", "CharaIntro"), lan("\u89D2\u8272\u7B80\u4ECB", "CharaIntro")];
+	    this.position = obj.position || "any";
+	    this.mark = {};
+	    this.exp = {};
+	    this.expUp = {};
+	    this.pregnancy = {};
+	    this.virginity = {};
+	    this.relation = {};
+	    this.flag = {};
+	    this.wallet = 1e3;
+	    this.debt = 0;
+	    this.inventory = [];
+	  }
+	  initChara(obj) {
+	    this.initMark();
+	    this.initExp();
+	    this.initSkin();
+	    this.initLiquid();
+	    this.initReveals();
+	    this.initVirginity();
+	    this.initDaily();
+	    this.initFlag();
+	    this.initLiquid();
+	    if (obj.stats) {
+	      this.Stats(obj.stats);
+	    }
+	    if (obj.abl) {
+	      this.Ability(obj.abl);
+	    }
+	    if (obj.sbl) {
+	      this.SituAbility(obj.sbl);
+	    }
+	    if (obj.skill) {
+	      this.skill.push(...obj.skill);
+	    }
+	    if (obj.exp) {
+	      this.Exp(obj.exp);
+	    }
+	    if (obj.flag) {
+	      this.Flag(obj.flag);
+	    }
+	    if (obj.virginity) {
+	      this.Virginity(obj.virginity);
+	    }
+	  }
+	  initMark() {
+	    Object.keys(D.mark).forEach((key) => {
+	      this.mark[key] = { lv: 0, history: [] };
+	    });
+	  }
+	  initExp() {
+	    Object.keys(D.exp).forEach((key) => {
+	      this.exp[key] = { aware: 0, total: 0 };
+	    });
+	  }
+	  initSkin() {
+	    this.skin = {};
+	    D.skinlayer.forEach((key) => {
+	      this.skin[key] = [];
+	    });
+	    if (this.gender == "male")
+	      delete this.skin.vagina;
+	    if (this.gender == "female")
+	      delete this.skin.penis;
+	    this.skin.total = {};
+	    return this;
+	  }
+	  initReveals() {
+	    this.reveals = {};
+	    const ignore = ["vagina", "penis", "buttL", "buttR"];
+	    this.reveals.expose = 3;
+	    this.reveals.reveal = 1500;
+	    this.reveals.detail = {};
+	    D.skinlayer.forEach((k) => {
+	      if (ignore.includes(k) === false)
+	        this.reveals.detail[k] = { expose: 3, block: 3 };
+	    });
+	    this.reveals.detail.genital = { expose: 3, block: 3 };
+	    this.reveals.detail.butts = { expose: 3, block: 3 };
+	    this.reveals.parts = Object.keys(this.reveals.detail);
+	    return this;
+	  }
+	  initVirginity() {
+	    this.virginity = {};
+	    const list = clone(D.virginity);
+	    if (this.gender === "male")
+	      list.delete();
+	    if (this.gender === "female")
+	      list.delete();
+	    list.forEach((k) => {
+	      this.virginity[k] = [];
+	    });
+	    return this;
+	  }
+	  initDaily() {
+	    this.daily = {};
+	    D.dailykeys.forEach((key) => {
+	      this.daily[key] = 0;
+	    });
+	    if (this.gender == "female") {
+	      delete this.daily.cum;
+	    }
+	    if (this.gender == "male") {
+	      delete this.daily.cumV;
+	      delete this.daily.ogV;
+	    }
+	    return this;
+	  }
+	  initFlag() {
+	    D.cflag.forEach((key) => {
+	      this.flag[key] = 0;
+	    });
+	    return this;
+	  }
+	  initLiquid() {
+	    this.liquid = {};
+	    D.initials.forEach((alpha) => {
+	      let i = alpha.toLowerCase();
+	      this.liquid[i] = {};
+	      D.liquidType.forEach((key) => {
+	        this.liquid[i][key] = 0;
+	      });
+	      this.liquid[i].total = 0;
+	    });
+	    return this;
+	  }
+	  Names(obj) {
+	    if (obj.v)
+	      this.name = obj.n;
+	    if (obj.m)
+	      this.midname = obj.n;
+	    if (obj.s)
+	      this.surname = obj.n;
+	    if (obj.n)
+	      this.nickname = obj.n;
+	    if (obj.c)
+	      this.callname = obj.n;
+	    this.fullname = Chara.combineName(this);
+	    return this;
+	  }
+	  set(key, value) {
+	    this[key] = value;
+	    return this;
+	  }
+	  Stats(obj) {
+	    D.stats.forEach((key) => {
+	      const v = obj[key] || this.getRandomStats(key);
+	      this[key] = [v, v];
+	    });
+	    return this;
+	  }
+	  Ability(obj) {
+	    Object.keys(obj).forEach((key) => {
+	      this.abl[key].lv = obj[key];
+	    });
+	    return this;
+	  }
+	  SituAbility(obj) {
+	    Object.keys(obj).forEach((key) => {
+	      this.sbl[key] = obj[key];
+	    });
+	    return this;
+	  }
+	  Exp(obj) {
+	    Object.keys(obj).forEach((key) => {
+	      let val = obj[key];
+	      if (typeof val === "string") {
+	        let match = val.match(/\d+/g);
+	        if (match) {
+	          console.log(match);
+	          val = Number(match[0]) + random(Number(match[1]));
+	        }
+	      }
+	      this.exp[key].total = val;
+	      this.exp[key].aware = val;
+	    });
+	    return this;
+	  }
+	  Appearance(obj) {
+	    Object.keys(obj).forEach((key) => {
+	      this.appearance[key] = obj[key];
+	    });
+	    return this;
+	  }
+	  Virginity(obj) {
+	    Object.keys(obj).forEach((key) => {
+	      this.virginity[key] = obj[key];
+	    });
+	    return this;
+	  }
+	  Flag(obj) {
+	    Object.keys(obj).forEach((key) => {
+	      this.flag[key] = obj[key];
+	    });
+	    return this;
+	  }
+	}
+	Chara.data = {};
+
+	const module = {
+	  name: "Creatures",
+	  version: "1.0.0",
+	  des: "A module for species and character system.",
+	  data: {
+	    species,
+	    bodyDict,
+	    bodyGroup,
+	    Psize,
+	    existency,
+	    bodysize
+	  },
+	  database: {
+	    Species: Species.data,
+	    Creature: Creature.data,
+	    Chara: Chara.data
+	  },
+	  classObj: {
+	    Organs,
+	    Species,
+	    Creature,
+	    Chara
+	  },
+	  func: {
+	    GenerateHeight,
+	    GenerateWeight,
+	    RandomSpeciesName,
+	    listAllParts,
+	    Fix: {
+	      LanArr: fixLanArr,
+	      BodyRatio,
+	      BodySizeCalc,
+	      HeadSize
+	    },
+	    Init: {
+	      InitSpecies,
+	      initBodyObj
+	    }
+	  },
+	  config: {
+	    globaldata: true
+	  },
+	  Init: ["InitSpecies"]
+	};
+	addModule(module);
+
 	slog(
 	  "log",
-	  "game/main.ts is loaded. The current language is " + (Config == null ? void 0 : Config.lan) + ". State: " + lan("\u987A\u5229\u52A0\u8F7D\u6E38\u620F\u6A21\u7EC4", "Successfully loaded game modules")
+	  "game/main.ts is loaded. The current language is " + (Config == null ? void 0 : Config.lan) + ". State: " + lan$1("\u987A\u5229\u52A0\u8F7D\u6E38\u620F\u6A21\u7EC4", "Successfully loaded game modules")
 	);
 
 })();

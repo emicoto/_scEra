@@ -1,0 +1,27 @@
+{
+	"abl": {
+		"magica": ["魔法等级", "Magica"],
+		"lumen": ["光魔法", "Lumen Magic"],
+		"ark": ["暗魔法", "Ark Magic"],
+		"flare": ["火魔法", "Flare Magic"],
+		"ions": ["水魔法", "Ions Magic"],
+		"vitae": ["木魔法", "Vitae Magic"],
+		"terra": ["土魔法", "Terra Magic"],
+		"electron": ["电魔法", "Electron Magic"],
+
+		"sword": ["剑术", "Sword"],
+		"wrestle": ["格斗", "Wrestle"],
+		"running": ["跑步", "Running"],
+
+		"cooking": ["料理", "Cooking"],
+		"plant": ["种植", "Plant"],
+		"medicine": ["药物", "Medicine"],
+		"craft": ["制作", "Craft"],
+		"fishing": ["钓鱼", "Fishing"],
+		"gather": ["采集", "Gather"],
+		"sing": ["歌唱", "Sing"],
+		"dance": ["舞蹈", "Dance"],
+		"instrument": ["乐器", "Instrument"],
+		"paint": ["绘画", "Paint"]
+	}
+}

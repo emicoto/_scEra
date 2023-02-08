@@ -1,0 +1,35 @@
+{
+	"stats": ["ATK", "DEF", "MTK", "MDF", "STR", "CON", "DEX", "INT", "WIL", "PSY", "ALR", "LUK"],
+
+	"basekey": [
+		"health",
+		"stamina",
+		"sanity",
+		"mana",
+		"hydration",
+		"nutrition",
+		"clean",
+		"drug",
+		"alcohol",
+		"stress",
+		"libido"
+	],
+
+	"basicNeeds": {
+		"health": ["健康", "HP."],
+		"stamina": ["体力", "SP."],
+		"sanity": ["理智", "San."],
+		"mana": ["魔力", "MP."],
+
+		"hydration": ["水分", "Hyd."],
+		"nutrition": ["营养", "Nutr."],
+		"clean": ["清洁", "Cln."]
+	},
+
+	"basicPalam": {
+		"drug": ["药物", "Drg."],
+		"alcohol": ["酒精", "Alc."],
+		"stress": ["压力", "Str."],
+		"libido": ["性欲", "Lbd."]
+	}
+}

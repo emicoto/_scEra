@@ -574,14 +574,14 @@ export async function getTraitJson() {
 	let list: setTrait[] = [];
 	let conflict: string[][] = [];
 
-	const filesData:any[] | void  = await getJson("./json/traits.json").then((res) => {
-		slog("log", "Get file list from traits.json:", res)
+	const filesData: any[] | void = await getJson("./json/traits.json").then((res) => {
+		slog("log", "Get file list from traits.json:", res);
+		return res;
 	});
 
-	if(filesData){
-
+	if (filesData) {
 		filesData.forEach(([filename, trait]) => {
-			slog('log', 'Get traits from ' + filename, trait)
+			slog("log", "Get traits from " + filename, trait);
 			//if is conflict file
 			if (filename.includes("conflict")) {
 				//ensure is array
@@ -592,21 +592,19 @@ export async function getTraitJson() {
 			}
 
 			//if is trait file
-			else if(Array.isArray(trait)){
-				if(trait.length === 0){
+			else if (Array.isArray(trait)) {
+				if (trait.length === 0) {
 					slog("warn", "Error: format error, skip this file. trait file must be array and not empty:", trait);
 				}
 				//ensure the format is correct
 				if (trait[0].name && trait[0].group && trait[0].des) {
 					list = list.concat(trait);
-				}
-				else{
+				} else {
 					slog("warn", "Error: format error, skip this file:", trait);
 				}
-
 			}
 		});
-		slog("log", "Get all the list done:", list, conflict)
+		slog("log", "Get all the list done:", list, conflict);
 	}
 	return { list, conflict };
 }

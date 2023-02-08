@@ -1,19 +1,10 @@
-declare global {
-	interface Window {
-		scEra;
-		addModule: typeof addModule;
-		config;
-		slog: (type: "log" | "warn" | "error", ...args: any[]) => void;
-		now: () => string;
-	}
-	interface scEra {
-		modules;
-	}
-}
-declare var scEra: typeof window.scEra;
-declare var Config: typeof window.config;
-declare function slog(type: "log" | "warn" | "error", ...args: any[]): void;
+import { getJson } from "./utils";
 
+export * from "./utils";
+declare var scEra: typeof window.scEra;
+declare function slog(type: "log" | "warn" | "error", ...args: any[]): void;
+declare var jQuery: typeof window.jQuery;
+declare var D: typeof window.D;
 //------------------------------------------------------------------------------
 //
 //   scEra.regist
@@ -83,6 +74,39 @@ Object.defineProperties(window, {
 
 //-------------------------------------------------------------
 //
+//  load all the basic defination json files
+//
+//-------------------------------------------------------------
+async function loadBasicDefinationJson() {
+	const filesdata: any[] = await getJson("./data/main.json").then((res) => {
+		slog("log", "Main data file loaded:", res);
+		return res;
+	});
+
+	if (!filesdata) return;
+
+	filesdata.forEach(([filename, filedata]) => {
+		slog("log", "Loading data from file:", filename, "...");
+		if (!filedata) return;
+		for (let key in filedata) {
+			D[key] = filedata[key];
+		}
+	});
+
+	slog("log", "All basic defination json files are loaded:", D);
+
+	if (D.expGroup) {
+		//assign all the expgroup from expgroup to exp
+		D.exp = {};
+		Object.keys(D.expGroup).forEach((key) => {
+			Object.assign(D.exp, D.expGroup[key]);
+			D.expGroup[key] = Object.keys(D.expGroup[key]);
+		});
+	}
+}
+
+//-------------------------------------------------------------
+//
 //   startup
 //
 //-------------------------------------------------------------
@@ -90,16 +114,24 @@ Object.defineProperties(window, {
 scEra.version = "0.3.5";
 console.time("scEra startup");
 
+$(document).one("sugarcube:startup", async () => {
+	await loadBasicDefinationJson();
+	console.timeLog("scEra startup");
+
+	scEra.status = "ready";
+});
+
 $(document).one(":initstory", () => {
-	console.log("after init story module");
-});
+	const checkId = setInterval(() => {
+		//check if the basic defination json files are loaded
+		if (scEra.status !== "ready") {
+			return;
+		}
 
-$(document).one(":storyinit", () => {
-	console.log("before storyinit");
-});
-
-$(document).one(":afterinit", () => {
-	console.log("after init");
+		slog("log", "Era and SugarCube both ready to next step....");
+		jQuery.event.trigger({ type: "scEra:ready" });
+		clearInterval(checkId);
+	}, 50);
 });
 
 //-------------------------------------------------------------
@@ -108,11 +140,19 @@ $(document).one(":afterinit", () => {
 //   apply the module
 //
 //-------------------------------------------------------------
-$(document).one("sugarcube:ready", () => {
+$(document).one("scEra:ready", () => {
 	slog("log", "Start to apply modules:", Object.keys(scEra.modules).join(", "));
 
-	Object.keys(scEra.modules).forEach(async (key) => {
+	scEra.loadorder.forEach(async (key) => {
 		await scEra.applyMod(key);
+	});
+
+	Object.keys(scEra.modules).forEach(async (key) => {
+		if (scEra.loadorder.includes(key)) {
+			return;
+		} else {
+			await scEra.applyMod(key);
+		}
 	});
 	console.timeLog("scEra startup");
 	slog("log", "Finish to apply modules.");
@@ -134,21 +174,26 @@ $(document).one("sugarcube:ready", () => {
 
 $(document).one("scEra:apply", async function () {
 	slog("log", "All modules are applied successfully. Start to initialization...");
+	console.timeLog("scEra startup");
 
-	for (const [key, func] of Object.entries(scEra.initialization)) {
+	console.log(scEra.startupInit);
+
+	scEra.startupInit.forEach(async (key) => {
 		slog("log", `Start to run initialization function ${key}...`);
+		let func = scEra.initialization[key];
 		if (func && typeof func === "function") await func();
-	}
+		else slog("warn", `Initialization function ${key} is not found, skipping...`);
+	});
 
 	slog("log", "All initialization functions are applied successfully.");
-
 	jQuery(document).trigger(":modulesloaded");
+	jQuery.event.trigger({ type: ":afterload" });
 });
 
 $(document).one(":modulesloaded", () => {
 	slog("log", "All modules are loaded successfully.");
 	console.timeEnd("scEra startup");
-	Config.afterinit = true;
+	scEra.status = "storyready";
 });
 
 $(document).one(":storyready", () => {

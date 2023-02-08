@@ -1,0 +1,69 @@
+{
+	"expGroup": {
+		"basic": {
+			"M": ["M经验", "Exp M."],
+			"B": ["B经验", "Exp B."],
+			"C": ["C经验", "Exp C."],
+			"U": ["U经验", "Exp U."],
+			"V": ["V经验", "Exp V."],
+			"A": ["A经验", "Exp A."]
+		},
+		"orgasm": {
+			"orgasm": ["高潮", "Orgasm"],
+			"orgM": ["M高潮", "Org M."],
+			"orgB": ["B高潮", "Org B."],
+			"orgC": ["C高潮", "Org C."],
+			"orgU": ["U高潮", "Org U."],
+			"orgV": ["V高潮", "Org V."],
+			"orgA": ["A高潮", "Org A."],
+			"strongOrg": ["强高潮", "Strong Orgasm"],
+			"deepOrg": ["深度高潮", "Deep Orgasm"],
+			"multiOrg": ["多重高潮", "Multi Orgasm"]
+		},
+		"general": {
+			"kiss": ["接吻", "Kiss"],
+			"cum": ["射精", "Cum"],
+			"milk": ["喷乳", "Milk"],
+			"pee": ["放尿", "Pee"],
+			"swallow": ["饮精", "Swallowed"],
+
+			"analsex": ["肛交", "Anal Sex"],
+			"vagisex": ["性交", "Vagina Sex"],
+			"titjob": ["乳交", "Tit Job"],
+			"oraljob": ["口交", "Oral Job"],
+
+			"ejacV": ["V内射", "V Ejaculated"],
+			"ejacA": ["A内射", "A Ejaculated"],
+			"devB": ["乳头开发", "Tits Trained"],
+			"devA": ["后穴开发", "Anal Trained"],
+			"devU": ["尿道开发", "Urethral Trained"],
+			"devV": ["子宫开发", "Uterus Trainded"],
+
+			"tentacles": ["触手", "Tentacles"],
+			"insertion": ["插入", "Insertion"],
+			"sextoy": ["道具", "Sextoy Used"],
+			"filmed": ["被拍摄", "be Filmed"]
+		},
+		"extra": {
+			"mascho": ["受虐", "Get Pain"],
+			"expose": ["露出", "Exposed"],
+			"pregnant": ["怀孕", "Pregnant"],
+			"spawn": ["产卵", "Spawned"],
+			"gangbang": ["轮奸", "Gangbang"],
+			"bestial": ["兽奸", "Bestial"],
+
+			"sleepsex": ["眠奸", "Sleep Sex"],
+			"raped": ["强奸", "Be Raped"],
+			"TS": ["性转", "Trans Sex"],
+			"homo": ["同性", "Homo Sex"],
+			"love": ["爱情", "Be Loved"],
+			"serve": ["侍奉", "Served"],
+			"onani": ["自慰", "Masturbated"],
+			"drugs": ["嗑药", "Drugs Taken"],
+			"submi": ["服从", "Submissive"],
+			"hypno": ["催眠", "Be Hypnosis"],
+			"train": ["调教", "Be Trained"],
+			"sadic": ["施虐", "Pain Given"]
+		}
+	}
+}

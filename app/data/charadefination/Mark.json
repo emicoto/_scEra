@@ -1,0 +1,12 @@
+{
+	"mark": {
+		"hypno": ["催眠刻印", "Hypnosis Mark"],
+		"ecstacy": ["快乐刻印", "Ecstacy Mark"],
+		"surrend": ["屈服刻印", "Surrender Mark"],
+		"pain": ["痛苦刻印", "Pain Mark"],
+		"fear": ["恐惧刻印", "Fear Mark"],
+		"humiliate": ["耻辱刻印", "Humiliated Mark"],
+		"mortify": ["羞耻刻印", "Mortify Mark"],
+		"resist": ["反抗刻印", "Resistance Mark"]
+	}
+}

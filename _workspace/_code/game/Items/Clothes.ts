@@ -1,5 +1,5 @@
 import { Items } from "./item";
-import {clothcategory, shop, gender, clothtags, coverparts} from '../types'
+import { clothcategory, shop, gender, clothtags, coverparts } from "../types";
 
 export interface Clothes extends Items {
 	id: string; //在库中所登记的id,
@@ -29,8 +29,8 @@ export interface Clothes extends Items {
 }
 
 export class Clothes extends Items {
-	constructor(cate: clothcategory, name: [string, string?], des: [string, string?], gender: gender = "n") {
-		super(name, des, "clothes", cate);
+	constructor(category: clothcategory, name: [string, string?], des: [string, string?], gender: gender = "n") {
+		super({ name, des, group: "clothes", category } as Items);
 		this.gender = gender;
 		this.uid = "0";
 

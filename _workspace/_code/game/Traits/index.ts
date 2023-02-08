@@ -27,6 +27,7 @@ const modules = {
 		},
 		globaldata: true,
 	},
+	Init: ["Traitlist"],
 };
 
 declare function addModule(modules): boolean;

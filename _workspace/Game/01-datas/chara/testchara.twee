@@ -1,0 +1,86 @@
+:: CharaSheet_Besta[csv]
+id, Besta
+name, 贝斯塔
+
+gender, male
+species, human
+position, any
+title, 狼战士
+job, warrior
+
+birthday, 4028, 10, 29
+
+traits, 强壮
+traits, 胆大
+traits, 厚脸皮
+traits, 冲动
+traits, 不服输
+traits, 忠诚
+traits, 乐观
+
+talent, 毛茸茸
+talent, 恢复快
+talent, 雷属性
+talent, 火属性
+
+skill, lighting
+
+bodysize, 4
+appearance.eyecolor, 蓝色
+appearance.haircolor, 灰蓝色
+appearance.hairstyle, 短发马尾
+appearance.skincolor, 麦色
+appearance.height, 1924
+
+stats.STR, 20
+stats.CON, 18
+stats.DEX, 18
+stats.INT, 8
+stats.WIL, 12
+stats.PSY, 8
+stats.ALR, 10
+
+abl.magica, 4
+abl.flare, 2
+abl.electron, 4
+abl.sword, 12
+abl.wrestle, 16
+abl.cooking, 6
+abl.craft, 12
+abl.fishing, 12
+abl.gather, 10
+
+sbl.knowledge, 5
+sbl.endurance, 2
+sbl.desire, 6
+
+penis.shape, 狼阴茎
+penis.trait, 结, 茎骨
+penis.size, 4
+penis.d, 42
+penis.l, 174
+
+mouth.size, 4
+mouth.sens, 2
+
+flag.jobfame, 40
+
+exp.onani, 30+random(100)
+exp.homo, 5+random(30)
+exp.analsex, 5+random(30)
+exp.insertion, 10+random(30)
+
+scar.face, scar
+scar.back, scar
+scar.back, scar
+scar.waistback, scar
+scar.abdomen, scar
+scar.breast, scar
+scar.arms, scar
+
+virginity.kiss, 姐姐, 不明, 在姐姐的引导下学会了接吻
+virginity.anal, 不明, 不明, 在一次酒吧派对上、醉酒后与伙伴发生了关系。
+virginity.analsex, 不明, 不明, 在一次酒吧派对上、醉酒后与伙伴发生了关系。
+virginity.penis, 不明, 不明, 在一次酒吧派对上、醉酒后与伙伴发生了关系。
+virginity.vagina, 不明, 不明, 在一次酒吧派对上、醉酒后与伙伴发生了关系。
+virginity.vaginasex, 不明, 不明, 在一次酒吧派对上、醉酒后与伙伴发生了关系。

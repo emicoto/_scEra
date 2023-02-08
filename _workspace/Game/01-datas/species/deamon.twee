@@ -1,43 +1,61 @@
-:: Species_Human [xml]
+:: Species_Deamon[xml]
 <?xml version='1.0' encoding='utf-8'?>
-<race type='chara' id='human'>
-<name lan='EN'>Human</name>
-<name lan='CN'>人类</name>
-<des lan='EN'>Humans are the most common intelligent creatures on this planet. They are ordinary, but because of their balanced abilities, their great adaptability, allowed their feet to tread across the main land.</des>
-<des lan='CN'>人类是这个星球上最普遍的智慧生物。他们普通，但因为均衡的能力、强大的适应能力，让他们的子子孙孙踏遍了整片大陆。</des>
-<gender>male||female</gender>
-<lifespan>100</lifespan>
+<race type='chara' id='deamon'>
+<name lan='CN'>魔人</name>
+<name lan='EN'>Half Deamon</name>
+<des lan='CN'></des>
+<des lan='EN'></des>
+<gender>male||female||herm</gender>
+<lifespan>300</lifespan>
 <talent>
-	<li>
-		<name>FastAdaption</name>
-		<rate>0.4</rate>
-	</li>
+   <li>
+      <name>MagicalAffinity</name>
+      <rate>0.2</rate>
+   </li>
+   <li>
+      <name>Genius</name>
+      <rate>0.2</rate>
+   </li>
 </talent>
+<trait>
+   <li>
+      <name>Pride</name>
+      <rate>0.3</rate>
+   </li>
+</trait>
 <buffs>
-	<health>1.1</health>
-	<stamina>1.1</stamina>
-	<mana>1.1</mana>
-	<ATK>1.1</ATK>
-	<DEF>1.1</DEF>
-	<MTK>1.1</MTK>
-	<MDF>1.1</MDF>
+	<health>1</health>
+	<stamina>1</stamina>
+	<mana>0.5</mana>
+	<ATK>1</ATK>
+	<DEF>1</DEF>
+	<MTK>0.8</MTK>
+	<MDF>1.2</MDF>
 </buffs>
-<basicStats min='5' max='18'></basicStats>
+<basicStats>
+   <STR min='6' max='18'></STR>
+   <CON min='6' max='18'></CON>
+   <DEX min='6' max='18'></DEX>
+   <INT min='6' max='16'></INT>
+   <WIL min='3' max='14'></WIL>
+   <PSY min='3' max='14'></PSY>
+   <ALR min='3' max='18'></ALR>
+</basicStats>
 
-<bodysize scale='1' min='1300' max='2100'></bodysize>
+<bodysize scale='1.2' min='1500' max='2100'></bodysize>
 <!-- the comfortable temperature  -->
-<tempe min='16' max='30' best='23' body='37'></tempe>
+<temper min='16' max='36' best='28' body='38'></temper>
 <bodygroup type='natural'>
 	<!-- pos: s=side, f=front, b=back, t=top, d=bottom, l=left, r=right, i=inside, o=outside, e=end, rt=root -->
-	<head name="head" group='head'></head>
-	<ears name='ear' group='head' pos='s' count='2' side='l/r'></ears>
+	<head name="head" group='head' pos='t'></head>
+	<ears name='ear' shape='elf' group='head' pos='s' count='2' side='l/r'></ears>
 	<brain name='brain' group='head' pos='i'></brain>
 
 	<eyes name='eye' group='face' pos='t' count='2' side='l/r'></eyes>
 	<nose name='nose' group='face' pos='c'></nose>
 	<mouth name='mouth' group='face' pos='b'></mouth>
 
-	<torso name='torso' group='torso'></torso>
+	<torso name='torso' group='torso' pos='c'></torso>
 	<neck name='neck' group='torso' pos='t'></neck>
 	<breasts name='breasts' group='torso' pos='f' count='1'></breasts>
 
@@ -63,8 +81,8 @@
 	<butts name='buttock' group='hips' pos='b' count='2' side='l/r'></butts>
    
    <vagina name='vagina' group='genitals' pos='i'>
-      <sens default='1'></sens>
-      <shape>human</shape>
+      <sens default='0'></sens>
+      <shape>elf</shape>
       <!-- scale is times of height(mm), unit is ml -->
       <capacity scale='0.8'></capacity>
    </vagina>
@@ -72,19 +90,20 @@
 
    <penis name='penis' group='genitals' pos='f'>
       <size default='3' max='5'></size>
-      <shape>human</shape>
+      <shape>elf</shape>
    </penis>
    <testicles name='testicles' group='genitals' pos='rt' herm='false'></testicles>
 
    <urethral name='urethral' pos='i'>
       <group female='vagina' male='penis' herm='penis'></group>
-      <capacity default='500'></capacity>
+      <capacity default='420'></capacity>
    </urethral>
 
    <prostate name='prostate' pos='i' group='anus' herm='true'></prostate>
 
    <anus name='anus' pos='i' group='anus'>
-      <capacity scale='1.2'></capacity>
+      <capacity scale='1'></capacity>
+      <sens default='1'></sens>
    </anus>
 
 </bodygroup>
@@ -108,8 +127,8 @@
 <avatar>
 	<headtype>pointy||round||square</headtype>
 	<bodytype>human</bodytype>
-	<eartype>human</eartype>
-	<skincolor>pale||white||health||black||chocolate||copper||sunset</skincolor>
-	<defaulthaircolor>brown</defaulthaircolor>
+	<eartype>elvin</eartype>
+	<skincolor>pale||white||health||gold</skincolor>
+	<defaulthaircolor>blond</defaulthaircolor>
 </avatar>
 </race>

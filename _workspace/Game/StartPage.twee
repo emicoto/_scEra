@@ -15,7 +15,7 @@
 
 <<run
    console.log('scEra version: ' + scEra.version)
-   slog('log','This is the end of StoryInit, but the scEra still on loading...')
+   slog('log','This is the end of StoryInit...')
 >>
 
 

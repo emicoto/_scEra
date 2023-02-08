@@ -102,6 +102,7 @@ const modules = {
 	setup: {
 		setTagByBoardType,
 	},
+	Init: ["initWorldMap"],
 };
 
 declare function addModule(modules): boolean;

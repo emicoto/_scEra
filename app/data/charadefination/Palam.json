@@ -1,0 +1,34 @@
+{
+	"palam": {
+		"ecstacy": ["快感", "Ecs."],
+		"lust": ["欲情", "Lust."],
+		"surrend": ["屈从", "Srr."],
+		"fear": ["恐惧", "Fear."],
+		"mortify": ["羞耻", "Mtf."],
+		"humiliate": ["受辱", "Hml."],
+		"pain": ["疼痛", "Pain."],
+		"depress": ["抑郁", "Dpr."],
+		"resist": ["抵触", "Rst."],
+		"favo": ["好意", "Favo"],
+		"uncomfort": ["不适", "Ucm."],
+
+		"eager": ["渴望", "Egr."],
+		"angry": ["愤怒", "Angr."],
+		"satisfy": ["满意", "Sat."],
+		"superior": ["优越", "Sup."],
+
+		"esM": ["快M", "ecsM."],
+		"esB": ["快B", "ecsB."],
+		"esC": ["快C", "ecsC."],
+		"esU": ["快U", "ecsU."],
+		"esV": ["快V", "ecsV."],
+		"esA": ["快A", "ecsA."],
+
+		"paM": ["痛M", "pnM."],
+		"paB": ["痛B", "pnB."],
+		"paC": ["痛C", "pnC."],
+		"paU": ["痛U", "pnU."],
+		"paV": ["痛V", "pnV."],
+		"paA": ["痛A", "pnA."]
+	}
+}

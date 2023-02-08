@@ -22,10 +22,13 @@ window.saveToFile = function () {
 console.log("check config", Config);
 
 Config.lan = "CN";
-Config.deflan = "CN";
-Config.seclan = "EN";
+Config.defLan = "CN";
+Config.secLan = "EN";
+Config.supportLan = ["CN", "EN"];
 
 jQuery(document).trigger("sugarcube:ready");
 
-Config.runningcycle = true;
-Config.afterinit = false;
+Config.onEra = true;
+Era.status = "start";
+
+setup.startYear = 4066;

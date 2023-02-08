@@ -1,76 +1,35 @@
-:: Species_Elvin[xml]
+:: Species_Human [xml]
 <?xml version='1.0' encoding='utf-8'?>
-<race type='chara' id='elvin'>
-<name lan='CN'>精灵</name>
-<name lan='EN'>Elvin</name>
-<des lan='CN'>精灵是这个星球上最古老的智慧物种。他们聪明、专注，对世界充满好奇心，同时又因为漫长的寿命容易变得固执保守，不乐意去改变已有的生活方式。漫长的历史与寿命让他们的传承从未断续，积累下来的技术与智慧是其他物种无法匹敌的。他们天生就拥有很高的魔法亲和力，是距离真理最近的物种。</des>
-<des lan='EN'>Elvins are the oldest intelligent species on the planet. They are intelligent, dedicated, and curious about the world. But because of their long lifespan they are prone to become stubborn and conservative, unwilling to change the way they live. Their long history and longevity has allowed them to build up a legacy of skills and wisdom unmatched by any other species. They have a high natural affinity for magic and are the closest to the truth.</des>
+<race type='chara' id='human'>
+<name lan='EN'>Human</name>
+<name lan='CN'>人类</name>
+<des lan='EN'>Humans are the most common intelligent creatures on this planet. They are ordinary, but because of their balanced abilities, their great adaptability, allowed their feet to tread across the main land.</des>
+<des lan='CN'>人类是这个星球上最普遍的智慧生物。他们普通，但因为均衡的能力、强大的适应能力，让他们的子子孙孙踏遍了整片大陆。</des>
 <gender>male||female</gender>
-<lifespan>500</lifespan>
+<lifespan>80</lifespan>
 <talent>
-   <li>
-      <name>MagicalAffinity</name>
-      <rate>0.4</rate>
-   </li>
-   <li>
-      <name>Genius</name>
-      <rate>0.8</rate>
-   </li>
-   <li>
-      <name>Androgynous</name>
-      <rate>0.6</rate>
-   </li>
-   <li>
-      <name>Beautiful</name>
-      <rate>0.6</rate>
-   </li>
+	<li>
+		<name>FastAdaption</name>
+		<rate>0.4</rate>
+	</li>
 </talent>
-<trait>
-   <li>
-      <name>GlassBody</name>
-      <rate>0.2</rate>
-   </li>
-   <li>
-      <name>IceCold</name>
-      <rate>0.3</rate>
-   </li>
-      <name>Calm</name>
-      <rate>0.4</rate>
-   </li>
-   <li>
-      <name>Reserved</name>
-      <rate>0.4</rate>
-   </li>
-   <li>
-      <name>Pride</name>
-      <rate>0.3</rate>
-   </li>
-</trait>
 <buffs>
-	<health>0.7</health>
-	<stamina>0.6</stamina>
-	<mana>1.3</mana>
-	<ATK>0.5</ATK>
-	<DEF>0.6</DEF>
-	<MTK>1.8</MTK>
-	<MDF>1.5</MDF>
+	<health>1.1</health>
+	<stamina>1.1</stamina>
+	<mana>1.1</mana>
+	<ATK>1.1</ATK>
+	<DEF>1.1</DEF>
+	<MTK>1.1</MTK>
+	<MDF>1.1</MDF>
 </buffs>
-<basicStats>
-   <STR min='3' max='14'></STR>
-   <CON min='3' max='14'></CON>
-   <DEX min='5' max='18'></DEX>
-   <INT min='8' max='20'></INT>
-   <WIL min='6' max='18'></WIL>
-   <PSY min='10' max='20'></PSY>
-   <ALR min='10' max='20'></ALR>
-</basicStats>
+<basicStats min='5' max='18'></basicStats>
 
-<bodysize scale='1' min='1300' max='2100'></bodysize>
+<bodysize scale='1' min='1300' max='2000'></bodysize>
 <!-- the comfortable temperature  -->
-<tempe min='16' max='30' best='23' body='37'></tempe>
+<temper min='16' max='30' best='23' body='37'></temper>
 <bodygroup type='natural'>
 	<!-- pos: s=side, f=front, b=back, t=top, d=bottom, l=left, r=right, i=inside, o=outside, e=end, rt=root -->
-	<head name="head" group='head'></head>
+	<head name="head" group='head' pos='t'></head>
 	<ears name='ear' group='head' pos='s' count='2' side='l/r'></ears>
 	<brain name='brain' group='head' pos='i'></brain>
 
@@ -78,7 +37,7 @@
 	<nose name='nose' group='face' pos='c'></nose>
 	<mouth name='mouth' group='face' pos='b'></mouth>
 
-	<torso name='torso' group='torso'></torso>
+	<torso name='torso' group='torso' pos='c'></torso>
 	<neck name='neck' group='torso' pos='t'></neck>
 	<breasts name='breasts' group='torso' pos='f' count='1'></breasts>
 
@@ -149,8 +108,8 @@
 <avatar>
 	<headtype>pointy||round||square</headtype>
 	<bodytype>human</bodytype>
-	<eartype>elvin</eartype>
-	<skincolor>pale||white||health||gold</skincolor>
-	<defaulthaircolor>blond</defaulthaircolor>
+	<eartype>human</eartype>
+	<skincolor>pale||white||health||black||chocolate||copper||sunset</skincolor>
+	<defaulthaircolor>brown</defaulthaircolor>
 </avatar>
 </race>

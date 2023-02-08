@@ -1,14 +1,13 @@
 export * from "./Clothes";
 export * from "./item";
 export * from "./misc";
-
-import { getJson } from "../function";
 import { Clothes } from "./Clothes";
 import { Items } from "./item";
 import { Potion, SexToy, Recipies } from "./misc";
 declare var Db: typeof window.Db;
 declare function slog(type: string, ...args: any[]): void;
 declare function dlog(type: string, ...args: any[]): void;
+declare function getJson(url: string): Promise<any>;
 
 const itemGroup = ["weapon", "shield", "armor", "clothes", "accessory", "items", "material", "recipies", "books"];
 
@@ -68,6 +67,7 @@ const modules = {
 			loadItems,
 		},
 	},
+	Init: ["loadItems"],
 };
 
 declare function addModule(modules): boolean;

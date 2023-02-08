@@ -16,24 +16,57 @@
  * "Hello World".has("Foo"); // false
  * "Hello World".has("Foo", "Bar"); // false
  */
-String.prototype.has = function (...arg) {
-	if (Array.isArray(arg[0])) arg = arg[0];
-	let count = 0;
-	for (let i = 0; i < arg.length; i++) {
-		if (this.includes(arg[i])) count++;
-	}
-	if (!count) return false;
-	return count;
-};
-Array.prototype.has = function (...arg) {
-	if (Array.isArray(arg[0])) arg = arg[0];
-	let count = 0;
-	for (let i = 0; i < arg.length; i++) {
-		if (this.includes(arg[i])) count++;
-	}
-	if (!count) return false;
-	return count;
-};
+Object.defineProperty(String.prototype, "has", {
+	configurable: true,
+	writable: true,
+	value(...arg) {
+		if (this == null) {
+			throw new TypeError("String.prototype.has called on null or undefined");
+		}
+
+		if (Array.isArray(arg[0])) arg = arg[0];
+		let count = 0;
+		for (let i = 0; i < arg.length; i++) {
+			if (this.includes(arg[i])) count++;
+		}
+		if (!count) return false;
+		return count;
+	},
+});
+
+Object.defineProperty(Array.prototype, "has", {
+	configurable: true,
+	writable: true,
+	value(/* needles */) {
+		if (this == null) {
+			throw new TypeError("Array.prototype.has called on null or undefined");
+		}
+
+		if (arguments.length === 1) {
+			if (Array.isArray(arguments[0])) {
+				return Array.prototype.has.apply(this, arguments[0]);
+			}
+
+			return Array.prototype.includes.apply(this, arguments);
+		}
+
+		let count = 0;
+		for (let i = 0, iend = arguments.length; i < iend; i++) {
+			if (
+				Array.prototype.some.call(
+					this,
+					function (val) {
+						return val === this.val || (val !== val && this.val !== this.val);
+					},
+					{ val: arguments[i] }
+				)
+			) {
+				count++;
+			}
+		}
+		return count;
+	},
+});
 
 /**
  *
@@ -43,10 +76,13 @@ Array.prototype.has = function (...arg) {
  * @description
  * Inserts a string at the given index.
  */
-String.prototype.insert = function (index, string) {
-	this.splice(index, 0, string);
-	return this;
-};
+Object.defineProperty(String.prototype, "insert", {
+	configurable: true,
+	writable: true,
+	value(index, string) {
+		return this.slice(0, index) + string + this.slice(index);
+	},
+});
 
 /**
  *
@@ -56,10 +92,14 @@ String.prototype.insert = function (index, string) {
  * @description
  * Inserts an element at the given index.
  */
-Array.prototype.insert = function (index, element) {
-	this.splice(index, 0, element);
-	return this;
-};
+Object.defineProperty(Array.prototype, "insert", {
+	configurable: true,
+	writable: true,
+	value(index, element) {
+		this.splice(index, 0, element);
+		return this;
+	},
+});
 
 Object.defineProperty(Array.prototype, "concatUnique", {
 	configurable: true,

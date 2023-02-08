@@ -6,6 +6,9 @@ export interface Talent {
 	name: [string, string?];
 	des: [string, string?];
 
+	group: string;
+	conflict: string[];
+
 	rate?: number;
 
 	effect?: Function;
@@ -14,8 +17,6 @@ export interface Talent {
 export interface Trait extends Talent {
 	id: string;
 	order: number;
-	group: string;
-	conflict: string[];
 	get: any;
 	lose: any;
 
@@ -36,12 +37,15 @@ export interface setTrait {
 }
 
 export class Talent {
-	constructor(name: [string, string?], des: [string, string?], rate: number = 0.1) {
+	constructor({ name, des, rate = 0.5, conflict = [], group = "Netural" } = {} as any) {
 		this.type = "talent";
 		this.name = name;
 		this.des = des;
-		this.effect = function () {};
+		this.group = group;
+		this.conflict = conflict;
+		this.group = "";
 		this.rate = rate;
+		this.effect = function () {};
 	}
 	Effects(callback) {
 		this.effect = callback;
@@ -96,14 +100,16 @@ export class Trait extends Talent {
 			return trait.group == type;
 		});
 	}
-	constructor({ id, name, des, order, group, rate, sourceEffect, conflict } = <setTrait>{}) {
+	constructor(
+		{ id, name, des, order, group = "mental", rate = 0.5, sourceEffect = [], conflict = [] } = <setTrait>{}
+	) {
 		if (typeof name == "string") {
 			name = [name, name];
 		}
 		if (typeof des == "string") {
 			des = [des, des];
 		}
-		super(name as [string, string?], des as [string, string?], rate);
+		super({ name, des, rate, conflict, group });
 		this.type = "trait";
 		this.id = id;
 		this.order = order;

@@ -1,0 +1,51 @@
+{
+	"basicBodypart": ["head", "torso", "arms", "legs", "feet", "ears", "ears", "breast", "butts", "genitals"],
+
+	"eyecolorPool": ["amber", "blue", "brown", "gray", "green", "hazel", "red", "violet"],
+
+	"haircolorPool": ["black", "blonde", "brown", "gray", "red", "white"],
+
+	"skincolorPool": ["sunset", "brown", "health", "white", "pale", "copper"],
+
+	"hairstylePool": ["bald", "bob", "bun", "curly", "long", "ponytail", "short", "straight", "twintail"],
+
+	"basecolor": {
+		"health": [255, 92, 79],
+		"stamina": [223, 236, 15],
+		"sanity": [12, 163, 238],
+		"mana": [160, 35, 231],
+
+		"hydration": [65, 255, 233],
+		"nutrient": [134, 255, 79],
+
+		"ecstacy": [255, 95, 202],
+
+		"pain": [87, 29, 243]
+	},
+
+	"initials": ["M", "B", "C", "U", "V", "A"],
+
+	"skinlayer": [
+		"face",
+		"neck",
+		"shoulder",
+		"arms",
+		"breast",
+		"abdomen",
+		"back",
+		"waistback",
+		"private",
+		"buttL",
+		"buttR",
+		"thighs",
+		"penis",
+		"vagina",
+		"anus"
+	],
+
+	"liquidType": ["cum", "juice", "rub", "slime", "nectar"],
+
+	"virginity": ["kiss", "oral", "penis", "anal", "analsex", "vigina", "viginasex", "handholding", "footjob"],
+
+	"scarType": ["kissmark", "scar", "whip", "wound", "pen", "bruise", "tattoo", "band"]
+}

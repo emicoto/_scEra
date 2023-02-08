@@ -1,3 +1,4 @@
+import { Organs, Species, GenerateHeight, GenerateWeight, RandomSpeciesName } from ".";
 import {
 	Dict,
 	P,
@@ -11,21 +12,15 @@ import {
 	sblkey,
 	statskey,
 } from "../types";
-import { Organs } from "./Organs";
-import { Species } from "./Species";
 
-declare function groupmatch(arg, ...args): boolean;
 declare function lan(arg, ...args): string;
 declare function slog(type: "log" | "warn" | "error", ...args): void;
-declare function isValid(arg): boolean;
-declare function NameGenerator(gender: genderFull): string;
-declare var scEra: typeof window.scEra;
+declare function draw(arr: any[]): any;
 declare var D: typeof window.D;
 
 export interface Creature {
 	type?: creaturetype; // only use in the database
 	id?: string; //the id in the database
-	cid?: string; //the id of character
 
 	name: string; //the name of the creature
 	gender: genderFull;
@@ -68,6 +63,14 @@ export interface Creature {
 	//the equipment of creature is wearing
 	equip?: any;
 
+	//the comfortable temperature of the creature
+	temper?: {
+		min?: number;
+		max?: number;
+		best?: number;
+		body?: number;
+	};
+
 	//a temporary value to store species data
 	r?: Species;
 
@@ -82,16 +85,32 @@ export class Creature {
 		return `${species}_${len}`;
 	}
 	constructor(obj = {} as Creature) {
-		const { type = "charatemplate", species = "Human" } = obj;
+		const { type = "charatemplate", species = "human" } = obj;
 		this.type = type;
 		this.species = species;
 		this.id = Creature.newId(species);
 
-		this.preInit(obj);
+		this.name = "";
+		this.gender = "none";
+		this.traits = [];
+		this.talent = [];
+		this.skill = [];
+		this.stats = {};
+		this.base = {};
+		this.palam = {};
+		this.appearance = {};
+		this.body = {};
+		this.bodysize = 1;
+		this.source = {};
+		this.state = [];
+		this.tsv = {};
+		this.abl = {};
+		this.sbl = {};
 	}
-	preInit(obj = {} as Creature) {
-		const { name, gender } = obj;
 
+	Init(obj = {} as Creature) {
+		const { name = "", gender = "" } = obj;
+		console.log("init creature:", obj);
 		this.r = Species.data[this.species];
 
 		this.name = name;
@@ -104,40 +123,135 @@ export class Creature {
 		}
 
 		if (!this.name) {
-			this.name = NameGenerator(this.gender);
+			if (!this.r) this.name = lan(draw(D.randomCharaNamePool));
+			else this.name = RandomSpeciesName(this.species);
 			this.randomchara = true;
 		}
 
-		if (!this.r) {
-			this.init();
-		} else {
-			this.init();
-			this.initSpecies();
-		}
-	}
-	init() {
-		this.traits = [];
-		this.talent = [];
-		this.skill = [];
+		this.InitCommon();
 
+		if (this.r) {
+			this.initSpecies(obj);
+		}
+
+		if (this.randomchara) {
+			this.RandomInitDefault();
+		}
+
+		return this;
+	}
+	InitCommon() {
 		this.initStats();
 		this.initBase();
 		this.initPalam();
 
-		this.appearance = {};
-		this.body = {};
-		this.bodysize = 0;
-
-		this.state = [];
-		this.tsv = {};
 		this.initAbility();
-		this.equip = {};
+		this.initEquipment();
+	}
+
+	RandomInitDefault() {
+		this.randomStats();
+		this.randomAbility();
+		this.randomSituAbility();
+		if (!this.r) {
+			this.RandomInitBody();
+			this.RandomInitApp();
+		} else {
+			let adj = { bodysize: random(5), breasts: { sizeLv: this.gender === "male" ? 0 : random(10) } };
+			this.initSpecies(adj);
+		}
+	}
+
+	initSpecies(obj = {} as any) {
+		this.bodysize = obj.bodysize || random(5);
+		this.initApp(obj);
+		this.body = this.r.configureBody(this.gender, this.appearance.height, obj);
+		this.initTalent(obj);
+		this.initTraits(obj);
+		this.initSkill(obj);
+
+		if (this.r.temper) this.temper = this.r.temper;
+	}
+	initTraits(obj = {} as any) {
+		this.traits = this.r.initTraits() || [];
+		if (!obj.traits) return;
+
+		if (typeof obj.traits === "string") {
+			this.traits.push(obj.traits);
+		} else if (Array.isArray(obj.traits)) {
+			this.traits = this.traits.concat(obj.traits);
+		} else {
+			slog("error", "TypeError: traits must be string or array:", obj.traits);
+		}
+	}
+	initTalent(obj = {} as any) {
+		this.talent = this.r.initTalent() || [];
+		if (!obj.talent) return;
+
+		if (typeof obj.talent === "string") {
+			this.talent.push(obj.talent);
+		} else if (Array.isArray(obj.talent)) {
+			this.talent = this.talent.concat(obj.talent);
+		} else {
+			slog("error", "TypeError: talent must be string or array:", obj.talent);
+		}
+	}
+	initSkill(obj = {} as any) {
+		this.skill = this.r.initSkill() || [];
+		if (!obj.skill) return;
+
+		if (typeof obj.skill === "string") {
+			this.skill.push(obj.skill);
+		} else if (Array.isArray(obj.skill)) {
+			this.skill = this.skill.concat(obj.skill);
+		} else {
+			slog("error", "TypeError: skill must be string or array:", obj.skill);
+		}
+	}
+	initApp(obj = {} as any) {
+		const app = this.appearance;
+
+		app.height = obj.height || GenerateHeight(this.bodysize);
+		app.weight = obj.weight || GenerateWeight(app.height);
+		app.beauty = 1000;
+
+		const list = ["haircolor", "eyecolor", "skincolor", "hairstyle"];
+		list.forEach((key) => {
+			if (obj[key]) app[key] = obj[key];
+			else if (this.r?.avatar[key]) app[key] = draw(this.r.avatar[key]);
+			else app[key] = draw(D[key + "Pool"]);
+		});
+	}
+	initBody(obj = {} as any) {
+		const size = obj.bodysize || random[5];
+		let range = D.bodysize[size];
+		this.appearance.height = obj.height || random(range[0], range[1]);
+	}
+	initBust(obj) {
+		const app = this.appearance;
+		const breast: Organs = this.body.breasts as Organs;
+		if (this.r || obj.bust) app.bust = obj.bust || this.r.GenerateBust(app.height, this.gender, breast.sizeLv);
+		else app.bust = Math.floor(app.height * 0.52) + random(-10, 10);
+	}
+	initWaist(obj) {
+		const app = this.appearance;
+		if (this.r || obj.waist) app.waist = obj.waist || this.r.GenerateWaist(app.height, this.gender);
+		else app.waist = Math.floor(app.height * 0.37) + random(-10, 10);
+	}
+	initHip(obj) {
+		const app = this.appearance;
+		if (this.r || obj.hip) app.hip = obj.hip || this.r.GenerateHip(app.height, this.gender);
+		else app.hip = Math.floor(app.height * 0.54) + random(-10, 10);
+	}
+	init3Size(obj = {} as any) {
+		this.initBust(obj);
+		this.initWaist(obj);
+		this.initHip(obj);
 	}
 	initStats() {
 		this.stats = {};
 		D.stats.forEach((key) => {
-			let v = random(5, 18);
-			this.stats[key] = [v, v];
+			this.stats[key] = [10, 10];
 		});
 		return this;
 	}
@@ -163,31 +277,79 @@ export class Creature {
 	}
 	initAbility() {
 		this.abl = {};
-		this.sbl = {};
 		Object.keys(D.abl).forEach((key) => {
 			this.abl[key] = { lv: 0, exp: 0 };
 		});
+	}
+	initSituAbility() {
+		this.sbl = {};
 		Object.keys(D.sbl).forEach((key) => {
 			this.sbl[key] = 0;
 		});
 	}
-	initBodyDefault() {
+	initEquipment() {
+		this.equip = {};
+		Object.keys(D.equipSlot).forEach((key) => {
+			this.equip[key] = {};
+		});
+		return this;
+	}
+
+	getRandomStats(key) {
+		if (Species.data[this.species]) {
+			let r = Species.data[this.species].basicStats;
+			if (r[key]?.min && r[key]?.max) return [r[key].min, r[key].max];
+			else if (r?.min && r?.max) return [r.min, r.max];
+		}
+		return [5, 18];
+	}
+	randomStats() {
+		D.stats.forEach((key) => {
+			const v = this.getRandomStats(key);
+			const value = random(v[0], v[1]);
+			this.stats[key] = [value, value];
+		});
+	}
+	randomAbility() {
+		Object.keys(D.abl).forEach((key) => {
+			this.abl[key].lv = random(0, 8);
+		});
+	}
+	randomSituAbility() {
+		Object.keys(D.sbl).forEach((key) => {
+			this.sbl[key] = random(0, 6);
+		});
+	}
+	RandomInitBody() {
 		this.body = {};
-		this.bodysize = 0;
+		this.bodysize = random(0, 5);
 		D.basicBodypart.forEach((key) => {
 			this.body[key] = {
-				type: "natural",
+				type: random(100) < 12 ? "artifact" : "natural",
 				dp: [10, 10],
 				hediff: [],
 			};
 		});
 	}
-	initAppearance() {
+	RandomInitApp() {
 		this.appearance = {
-			eyecolor: "blue",
-			haircolor: "brown",
-			skincolor: "white",
+			eyecolor: draw(D.eyecolorPool),
+			haircolor: draw(D.haircolorPool),
+			skincolor: draw(D.skincolorPool),
+			hairstyle: draw(D.hairstylePool),
+
+			beauty: 1000,
+			height: GenerateHeight(this.bodysize),
 		};
+		const app = this.appearance;
+		this.appearance.weight = GenerateWeight(app.height);
+		this.init3Size();
+	}
+	End() {
+		delete this.r;
+	}
+	Freeze() {
+		Object.freeze(this);
 	}
 }
 

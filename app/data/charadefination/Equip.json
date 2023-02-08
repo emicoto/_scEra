@@ -1,0 +1,20 @@
+{
+	"equipSlot": {
+		"weapon": "武器",
+		"shield": "护盾",
+
+		"head": "头饰",
+		"cover": "外套",
+		"outfitUp": "上衣",
+		"outfitBt": "下衣",
+		"innerUp": "内衣",
+		"innerBt": "内裤",
+		"hands": "手套",
+		"legs": "袜子",
+
+		"face": "面具",
+		"ears": "耳饰",
+		"chest": "乳饰",
+		"bottom": "插件"
+	}
+}

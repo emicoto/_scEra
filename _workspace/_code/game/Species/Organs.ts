@@ -1,8 +1,8 @@
 import { genderFull, organAdjustment } from "../types";
-import { Psize } from "./bodyparts";
 
 declare function slog(type: "log" | "warn" | "error", ...args): void;
 declare function isValid(arg): boolean;
+declare var D: typeof window.D;
 
 export interface Organs {
 	name: string; //name used for describe, the name must in the dictionary
@@ -85,7 +85,7 @@ export class Organs {
 	initSexStats(part: string) {
 		switch (part) {
 			case "vagina":
-			case "anal":
+			case "anus":
 			case "penis":
 			case "urethral":
 				if (!this.size) this.size = [0, 0];
@@ -221,13 +221,15 @@ export class Organs {
 	initAnal(height: number, config) {
 		this.size[0] = Organs.AnalDiameter(height, this.sizeLv);
 		this.size[1] = Organs.AnalDepth(height);
+
+		if (config?.trait) this.trait = config.trait;
 		this.initCapacity(config, height);
 
 		return this;
 	}
 
 	initPenis() {
-		const size = Psize[this.sizeLv];
+		const size = D.Psize[this.sizeLv];
 		const d = random(size.d[0], size.d[1]) + random(8);
 		const l = random(size.l[0], size.l[1]) + random(8);
 
@@ -289,7 +291,7 @@ export class Organs {
 
 	public static MouthDiameter(height: number, sizeLv: number) {
 		const multip = 1 + sizeLv * 0.15;
-		return (height / 40) * multip + random(10);
+		return Math.floor((height / 40) * multip) + random(10);
 	}
 
 	public static addHediff(organ: Organs, type, hediff) {

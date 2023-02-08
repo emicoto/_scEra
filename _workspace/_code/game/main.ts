@@ -34,6 +34,7 @@ declare global {
 		scEra;
 		worldMap;
 		S; //setup data
+		jQuery;
 	}
 
 	interface String {

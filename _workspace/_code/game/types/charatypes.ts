@@ -1,110 +1,5 @@
 import { race, Dict, statskey, basekey, palamkey, ablkey, sblkey, jobclass, markkey, expkey, P } from ".";
 
-export interface sexStats {
-	lv: number;
-	type?: string;
-	trait?: string[];
-
-	size?: number;
-	d?: number;
-	l?: number;
-
-	wet?: number;
-	cum?: number;
-	maxcum?: number;
-	milk?: number;
-	maxmilk?: number;
-}
-
-export interface appearance {
-	eyecolor?: string;
-
-	haircolor?: string;
-	hairstlye?: string;
-
-	skincolor?: string;
-	beauty?: number;
-	bodysize?: number;
-	tall?: number; //mm
-	weight?: number; //kg
-}
-
-export interface Creature {
-	type: creaturetype;
-	id?: string;
-	cid: string;
-	name: string;
-	gender: genderFull;
-	position: "neko" | "tachi" | "both";
-	race: race;
-	traits: string[];
-	talent: string[];
-	skill: string[];
-
-	stats: Dict<P, statskey>;
-	appearance?: appearance;
-	base: Dict<P, basekey>;
-	palam: Dict<P, palamkey>;
-
-	source: Dict<number>;
-	state: string[];
-	mood: number;
-
-	tsv: any;
-	abl: Dict<{ lv: number; exp: number }, ablkey>;
-	sbl: Dict<number, sblkey>;
-	sexstats: Dict<sexStats>;
-
-	equip?: any;
-}
-
-export interface Chara extends Creature {
-	name: string;
-	midname?: string;
-	surname?: string;
-	fullname?: string;
-	nickame?: string;
-	callname?: string;
-
-	title?: string;
-	class?: jobclass;
-	guildRank?: number;
-
-	kojo?: string;
-	birthday?: [number, number, number];
-	intro?: [string?, string?];
-
-	mark?: Dict<number, markkey>;
-
-	expUp: Dict<number>;
-
-	daily?: any;
-	exp?: Dict<{ aware: number; total: number }, expkey>;
-
-	pregnancy?: any;
-	parasite?: any;
-	scars?: any;
-
-	wear?: any;
-
-	reveals?: any;
-	virginity?: any;
-
-	flag: any; //好感、信赖， 学籍情报， 诅咒进展， 诅咒魔力效率等
-	wallet?: number;
-	debt?: number;
-	inventory?: any;
-	tempe?: { low: number; high: number; best: number; current: number };
-}
-
-interface iName {
-	v?: string;
-	m?: string; //middle
-	s?: string; //surname
-	n?: string; //nick
-	c?: string; //call master
-}
-
 export interface cycleInfo {
 	type: "menst" | "heat" | "none";
 	circleDays?: [number, number]; //cycle days range
@@ -168,7 +63,7 @@ export interface appearance {
 	eyecolor?: string;
 
 	haircolor?: string;
-	hairstlye?: string;
+	hairstyle?: string;
 
 	skincolor?: string;
 	beauty?: number;
@@ -240,4 +135,17 @@ export type bodygroup = "head" | "torso" | "bottom" | "back" | "organ" | "limb";
 export type gender = "f" | "m" | "n";
 export type genderFull = "female" | "male" | "none" | "herm";
 
-export type charaposi = "neko" | "tach" | "both";
+export type charaposi = "neko" | "tach" | "any";
+
+export type dailykeys =
+	| "cum"
+	| "swallowed"
+	| "cumA"
+	| "cumV"
+	| "orgasm"
+	| "ogM"
+	| "ogB"
+	| "ogC"
+	| "ogU"
+	| "ogV"
+	| "ogA";

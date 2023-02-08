@@ -189,7 +189,7 @@ export const Psize = [
 	{ l: [164, 184], d: [54, 70] }, //5, huge
 	{ l: [176, 210], d: [64, 90] }, //6, giant
 	{ l: [200, 250], d: [72, 100] }, //7, titantic
-	{ l: [250, 400], d: [90, 148] }, //8, dragon
+	{ l: [250, 400], d: [90, 148] }, //8, dragom nn
 ];
 
 //testsize = psize.l/2 + 15 + random(10)

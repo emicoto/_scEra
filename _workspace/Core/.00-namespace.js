@@ -47,7 +47,7 @@ window.scEra = {
 	 * @description
 	 * The scEra.loadOrder namespace is the root namespace for all of the Era core load order modules.
 	 */
-	loadorder: {},
+	loadorder: [],
 
 	/**
 	 * @namespace
@@ -109,6 +109,7 @@ window.scEra = {
 	modEvents: {},
 	mods: {},
 	modlist: [],
+	startupInit: [],
 
 	/**
 	 * @namespace
@@ -180,7 +181,12 @@ window.scEra = {
 	 * @see {@link scEra.game}
 	 */
 	game: {},
+
+	// status
+	status: "init",
 };
+
+scEra.config.lan = "CN";
 
 Object.defineProperties(window, {
 	Config: { get: () => scEra.config },
