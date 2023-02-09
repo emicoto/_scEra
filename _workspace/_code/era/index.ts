@@ -112,7 +112,7 @@ async function loadBasicDefinationJson() {
 //
 //-------------------------------------------------------------
 
-scEra.version = "0.7.0";
+scEra.version = "0.7.5";
 console.time("scEra startup");
 
 $(document).one("sugarcube:startup", async () => {

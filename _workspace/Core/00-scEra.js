@@ -354,7 +354,7 @@
 	    }
 	  });
 	}
-	scEra.version = "0.7.0";
+	scEra.version = "0.7.5";
 	console.time("scEra startup");
 	$(document).one("sugarcube:startup", () => __async(void 0, null, function* () {
 	  yield loadBasicDefinationJson();
