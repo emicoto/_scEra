@@ -1,0 +1,9 @@
+[
+	"traits/mental.json",
+	"traits/physical.json",
+	"traits/personality.json",
+	"traits/fallen.json",
+	"traits/other.json",
+	"traits/conflict.json",
+	"traits/behavior.json"
+]

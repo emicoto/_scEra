@@ -9,28 +9,45 @@
 
 	"hairstylePool": ["bald", "bob", "bun", "curly", "long", "ponytail", "short", "straight", "twintail"],
 
-	"basecolor": {
-		"health": [255, 92, 79],
-		"stamina": [223, 236, 15],
-		"sanity": [12, 163, 238],
-		"mana": [160, 35, 231],
-
-		"hydration": [65, 255, 233],
-		"nutrient": [134, 255, 79],
-
-		"ecstacy": [255, 95, 202],
-
-		"pain": [87, 29, 243]
-	},
-
 	"initials": ["M", "B", "C", "U", "V", "A"],
+
+	"randomCharaNamePool": [
+		["波奇", "Bocchi"],
+		["阿兰", "Aran"],
+		["雷德", "Red"],
+		["布鲁", "Blue"],
+		["萨菲尔", "Sapphire"],
+		["葛琳", "Green"],
+		["艾莉森", "Allison"],
+		["凯特", "Kate"],
+		["伊丽莎白", "Elizabeth"],
+		["金盏花", "Marigold"],
+		["路易", "Lewie"],
+		["奥利维亚", "Olivia"],
+		["杰瑞", "Jerry"],
+		["妮可", "Nicole"],
+		["詹姆斯", "James"],
+		["玛莎", "Marsha"],
+		["比尔", "Bill"],
+		["阿什利", "Ashley"],
+		["贝丝", "Beth"],
+		["卢卡斯", "Lucas"],
+		["小幸运", "Lucky"],
+		["露西", "Lucy"],
+		["布兰登", "Brandon"],
+		["阿曼达", "Amanda"],
+		["奥克斯", "Oakes"],
+		["科林", "Colin"],
+		["阿瑟", "Arthur"],
+		["贝丝", "Beth"]
+	],
 
 	"skinlayer": [
 		"face",
 		"neck",
 		"shoulder",
 		"arms",
-		"breast",
+		"breasts",
 		"abdomen",
 		"back",
 		"waistback",
@@ -43,9 +60,15 @@
 		"anus"
 	],
 
-	"liquidType": ["cum", "juice", "rub", "slime", "nectar"],
-
-	"virginity": ["kiss", "oral", "penis", "anal", "analsex", "vigina", "viginasex", "handholding", "footjob"],
-
-	"scarType": ["kissmark", "scar", "whip", "wound", "pen", "bruise", "tattoo", "band"]
+	"partSkinLayer": {
+		"vagina": ["vagina", "private"],
+		"penis": ["penis", "private"],
+		"head": ["face"],
+		"torso": ["abdomen", "chest", "waistback"],
+		"butts": ["buttL", "buttR"],
+		"thighs": ["thighs"],
+		"arms": ["arms"],
+		"breasts": ["breasts"],
+		"anus": ["anus"]
+	}
 }

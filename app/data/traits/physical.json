@@ -1,0 +1,116 @@
+[
+	{
+		"name": ["纤弱", "Weak"],
+		"group": "physical",
+		"des": ["风一吹就倒体的样子。", "The one who is blown down by the wind."],
+		"order": 1,
+		"sourceEffect": [["stamina", 1.2, "lose"]]
+	},
+	{
+		"name": ["强壮", "Strong"],
+		"group": "physical",
+		"des": ["身强力壮肌肉发达。", "Strong and muscular."],
+		"order": 0,
+		"sourceEffect": [["stamina", 0.8, "lose"]]
+	},
+	{
+		"name": ["耐疼", "Rough"],
+		"group": "physical",
+		"des": ["皮糙肉厚，些许磕碰也不觉得疼。", "The skin is thick and rough, it's hard to feel pain."],
+		"order": 0,
+		"sourceEffect": [["paAll", 0.8]]
+	},
+	{
+		"name": ["不耐疼", "Tender"],
+		"group": "physical",
+		"des": [
+			"细皮嫩肉，些许磕碰也会很痛。",
+			"The skin is tender and sensitive, it will feel painful even a little bumps."
+		],
+		"order": 0,
+		"sourceEffect": [["paAll", 1.2]]
+	},
+
+	{
+		"name": ["易伤体质", "GlassBody"],
+		"group": "physical",
+		"des": [
+			"身上很容易留下痕迹，还不容易消退。",
+			"It leaves marks easily on the body and difficult to recover from."
+		],
+		"order": 0
+	},
+	{
+		"name": ["早泄", "Premature"],
+		"group": "physical",
+		"des": ["手速很快，但射得更快。", "The hands is fast, but the shot is faster."],
+		"sourceEffect": [["ecstacy", 2.5]]
+	},
+	{
+		"name": ["金枪不倒", "Durable"],
+		"group": "physical",
+		"des": ["小兄弟十分勇猛，金枪百战不倒。", "The cock is very brave, he will not fail in a hundred battles."],
+		"sourceEffect": [["ecstacy", 0.25]]
+	},
+
+	{
+		"name": ["性冷淡", "IceCold"],
+		"group": "physical",
+		"des": ["没有世俗的欲望。", "The sex drive is colder than ice."],
+		"sourceEffect": [
+			["libido", 0.3],
+			["lust", 0.3],
+			["libido", 2, "lose"]
+		]
+	},
+	{
+		"name": ["性欲强", "FireHot"],
+		"group": "physical",
+		"des": ["身体很容易被刺激到。", "The sex drive is hotter than fire."],
+		"sourceEffect": [
+			["libido", 1.5],
+			["lust", 1.5],
+			["libido", 0.5, "lose"]
+		]
+	},
+
+	{
+		"name": ["M体质", "MasochicBody"],
+		"group": "SM",
+		"des": ["明明很痛，但莫名的有点酸爽。", "It's kind of pain, but oddly feel a little bit good."],
+		"order": 0
+	},
+	{
+		"name": ["M倾向", "Masochicsm"],
+		"group": "SM",
+		"des": ["战斗时倾向往前排承受伤害。", "Enjoy taking damage at the front during combat."],
+		"order": 10
+	},
+	{
+		"name": ["S倾向", "Sadicsm"],
+		"group": "SM",
+		"des": ["战斗时倾向往前排输出伤害。", "Enjoys outputting damage at the front during combat."],
+		"order": 0
+	},
+
+	{
+		"name": ["A名器", "QualityAnal"],
+		"group": "quaility",
+		"des": ["这个菊穴用起来会很爽。", "Oh..!So tight.."],
+		"order": 0
+	},
+
+	{
+		"name": ["V名器", "QuailityVagina"],
+		"group": "quaility",
+		"des": ["这个秘穴用起来会很爽。", "Oh..!So tight and smooth.."],
+		"order": 0
+	},
+
+	{
+		"name": ["M名器", "QualityMouth"],
+		"group": "quaility",
+		"des": ["这个嘴用起来会很爽。", "Oh..!Nice mouth pussy.."],
+		"order": 0
+	}
+]

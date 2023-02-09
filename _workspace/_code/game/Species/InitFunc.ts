@@ -2,7 +2,6 @@ import { Species } from "./Species";
 import { bodyDict, bodyGroup, posDict } from "./bodyparts";
 declare function groupmatch(arg, ...args): boolean;
 declare function slog(type: string, ...args: any[]): void;
-declare function dlog(type: string, ...args: any[]): void;
 
 export function fixLanArr(obj) {
 	const lang = ["CN", "EN", "JP"];

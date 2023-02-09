@@ -27,17 +27,17 @@ export interface Organs {
 	trait?: string[];
 
 	//the produce of the organ
-	//cur is current amount of the produce, max is the capacity of the organ
-	//day is the amount of produce per day
+	//cur is current amount of the produce, max is the max volume of the organ produce
+	//day is the how much produce per day
 	produce?: string;
-	amount?: {
+	volume?: {
 		cur?: number;
 		day?: number;
 		max?: number;
 	};
 
 	//the capacity of the organ, the unit is ml
-	capacity?: [number, number]; //current capacity, max capacity
+	capacity?: [number, number]; //current amount, max capacity
 
 	//anything else of detail of organs. the <any> must be object type, and has 'type' property to define what's of it
 	hediff?: Array<any>;
@@ -109,22 +109,22 @@ export class Organs {
 		if (l) this.size[1] = l;
 		if (size) this.sizeLv = size;
 
-		if (trait) this.initTrait(trait);
+		if (adj.trait) this.initTrait(trait);
 
 		return this;
 	}
 
 	initProduce(config) {
 		this.produce = config.type;
-		if (config.amountPerDay || config.amountPerSize) {
-			this.amount = { cur: 0 };
-		}
-		if (config.amountPerDay) {
-			this.amount.day = config.amountPerDay;
-		}
-		if (config.amountPerSize) {
-			this.amount.max = config.amountPerSize * (this.sizeLv || 1);
-		}
+      if(!(config.amountPerDay || config.volumePerSize || config.volume))
+         return this;
+
+		this.volume = { cur: 0 };
+
+      const { volume=0, amountPerDay=0, volumePerSize=0 } = config
+
+		this.volume.day = amountPerDay;
+		this.volume.max = volume || volumePerSize * (this.sizeLv || 1);
 
 		return this;
 	}
@@ -228,17 +228,16 @@ export class Organs {
 		return this;
 	}
 
-	initPenis() {
+	initPenis(scale=1) {
 		const size = D.Psize[this.sizeLv];
 		const d = random(size.d[0], size.d[1]) + random(8);
 		const l = random(size.l[0], size.l[1]) + random(8);
 
-		if (!this.size[0]) this.size[0] = d;
-		if (!this.size[1]) this.size[1] = l;
+		if (!this.size[0]) this.size[0] = d * scale;
+		if (!this.size[1]) this.size[1] = l * scale;
 
 		return this;
 	}
-
 	//theoritical maxium size
 	public static theoriticalMaxiumHoleSize(height: number) {
 		return (height / 10) * 0.9;

@@ -6,11 +6,10 @@
 	"charadefination/Equip.json",
 	"charadefination/Exp.json",
 	"charadefination/Mark.json",
+	"charadefination/Other.json",
 	"charadefination/Palam.json",
 	"charadefination/Sbl.json",
 	"charadefination/Skill.json",
 	"charadefination/State.json",
-	"charadefination/Stats.json",
-	"charadefination/Talent.json",
-	"charadefination/Traits.json"
+	"charadefination/Stats.json"
 ]

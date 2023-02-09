@@ -38,22 +38,6 @@ function DefineMacroS(macroName, macroFunction, tags, skipArgs, maintainContext)
 	);
 }
 
-window.wikifier = function (widget, arg1, arg2, arg3) {
-	if (arg3 !== undefined) {
-		new Wikifier(null, "<<" + widget + " " + arg1 + " " + arg2 + " " + arg3 + ">>");
-	} else if (arg2 !== undefined) {
-		new Wikifier(null, "<<" + widget + " " + arg1 + " " + arg2 + ">>");
-	} else if (arg1 !== undefined) {
-		new Wikifier(null, "<<" + widget + " " + arg1 + ">>");
-	} else if (arg1 === undefined) {
-		new Wikifier(null, "<<" + widget + ">>");
-	}
-};
-
-window.wikifier2 = function (str) {
-	new Wikifier(null, str);
-};
-
 /*
  * Similar to <<script>>, but preprocesses the contents, so $variables are accessible.
  * The variable "output" is also exposed (unlike <<run>>, <<set>>)

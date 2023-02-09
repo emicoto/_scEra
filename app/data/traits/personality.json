@@ -1,0 +1,86 @@
+[
+	{
+		"name": "冷静",
+		"group": "personality",
+		"des": "无论什么情况都能维持冷静。",
+		"order": 0,
+		"sourceEffect": [
+			["fear", 0.8],
+			["angry", 0.8],
+			["depress", 0.8]
+		]
+	},
+	{
+		"name": "傲娇",
+		"group": "personality",
+		"des": "才不是为了你呢！",
+		"order": 0
+	},
+	{
+		"name": "乖顺",
+		"group": "personality",
+		"des": "哦，好的。",
+		"order": 5,
+		"sourceEffect": [
+			["surrend", 1.4],
+			["resist", 0.6]
+		]
+	},
+	{
+		"name": "叛逆",
+		"group": "personality",
+		"des": "滚！",
+		"order": -10,
+		"sourceEffect": [
+			["surrend", 0.6],
+			["resist", 1.5]
+		]
+	},
+	{
+		"name": "高傲",
+		"group": "personality",
+		"des": "像我这么高贵的血统，只有别人配合我，凭啥让我配合别人？",
+		"order": -5
+	},
+	{
+		"name": "善嫉",
+		"group": "personality",
+		"des": "凭什么啊？他哪有大家说的那么好，应该看我的！",
+		"order": 5
+	},
+	{
+		"name": "高洁",
+		"group": "personality",
+		"des": "这个人思想品德十分高尚。",
+		"order": 0
+	},
+	{
+		"name": "忠诚",
+		"group": "personality",
+		"des": "绝对不会主动背叛你。",
+		"order": 0
+	},
+
+	{
+		"name": "两面三刀",
+		"group": "personality",
+		"des": "人前一套人后一套。",
+		"order": 0,
+		"sourceEffect": [
+			["favo", 0.9],
+			["angry", 1.1]
+		]
+	},
+	{
+		"name": "变态",
+		"group": "personality",
+		"des": "喜好变态的性行为。",
+		"order": 0
+	},
+	{
+		"name": "鬼畜",
+		"group": "personality",
+		"des": "喜好鬼畜的性行为。",
+		"order": 0
+	}
+]

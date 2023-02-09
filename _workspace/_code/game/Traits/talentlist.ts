@@ -80,5 +80,14 @@ export async function TalentList() {
 			rate: 0.1,
 			conflic: ["FastRecovery"],
 		},
+		{
+			name: ["高等精灵", "HighElf"],
+			group: "species",
+			des: [
+				"高等精灵是一种高等的精灵，他们的身体比普通精灵更加强壮，而且他们的魔力也比普通精灵更加强大。",
+				"HighElf is a higher elf, their body is stronger than ordinary elves, and their magic is stronger than ordinary elves.",
+			],
+			rate: 0,
+		},
 	];
 }

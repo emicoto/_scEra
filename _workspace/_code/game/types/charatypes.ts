@@ -1,9 +1,12 @@
 import { race, Dict, statskey, basekey, palamkey, ablkey, sblkey, jobclass, markkey, expkey, P } from ".";
 
 export interface cycleInfo {
-	type: "menst" | "heat" | "none";
-	circleDays?: [number, number]; //cycle days range
-	circleRng?: [number, number]; //cycle random range
+	type: "menst" | "heat" | "none" | "alert";
+	cycleDays: [number, number]; //cycle days range
+	cycleRng: [number, number]; //cycle random range
+
+	baseDays?: [number, number]; //menst/heat days range
+
 	pregDays?: [number, number]; // pregnancy length
 	pregType?: "babies" | "eggs" | "none";
 	ovulateNum?: number; // max ovulate number
@@ -12,9 +15,10 @@ export interface cycleInfo {
 }
 
 export interface Womb {
-	circle: {
-		type: "menst" | "heat" | "none";
-		basedays: number; // basic cycle day length
+	cycle?: {
+		type: "menst" | "heat" | "none" | "alert";
+		cycleDays: number; // cycle day length
+		stageDays: number; //mens/heats day length
 		rng: number; // cycle random range
 		current: number; // current cycle day
 		state: "pregnant" | "ovulate" | "menst" | "heat" | "normal";
@@ -26,7 +30,7 @@ export interface Womb {
 	};
 	womb: {
 		maxslot: number; // max womb slot
-		state: "pregnant" | "empty";
+		state: "pregnant" | "normal";
 		aware: boolean; // is aware of pregnancy
 		fetus: any[]; // fetus
 	};
@@ -36,7 +40,7 @@ export interface Womb {
 
 export interface Parasite {
 	maxslot: number; // max parasite slot
-	type: "slime" | "worm" | "tentacles" | "none";
+	type: "slime" | "worm" | "tentacles" | "" | "none";
 	aware: boolean; // is aware of parasite
 	intestinal: any[]; // the parasite detail in intestine
 }

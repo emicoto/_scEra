@@ -64,7 +64,6 @@
    
    <vagina name='vagina' group='genitals' pos='i'>
       <sens default='1'></sens>
-      <shape>human</shape>
       <!-- scale is times of height(mm), unit is ml -->
       <capacity scale='0.8'></capacity>
    </vagina>
@@ -72,7 +71,6 @@
 
    <penis name='penis' group='genitals' pos='f'>
       <size default='3' max='5'></size>
-      <shape>human</shape>
    </penis>
    <testicles name='testicles' group='genitals' pos='rt' herm='false'></testicles>
 
@@ -90,14 +88,16 @@
 </bodygroup>
 
 <produce>
-   <breasts type='milk' amountPerSize='100' amountPerDay='30'></breasts>
-   <penis type='cum' amountPerSize='50' amountPerDay='10'></penis>
+   <breasts type='milk' volumePerSize='100' amountPerDay='30'></breasts>
+   <penis type='cum' volumePerSize='30' amountPerDay='10'></penis>
    <vagina type='lovejuice'></vagina>
 </produce>
 
 <cycle type='menst' maleHasIntestinalWomb='false'>
-	<circleDays min='3' max='5'></circleDays>
-	<circleRng min='3' max='5'></circleRng>
+   <cycleDays min='24' max='36'></cycleDays>
+ 	<cycleRng min='3' max='5'></cycleRng>  
+
+	<baseDays min='2' max='5'></baseDays>
 	<pregDays>300</pregDays>
 	<pregType>babies</pregType>
 	<ovulateNum>1</ovulateNum>

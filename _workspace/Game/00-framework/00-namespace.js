@@ -18,9 +18,6 @@ const Perflog = {};
 
 	Object.defineProperties(window.game, {
 		State: { value: State },
-	});
-
-	Object.defineProperties(window.scEra, {
 		Errors: { value: Errors },
 		Perflog: { value: Perflog },
 	});
@@ -36,8 +33,8 @@ const Perflog = {};
 		Wikifier: Wikifier,
 		State: State,
 
-		Errors: window.scEra.Errors,
-		Perflog: window.scEra.Perflog,
+		Errors: window.game.Errors,
+		Perflog: window.game.Perflog,
 	};
 
 	defineGlobalShortcuts(shortcuts);
@@ -46,7 +43,6 @@ const Perflog = {};
 	Object.defineProperties(window, {
 		V: { get: () => State.variables },
 		T: { get: () => State.temporary },
-		S: { get: () => window.scEra.setup },
 		C: { get: () => State.variables.chara },
 		Flag: {
 			get: () => State.variables.flag,

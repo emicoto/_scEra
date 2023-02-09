@@ -125,7 +125,7 @@
    </vagina>
    <clitoris name='clitoris' group='genitals' pos='i' herm='false'></clitoris>
 
-   <penis name='penis' group='genitals' pos='f'>
+   <penis name='penis' trait='Tender' group='genitals' pos='f'>
       <size default='3' max='5'></size>
       <shape>elf</shape>
    </penis>
@@ -146,15 +146,16 @@
 </bodygroup>
 
 <produce>
-   <breasts type='milk' amountPerSize='100' amountPerDay='30'></breasts>
-   <penis type='cum' amountPerSize='50' amountPerDay='10'></penis>
+   <breasts type='milk' volumePerSize='100' amountPerDay='30'></breasts>
+   <penis type='cum' volumePerSize='50' amountPerDay='10'></penis>
    <vagina type='lovejuice'></vagina>
 </produce>
 
-<cycle type='menst' maleHasIntestinalWomb='false'>
-	<circleDays min='3' max='5'></circleDays>
-	<circleRng min='3' max='5'></circleRng>
-	<pregDays>300</pregDays>
+<cycle type='alert' maleHasIntestinalWomb='false'>
+   <cycleDays min='90' max='120'></cycleDays>
+   <cycleRng min='5' max='10'></cycleRng>
+	<basedays min='7' max='28'></basedays>
+	<pregDays>360</pregDays>
 	<pregType>babies</pregType>
 	<ovulateNum>1</ovulateNum>
 	<frng min='0' max='2'></frng>
@@ -164,8 +165,9 @@
 <avatar>
 	<headtype>pointy||round||square</headtype>
 	<bodytype>human</bodytype>
-	<eartype>elvin</eartype>
+	<eartype>elf</eartype>
 	<skincolor>pale||white||health||gold</skincolor>
+   <eyecolor>blue||green||limegreen||skyblue||silver</eyecolor>
 	<defaulthaircolor>blond</defaulthaircolor>
 </avatar>
 </race>

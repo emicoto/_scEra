@@ -138,6 +138,8 @@ export class Creature {
 			this.RandomInitDefault();
 		}
 
+		$(document).trigger(":initCreature", [this, obj]);
+
 		return this;
 	}
 	InitCommon() {
@@ -157,7 +159,13 @@ export class Creature {
 			this.RandomInitBody();
 			this.RandomInitApp();
 		} else {
-			let adj = { bodysize: random(5), breasts: { sizeLv: this.gender === "male" ? 0 : random(10) } };
+			let adj = {
+				bodysize: random(5),
+				breasts: {
+					sizeLv: this.gender === "male" ? 0 : random(10),
+					penis: { sizeLv: this.gender === "female" ? 0 : random(7) },
+				},
+			};
 			this.initSpecies(adj);
 		}
 	}

@@ -1,0 +1,141 @@
+[
+	{
+		"name": ["理智", "Rational"],
+		"group": "mental",
+		"des": [
+			"无论什么时候都能做出理智的判断。从负面状态中更容易恢复。",
+			"Can make sensible judgments no matter what. Recover more easily from negative states."
+		],
+		"order": 5
+	},
+	{
+		"name": ["不过线", "NotOverstep"],
+		"group": "mental",
+		"des": [
+			"对什么是都分得很清楚，不会轻易过线。",
+			"Know what is right and wrong, and will not overstep the line easily."
+		],
+		"order": -10
+	},
+	{
+		"name": ["淡漠", "Indifferent"],
+		"group": "mental",
+		"des": ["无所谓，没有什么能让我心动的。", "Nothing can move me."],
+		"conflict": ["放纵", "冲动", "高调", "强欲"],
+		"order": 0,
+		"sourceEffect": [
+			["lust", 0.75],
+			["eager", 0.8],
+			["satisfy", 1.2]
+		]
+	},
+	{
+		"name": ["强欲", "Greed"],
+		"group": "mental",
+		"des": ["小孩才做选择，我全都要！", "I want everything!"],
+		"order": 0,
+		"sourceEffect": [
+			["lust", 1.25],
+			["eager", 1.2],
+			["satisfy", 0.8]
+		]
+	},
+	{
+		"name": ["胆大", "Bold"],
+		"group": "mental",
+		"des": ["无法被恐惧打倒。", "Cannot be defeated by fear."],
+		"order": 5,
+		"sourceEffect": [["fear", 0.8]]
+	},
+	{
+		"name": ["胆小", "Cowardly"],
+		"group": "mental",
+		"des": ["容易受到惊吓。", "Easily frightened."],
+		"order": -5,
+		"sourceEffect": [["fear", 0.8]]
+	},
+
+	{
+		"name": ["冲动", "Impulsive"],
+		"group": "mental",
+		"des": ["别拦我，我就要去！", "Don't stop me, I need to do!"],
+		"order": 5,
+		"sourceEffect": [["sanity", 1.2, "lose"]]
+	},
+	{
+		"name": ["忍耐", "Forbearance"],
+		"group": "mental",
+		"des": ["忍忍，就过去了。", "Bear it for a moment, and the wind will be calm and the waves will be smooth."],
+		"order": 0,
+		"sourceEffect": [
+			["paAll", 0.9],
+			["fear", 0.9],
+			["lust", 0.9],
+			["esAll", 0.9]
+		]
+	},
+	{
+		"name": ["脆弱", "GlassHeart"],
+		"group": "mental",
+		"des": ["呜呜呜……玻璃心……碎了。", "QAQ... My heart is broken."],
+		"order": 3,
+		"sourceEffect": [
+			["sanity", 1.5, "lose"],
+			["paALL", 1.2],
+			["fear", 1.5]
+		]
+	},
+	{
+		"name": ["坚韧", "Tough"],
+		"group": "mental",
+		"des": ["没有什么可以打倒我的。", "Nothing can defeat me."],
+		"order": 0,
+		"sourceEffect": [
+			["sanity", 0.8, "lose"],
+			["paAll", 0.9],
+			["fear", 0.9],
+			["lust", 0.9],
+			["esAll", 0.9]
+		]
+	},
+	{
+		"name": ["不服输", "Unyielding"],
+		"group": "mental",
+		"des": ["再来一局！", "One more game!"],
+		"order": 5,
+		"sourceEffect": [["surrend", 0.8]]
+	},
+	{
+		"name": ["乐观", "Optimistic"],
+		"group": "mental",
+		"des": ["每天都是晴天。", "Every day is sunny."],
+		"order": 2,
+		"sourceEffect": [
+			["depress", 0.8],
+			["resist", 0.8]
+		]
+	},
+	{
+		"name": ["悲观", "Pessimistic"],
+		"group": "mental",
+		"des": ["每天都是阴天。", "Every day is cloudy."],
+		"order": -2,
+		"sourceEffect": [
+			["depress", 1.2],
+			["resist", 1.2]
+		]
+	},
+	{
+		"name": ["厚脸皮", "Insensitive"],
+		"group": "mental",
+		"des": [
+			"只要我不尴尬，尴尬的就是别人",
+			"As long as I'm not embarrassed, it's others who should feel embarrassed."
+		],
+		"order": 2,
+		"sourceEffect": [
+			["mortify", 0.8],
+			["favo", 1.1]
+		]
+	}
+]

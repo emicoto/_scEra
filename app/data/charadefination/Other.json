@@ -1,0 +1,21 @@
+{
+	"liquidType": ["cum", "juice", "rub", "slime", "nectar"],
+
+	"virginity": ["kiss", "oral", "penis", "anal", "analsex", "vigina", "viginasex", "handholding", "footjob"],
+
+	"scarType": ["kissmark", "scar", "whip", "wound", "pen", "bruise", "tattoo", "band"],
+
+	"basecolor": {
+		"health": [255, 92, 79],
+		"stamina": [223, 236, 15],
+		"sanity": [12, 163, 238],
+		"mana": [160, 35, 231],
+
+		"hydration": [65, 255, 233],
+		"nutrient": [134, 255, 79],
+
+		"ecstacy": [255, 95, 202],
+
+		"pain": [87, 29, 243]
+	}
+}

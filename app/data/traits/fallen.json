@@ -1,0 +1,81 @@
+[
+	{
+		"name": "恋慕",
+		"group": "fallen",
+		"des": "喜欢但说不出口。",
+		"order": 10
+	},
+	{
+		"name": "依恋",
+		"group": "fallen",
+		"des": "你不在身边会感到寂寞。",
+		"order": 20
+	},
+	{
+		"name": "深爱",
+		"group": "fallen",
+		"des": "深爱着你。",
+		"order": 50
+	},
+	{
+		"name": "三人行",
+		"group": "fallen",
+		"des": "同时与你们两人一起交往。",
+		"order": 30
+	},
+	{
+		"name": "服从",
+		"group": "fallen",
+		"des": "是你忠实的下属。",
+		"order": 10
+	},
+	{
+		"name": "隶属",
+		"group": "fallen",
+		"des": "是你忠诚的奴仆。",
+		"order": 20
+	},
+	{
+		"name": "烙印",
+		"group": "fallen",
+		"des": "放弃自我，完全属于你。",
+		"order": 50
+	},
+	{
+		"name": "炮友",
+		"group": "fallen",
+		"des": "是你的淫乱炮友。",
+		"order": 10
+	},
+	{
+		"name": "情欲",
+		"group": "fallen",
+		"des": "对你萌生感情的炮友。",
+		"order": 20
+	},
+	{
+		"name": "爱欲",
+		"group": "fallen",
+		"des": "完全离不开你的身体。",
+		"order": 50
+	},
+
+	{
+		"name": "淫乱",
+		"group": "fallen",
+		"des": "很轻易的就能张开双腿。",
+		"order": 10
+	},
+	{
+		"name": "淫荡",
+		"group": "fallen",
+		"des": "不仅淫乱还放荡。",
+		"order": 20
+	},
+	{
+		"name": "淫魔",
+		"group": "fallen",
+		"des": "已经变成了以性为生以精液为食物的淫魔。",
+		"order": 50
+	}
+]

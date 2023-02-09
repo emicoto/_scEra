@@ -902,7 +902,7 @@
 	  });
 	  return worldMap$1[boardId][spotId];
 	}
-	const modules$2 = {
+	const modules$3 = {
 	  name: "Maps",
 	  version: "1.0.0",
 	  des: "A module for map system.",
@@ -942,7 +942,7 @@
 	  },
 	  Init: ["initWorldMap"]
 	};
-	addModule(modules$2);
+	addModule(modules$3);
 
 	var __async$2 = (__this, __arguments, generator) => {
 	  return new Promise((resolve, reject) => {
@@ -1148,522 +1148,8 @@
 	};
 	function TraitList() {
 	  return __async$1(this, null, function* () {
-	    let list = [
-	      {
-	        name: ["\u7EA4\u5F31", "Weak"],
-	        group: "physical",
-	        des: ["\u98CE\u4E00\u5439\u5C31\u5012\u4F53\u7684\u6837\u5B50\u3002", "The one who is blown down by the wind."],
-	        order: 1,
-	        sourceEffect: [["stamina", 1.2, "lose"]]
-	      },
-	      {
-	        name: ["\u5F3A\u58EE", "Strong"],
-	        group: "physical",
-	        des: ["\u8EAB\u5F3A\u529B\u58EE\u808C\u8089\u53D1\u8FBE\u3002", "Strong and muscular."],
-	        order: 0,
-	        sourceEffect: [["stamina", 0.8, "lose"]]
-	      },
-	      {
-	        name: ["\u8010\u75BC", "Tough"],
-	        group: "physical",
-	        des: ["\u76AE\u7CD9\u8089\u539A\uFF0C\u4E9B\u8BB8\u78D5\u78B0\u4E5F\u4E0D\u89C9\u5F97\u75BC\u3002", "The skin is thick and tough, it's hard to feel pain."],
-	        order: 0,
-	        sourceEffect: [["paAll", 0.8]]
-	      },
-	      {
-	        name: ["\u4E0D\u8010\u75BC", "Tender"],
-	        group: "physical",
-	        des: [
-	          "\u7EC6\u76AE\u5AE9\u8089\uFF0C\u4E9B\u8BB8\u78D5\u78B0\u4E5F\u4F1A\u5F88\u75DB\u3002",
-	          "The skin is tender and sensitive, it will feel painful even a little bumps."
-	        ],
-	        order: 0,
-	        sourceEffect: [["paAll", 1.2]]
-	      },
-	      {
-	        name: ["\u6613\u4F24\u4F53\u8D28", "GlassBody"],
-	        group: "physical",
-	        des: [
-	          "\u8EAB\u4E0A\u5F88\u5BB9\u6613\u7559\u4E0B\u75D5\u8FF9\uFF0C\u8FD8\u4E0D\u5BB9\u6613\u6D88\u9000\u3002",
-	          "It leaves marks easily on the body and difficult to recover from."
-	        ],
-	        order: 0
-	      },
-	      {
-	        name: ["\u65E9\u6CC4", "Premature"],
-	        group: "physical",
-	        des: ["\u624B\u901F\u5F88\u5FEB\uFF0C\u4F46\u5C04\u5F97\u66F4\u5FEB\u3002", "The hands is fast, but the shot is faster."],
-	        sourceEffect: [["ecstacy", 2.5]]
-	      },
-	      {
-	        name: ["\u91D1\u67AA\u4E0D\u5012", "Durable"],
-	        group: "physical",
-	        des: ["\u5C0F\u5144\u5F1F\u5341\u5206\u52C7\u731B\uFF0C\u91D1\u67AA\u767E\u6218\u4E0D\u5012\u3002", "The cock is very brave, he will not fail in a hundred battles."],
-	        sourceEffect: [["ecstacy", 0.25]]
-	      },
-	      {
-	        name: ["\u6027\u51B7\u6DE1", "IceCold"],
-	        group: "physical",
-	        des: ["\u6CA1\u6709\u4E16\u4FD7\u7684\u6B32\u671B\u3002", "The sex drive is colder than ice."],
-	        sourceEffect: [
-	          ["libido", 0.3],
-	          ["lust", 0.3],
-	          ["libido", 2, "lose"]
-	        ]
-	      },
-	      {
-	        name: ["\u6027\u6B32\u5F3A", "FireHot"],
-	        group: "physical",
-	        des: ["\u8EAB\u4F53\u5F88\u5BB9\u6613\u88AB\u523A\u6FC0\u5230\u3002", "The sex drive is hotter than fire."],
-	        sourceEffect: [
-	          ["libido", 1.5],
-	          ["lust", 1.5],
-	          ["libido", 0.5, "lose"]
-	        ]
-	      },
-	      {
-	        name: ["M\u4F53\u8D28", "MasochicBody"],
-	        group: "SM",
-	        des: ["\u660E\u660E\u5F88\u75DB\uFF0C\u4F46\u83AB\u540D\u7684\u6709\u70B9\u9178\u723D\u3002", "It's kind of pain, but oddly feel a little bit good."],
-	        order: 0
-	      },
-	      {
-	        name: ["M\u503E\u5411", "Masochicsm"],
-	        group: "SM",
-	        des: ["\u6218\u6597\u65F6\u503E\u5411\u5F80\u524D\u6392\u627F\u53D7\u4F24\u5BB3\u3002", "Enjoy taking damage at the front during combat."],
-	        order: 10
-	      },
-	      {
-	        name: ["S\u503E\u5411", "Sadicsm"],
-	        group: "SM",
-	        des: ["\u6218\u6597\u65F6\u503E\u5411\u5F80\u524D\u6392\u8F93\u51FA\u4F24\u5BB3\u3002", "Enjoys outputting damage at the front during combat."],
-	        order: 0
-	      },
-	      {
-	        name: ["A\u540D\u5668", "QualityAnal"],
-	        group: "quaility",
-	        des: ["\u8FD9\u4E2A\u83CA\u7A74\u7528\u8D77\u6765\u4F1A\u5F88\u723D\u3002", "Oh..!So tight.."],
-	        order: 0
-	      },
-	      {
-	        name: ["V\u540D\u5668", "QuailityVagina"],
-	        group: "quaility",
-	        des: ["\u8FD9\u4E2A\u79D8\u7A74\u7528\u8D77\u6765\u4F1A\u5F88\u723D\u3002", "Oh..!So tight and smooth.."],
-	        order: 0
-	      },
-	      {
-	        name: ["M\u540D\u5668", "QualityMouth"],
-	        group: "quaility",
-	        des: ["\u8FD9\u4E2A\u5634\u7528\u8D77\u6765\u4F1A\u5F88\u723D\u3002", "Oh..!Nice mouth pussy.."],
-	        order: 0
-	      },
-	      {
-	        name: ["\u7406\u667A", "Rational"],
-	        group: "mental",
-	        des: [
-	          "\u65E0\u8BBA\u4EC0\u4E48\u65F6\u5019\u90FD\u80FD\u505A\u51FA\u7406\u667A\u7684\u5224\u65AD\u3002\u4ECE\u8D1F\u9762\u72B6\u6001\u4E2D\u66F4\u5BB9\u6613\u6062\u590D\u3002",
-	          "Can make sensible judgments no matter what. Recover more easily from negative states."
-	        ],
-	        order: 5
-	      },
-	      {
-	        name: "\u4E0D\u8FC7\u7EBF",
-	        group: "mental",
-	        des: "\u5BF9\u4EC0\u4E48\u662F\u90FD\u5206\u5F97\u5F88\u6E05\u695A\uFF0C\u4E0D\u4F1A\u8F7B\u6613\u8FC7\u7EBF\u3002",
-	        order: -10
-	      },
-	      {
-	        name: "\u6DE1\u6F20",
-	        group: "mental",
-	        des: "\u65E0\u6240\u8C13\uFF0C\u6CA1\u6709\u4EC0\u4E48\u80FD\u8BA9\u6211\u5FC3\u52A8\u7684\u3002",
-	        conflict: ["\u653E\u7EB5", "\u51B2\u52A8", "\u9AD8\u8C03", "\u5F3A\u6B32"],
-	        order: 0,
-	        sourceEffect: [
-	          ["lust", 0.75],
-	          ["eager", 0.8],
-	          ["satisfy", 1.2]
-	        ]
-	      },
-	      {
-	        name: "\u5F3A\u6B32",
-	        group: "mental",
-	        des: "\u5C0F\u5B69\u624D\u505A\u9009\u62E9\uFF0C\u6211\u5168\u90FD\u8981\uFF01",
-	        order: 0,
-	        sourceEffect: [
-	          ["lust", 1.25],
-	          ["eager", 1.2],
-	          ["satisfy", 0.8]
-	        ]
-	      },
-	      {
-	        name: "\u80C6\u5927",
-	        group: "mental",
-	        des: "\u65E0\u6CD5\u88AB\u6050\u60E7\u6253\u5012\u3002",
-	        order: 5,
-	        sourceEffect: [["fear", 0.8]]
-	      },
-	      {
-	        name: "\u80C6\u5C0F",
-	        group: "mental",
-	        des: "\u5BB9\u6613\u53D7\u5230\u60CA\u5413\u3002",
-	        order: -5,
-	        sourceEffect: [["fear", 0.8]]
-	      },
-	      {
-	        name: "\u51B2\u52A8",
-	        group: "mental",
-	        des: "\u522B\u62E6\u6211\uFF0C\u6211\u5C31\u8981\u53BB\uFF01",
-	        order: 5,
-	        sourceEffect: [["sanity", 1.2, "lose"]]
-	      },
-	      {
-	        name: "\u5FCD\u8010",
-	        group: "mental",
-	        des: "\u5FCD\u5FCD\uFF0C\u5C31\u8FC7\u53BB\u4E86\u3002",
-	        order: 0,
-	        sourceEffect: [
-	          ["paAll", 0.9],
-	          ["fear", 0.9],
-	          ["lust", 0.9],
-	          ["esAll", 0.9]
-	        ]
-	      },
-	      {
-	        name: "\u8106\u5F31",
-	        group: "mental",
-	        des: "\u545C\u545C\u545C\u2026\u2026\u73BB\u7483\u5FC3\u2026\u2026\u788E\u4E86\u3002",
-	        order: 3,
-	        sourceEffect: [
-	          ["sanity", 1.5, "lose"],
-	          ["paALL", 1.2],
-	          ["fear", 1.5]
-	        ]
-	      },
-	      {
-	        name: "\u575A\u97E7",
-	        group: "mental",
-	        des: "\u6CA1\u6709\u4EC0\u4E48\u53EF\u4EE5\u6253\u5012\u6211\u7684\u3002",
-	        order: 0,
-	        sourceEffect: [
-	          ["sanity", 0.8, "lose"],
-	          ["paAll", 0.9],
-	          ["fear", 0.9],
-	          ["lust", 0.9],
-	          ["esAll", 0.9]
-	        ]
-	      },
-	      {
-	        name: "\u4E0D\u670D\u8F93",
-	        group: "mental",
-	        des: "\u518D\u6765\u4E00\u5C40\uFF01",
-	        order: 5,
-	        sourceEffect: [["surrend", 0.8]]
-	      },
-	      {
-	        name: "\u4E50\u89C2",
-	        group: "mental",
-	        des: "\u6BCF\u5929\u90FD\u662F\u6674\u5929\u3002",
-	        order: 2,
-	        sourceEffect: [
-	          ["depress", 0.8],
-	          ["resist", 0.8]
-	        ]
-	      },
-	      {
-	        name: "\u60B2\u89C2",
-	        group: "mental",
-	        des: "\u6BCF\u5929\u90FD\u662F\u9634\u5929\u3002",
-	        order: -2,
-	        sourceEffect: [
-	          ["depress", 1.2],
-	          ["resist", 1.2]
-	        ]
-	      },
-	      {
-	        name: "\u539A\u8138\u76AE",
-	        group: "mental",
-	        des: "\u53EA\u8981\u6211\u4E0D\u5C34\u5C2C\uFF0C\u5C34\u5C2C\u7684\u5C31\u662F\u522B\u4EBA",
-	        order: 2,
-	        sourceEffect: [
-	          ["mortify", 0.8],
-	          ["favo", 1.1]
-	        ]
-	      },
-	      {
-	        name: "\u51B7\u9759",
-	        group: "\u6027\u683C",
-	        des: "\u65E0\u8BBA\u4EC0\u4E48\u60C5\u51B5\u90FD\u80FD\u7EF4\u6301\u51B7\u9759\u3002",
-	        order: 0,
-	        sourceEffect: [
-	          ["fear", 0.8],
-	          ["angry", 0.8],
-	          ["depress", 0.8]
-	        ]
-	      },
-	      {
-	        name: "\u50B2\u5A07",
-	        group: "\u6027\u683C",
-	        des: "\u624D\u4E0D\u662F\u4E3A\u4E86\u4F60\u5462\uFF01",
-	        order: 0
-	      },
-	      {
-	        name: "\u4E56\u987A",
-	        group: "\u6027\u683C",
-	        des: "\u54E6\uFF0C\u597D\u7684\u3002",
-	        order: 5,
-	        sourceEffect: [
-	          ["surrend", 1.4],
-	          ["resist", 0.6]
-	        ]
-	      },
-	      {
-	        name: "\u53DB\u9006",
-	        group: "\u6027\u683C",
-	        des: "\u6EDA\uFF01",
-	        order: -10,
-	        sourceEffect: [
-	          ["surrend", 0.6],
-	          ["resist", 1.5]
-	        ]
-	      },
-	      {
-	        name: "\u9AD8\u50B2",
-	        group: "\u6027\u683C",
-	        des: "\u50CF\u6211\u8FD9\u4E48\u9AD8\u8D35\u7684\u8840\u7EDF\uFF0C\u53EA\u6709\u522B\u4EBA\u914D\u5408\u6211\uFF0C\u51ED\u5565\u8BA9\u6211\u914D\u5408\u522B\u4EBA\uFF1F",
-	        order: -5
-	      },
-	      {
-	        name: "\u5584\u5AC9",
-	        group: "\u6027\u683C",
-	        des: "\u51ED\u4EC0\u4E48\u554A\uFF1F\u4ED6\u54EA\u6709\u5927\u5BB6\u8BF4\u7684\u90A3\u4E48\u597D\uFF0C\u5E94\u8BE5\u770B\u6211\u7684\uFF01",
-	        order: 5
-	      },
-	      {
-	        name: "\u6027\u4FDD\u5B88",
-	        group: "\u6027\u89C2\u5FF5",
-	        des: "\u7E41\u884D\u662F\u795E\u5723\u7684\uFF0C\u4E0D\u8BE5\u4EE5\u4EAB\u4E50\u800C\u4E3A\u4E4B\u3002",
-	        order: 0
-	      },
-	      {
-	        name: "\u6027\u5F00\u653E",
-	        group: "\u6027\u89C2\u5FF5",
-	        des: "\u6027\u5C31\u662F\u5A31\u4E50\u884C\u4E3A\uFF0C\u600E\u4E48\u5F00\u5FC3\u600E\u4E48\u6765\u3002",
-	        order: 0
-	      },
-	      {
-	        name: "\u7981\u6B32",
-	        group: "\u6027\u89C2\u5FF5",
-	        des: "\u795E\u554A\uFF0C\u8BF7\u539F\u8C05\u6211\u7684\u7F6A\u6076\uFF01",
-	        order: -2,
-	        sourceEffect: [
-	          ["lust", 0.2],
-	          ["esAll", 1.2]
-	        ]
-	      },
-	      {
-	        name: "\u653E\u7EB5",
-	        group: "\u6027\u89C2\u5FF5",
-	        des: "\u6027\u81EA\u7531\u4ECA\u5929\u5C31\u8981\u5B9E\u73B0\uFF01",
-	        order: 2,
-	        sourceEffect: [
-	          ["lust", 1.8],
-	          ["esAll", 0.5]
-	        ]
-	      },
-	      {
-	        name: "\u6D01\u7656",
-	        group: "\u6027\u89C2\u5FF5",
-	        des: "\u810F\u6B7B\u4E86\uFF0C\u522B\u78B0\u6211\uFF01",
-	        order: 0,
-	        sourceEffect: [
-	          ["lust", 0.2],
-	          ["resist", 2],
-	          ["esAll", 0.9]
-	        ]
-	      },
-	      {
-	        name: "\u6027\u763E",
-	        group: "\u6027\u89C2\u5FF5",
-	        des: "\u5FEB\uFF0C\u6B63\u9762\u4E0A\u6211\uFF01\uFF01",
-	        order: 10,
-	        sourceEffect: [
-	          ["lust", 2.5],
-	          ["libido", 3]
-	        ]
-	      },
-	      {
-	        name: "\u9AD8\u6D01",
-	        group: "\u4EBA\u54C1",
-	        des: "\u8FD9\u4E2A\u4EBA\u601D\u60F3\u54C1\u5FB7\u5341\u5206\u9AD8\u5C1A\u3002",
-	        order: 0
-	      },
-	      {
-	        name: "\u5FE0\u8BDA",
-	        group: "\u4EBA\u54C1",
-	        des: "\u7EDD\u5BF9\u4E0D\u4F1A\u4E3B\u52A8\u80CC\u53DB\u4F60\u3002",
-	        order: 0
-	      },
-	      {
-	        name: "\u4E24\u9762\u4E09\u5200",
-	        group: "\u4EBA\u54C1",
-	        des: "\u4EBA\u524D\u4E00\u5957\u4EBA\u540E\u4E00\u5957\u3002",
-	        order: 0,
-	        sourceEffect: [
-	          ["favo", 0.9],
-	          ["angry", 1.1]
-	        ]
-	      },
-	      {
-	        name: "\u53D8\u6001",
-	        group: "\u4EBA\u54C1",
-	        des: "\u559C\u597D\u53D8\u6001\u7684\u6027\u884C\u4E3A\u3002",
-	        order: 0
-	      },
-	      {
-	        name: "\u9B3C\u755C",
-	        group: "\u4EBA\u54C1",
-	        des: "\u559C\u597D\u9B3C\u755C\u7684\u6027\u884C\u4E3A\u3002",
-	        order: 0
-	      },
-	      {
-	        name: "\u9AD8\u8C03",
-	        group: "\u884C\u4E3A",
-	        des: "\u8FD8\u6709\u8C01\u4E0D\u77E5\u9053\u6211\uFF1F",
-	        order: 2
-	      },
-	      {
-	        name: "\u4F4E\u8C03",
-	        group: "\u884C\u4E3A",
-	        des: "\u5E94\u8BE5\u6CA1\u4EBA\u77E5\u9053\u6211\u5427\u2026\u2026\uFF1F",
-	        order: 0
-	      },
-	      {
-	        name: "\u9AD8\u81EA\u5C0A",
-	        group: "\u884C\u4E3A",
-	        des: "\u6211\u662F\u6709\u5C0A\u4E25\u7684\u4EBA\uFF0C\u94B1\u4E5F\u4E0D\u80FD\u6536\u4E70\u6211\u3002",
-	        order: -10
-	      },
-	      {
-	        name: "\u65E0\u8282\u64CD",
-	        group: "\u884C\u4E3A",
-	        des: "\u5C0A\u4E25\u53C8\u4E0D\u80FD\u5403\uFF0C\u53EA\u8981\u7ED9\u6211\u94B1\uFF0C\u4EC0\u4E48\u90FD\u80FD\u6EE1\u8DB3\u4F60\u3002",
-	        order: 10
-	      },
-	      {
-	        name: "\u8D1E\u6D01",
-	        group: "\u884C\u4E3A",
-	        des: "\u6027\u884C\u4E3A\u53EA\u80FD\u8DDF\u7ED3\u5A5A\u5BF9\u8C61\u505A\uFF0C\u800C\u4E14\u5FC5\u987B\u5F97\u5A5A\u540E\u3002",
-	        order: 0,
-	        sourceEffect: [["lust", 0.9]]
-	      },
-	      {
-	        name: "\u653E\u8361",
-	        group: "\u884C\u4E3A",
-	        des: "\u60F3\u505A\u5C31\u505A\uFF0C\u6CA1\u4EBA\u53EF\u4EE5\u7EA6\u675F\u6211\u3002",
-	        order: 5,
-	        sourceEffect: [
-	          ["lust", 1.5],
-	          ["favo", 1.5]
-	        ]
-	      },
-	      {
-	        name: "\u604B\u6155",
-	        group: "\u9677\u843D",
-	        des: "\u559C\u6B22\u4F46\u8BF4\u4E0D\u51FA\u53E3\u3002",
-	        order: 10
-	      },
-	      {
-	        name: "\u4F9D\u604B",
-	        group: "\u9677\u843D",
-	        des: "\u4F60\u4E0D\u5728\u8EAB\u8FB9\u4F1A\u611F\u5230\u5BC2\u5BDE\u3002",
-	        order: 20
-	      },
-	      {
-	        name: "\u6DF1\u7231",
-	        group: "\u9677\u843D",
-	        des: "\u6DF1\u7231\u7740\u4F60\u3002",
-	        order: 50
-	      },
-	      {
-	        name: "\u4E09\u4EBA\u884C",
-	        group: "\u9677\u843D",
-	        des: "\u540C\u65F6\u4E0E\u4F60\u4EEC\u4E24\u4EBA\u4E00\u8D77\u4EA4\u5F80\u3002",
-	        order: 30
-	      },
-	      {
-	        name: "\u670D\u4ECE",
-	        group: "\u9677\u843D",
-	        des: "\u662F\u4F60\u5FE0\u5B9E\u7684\u4E0B\u5C5E\u3002",
-	        order: 10
-	      },
-	      {
-	        name: "\u96B6\u5C5E",
-	        group: "\u9677\u843D",
-	        des: "\u662F\u4F60\u5FE0\u8BDA\u7684\u5974\u4EC6\u3002",
-	        order: 20
-	      },
-	      {
-	        name: "\u70D9\u5370",
-	        group: "\u9677\u843D",
-	        des: "\u653E\u5F03\u81EA\u6211\uFF0C\u5B8C\u5168\u5C5E\u4E8E\u4F60\u3002",
-	        order: 50
-	      },
-	      {
-	        name: "\u70AE\u53CB",
-	        group: "\u9677\u843D",
-	        des: "\u662F\u4F60\u7684\u6DEB\u4E71\u70AE\u53CB\u3002",
-	        order: 10
-	      },
-	      {
-	        name: "\u60C5\u6B32",
-	        group: "\u9677\u843D",
-	        des: "\u5BF9\u4F60\u840C\u751F\u611F\u60C5\u7684\u70AE\u53CB\u3002",
-	        order: 20
-	      },
-	      {
-	        name: "\u7231\u6B32",
-	        group: "\u9677\u843D",
-	        des: "\u5B8C\u5168\u79BB\u4E0D\u5F00\u4F60\u7684\u8EAB\u4F53\u3002",
-	        order: 50
-	      },
-	      {
-	        name: "\u6DEB\u4E71",
-	        group: "\u9677\u843D",
-	        des: "\u5F88\u8F7B\u6613\u7684\u5C31\u80FD\u5F20\u5F00\u53CC\u817F\u3002",
-	        order: 10
-	      },
-	      {
-	        name: "\u6DEB\u8361",
-	        group: "\u9677\u843D",
-	        des: "\u4E0D\u4EC5\u6DEB\u4E71\u8FD8\u653E\u8361\u3002",
-	        order: 20
-	      },
-	      {
-	        name: "\u6DEB\u9B54",
-	        group: "\u9677\u843D",
-	        des: "\u5DF2\u7ECF\u53D8\u6210\u4E86\u4EE5\u6027\u4E3A\u751F\u4EE5\u7CBE\u6DB2\u4E3A\u98DF\u7269\u7684\u6DEB\u9B54\u3002",
-	        order: 50
-	      }
-	    ];
-	    let conflict = [
-	      ["\u5F3A\u58EE", "\u7EA4\u5F31"],
-	      ["\u8010\u75BC", "\u4E0D\u8010\u75BC"],
-	      ["M\u503E\u5411", "M\u4F53\u8D28"],
-	      ["\u5F3A\u6B32", "\u6DE1\u6F20"],
-	      ["\u80C6\u5927", "\u80C6\u5C0F"],
-	      ["\u4E50\u89C2", "\u60B2\u89C2"],
-	      ["\u4E56\u987A", "\u53DB\u9006", "\u50B2\u5A07"],
-	      ["\u6027\u4FDD\u5B88", "\u6027\u5F00\u653E", "\u7981\u6B32", "\u653E\u7EB5", "\u6D01\u7656", "\u6027\u763E"],
-	      ["\u53D8\u6001", "\u9AD8\u6D01"],
-	      ["\u9B3C\u755C", "\u9AD8\u6D01"],
-	      ["\u9AD8\u8C03", "\u4F4E\u8C03"],
-	      ["\u9AD8\u81EA\u5C0A", "\u65E0\u8282\u64CD"],
-	      ["\u9AD8\u81EA\u5C0A", "\u539A\u8138\u76AE"],
-	      ["\u51B2\u52A8", "\u5FCD\u8010"],
-	      ["\u8106\u5F31", "\u575A\u97E7"],
-	      ["\u8D1E\u6D01", "\u653E\u8361"],
-	      ["\u5FE0\u8BDA", "\u5584\u5AC9"]
-	    ];
+	    let list = [];
+	    let conflict = [];
 	    let loadjson = yield getTraitJson();
 	    slog("log", `Get file list from json`, loadjson);
 	    if (loadjson) {
@@ -1685,19 +1171,22 @@
 	    D.traits = D.traits.concat(list);
 	    Trait.init();
 	    InitTraitsConflict();
+	    setTimeout(() => {
+	      delete D.traits;
+	    }, 2e3);
 	  });
 	}
 	function getTraitJson() {
 	  return __async$1(this, null, function* () {
 	    let list = [];
 	    let conflict = [];
-	    const filesData = yield getJson("./json/traits.json").then((res) => {
+	    const filesData = yield getJson("./data/traits.json").then((res) => {
 	      slog("log", "Get file list from traits.json:", res);
 	      return res;
 	    });
 	    if (filesData) {
 	      filesData.forEach(([filename, trait]) => {
-	        slog("log", "Get traits from " + filename, trait);
+	        dlog("log", "Get traits from " + filename, trait);
 	        if (filename.includes("conflict")) {
 	          if (!Array.isArray(trait)) {
 	            slog("warn", "Error: format error, skip this file. conflict file must be array:", trait);
@@ -1714,13 +1203,13 @@
 	          }
 	        }
 	      });
-	      slog("log", "Get all the list done:", list, conflict);
+	      dlog("log", "Get all the list done:", list, conflict);
 	    }
 	    return { list, conflict };
 	  });
 	}
 
-	const modules$1 = {
+	const modules$2 = {
 	  name: "Traits",
 	  version: "1.0.0",
 	  des: "A module for trait system.",
@@ -1747,7 +1236,7 @@
 	  },
 	  Init: ["Traitlist"]
 	};
-	addModule(modules$1);
+	addModule(modules$2);
 
 	class Items {
 	  static newId(group, name, cate) {
@@ -1935,7 +1424,7 @@
 	});
 	function loadItems() {
 	  return __async(this, null, function* () {
-	    const filesdata = yield getJson("./json/items.json").then((res) => {
+	    const filesdata = yield getJson("./data/items.json").then((res) => {
 	      slog("log", "Items loaded:", res);
 	      return res;
 	    });
@@ -1963,7 +1452,7 @@
 	    slog("log", "All items loaded:", Db.Items);
 	  });
 	}
-	const modules = {
+	const modules$1 = {
 	  name: "Items",
 	  version: "1.0.0",
 	  des: "A module for items system.",
@@ -1985,7 +1474,7 @@
 	  },
 	  Init: ["loadItems"]
 	};
-	addModule(modules);
+	addModule(modules$1);
 
 	const bodyDict = {
 	  head: "\u5934\u90E8",
@@ -2175,267 +1664,6 @@
 	  kijin: ["`\u9B3C\u4EBA", "Kijin"]
 	};
 
-	function GenerateHeight(size, scale = 1) {
-	  if (typeof size !== "number") {
-	    size = random(5);
-	  }
-	  const r = D.bodysize[size];
-	  const height = random(r[0], r[1]) + random(30);
-	  return height * scale;
-	}
-	function GenerateWeight(height) {
-	  const r = height / 1e3;
-	  const BMI = 19 + random(-2, 4);
-	  return Math.floor(r * r * BMI + 0.5) + random(30) / 10;
-	}
-	function BodyRatio(height) {
-	  const select = new SelectCase();
-	  select.case([240, 800], 3.5).case([800, 1240], 4).case([1300, 1400], 4.5).case([1400, 1500], 5).case([1500, 1660], 6).case([1660, 1740], 6.5).case([1740, 1800], 7).else(7.5);
-	  return select.has(height);
-	}
-	function BodySizeCalc(height) {
-	  return Math.floor((height / this.bodyScale - 1300) / 1500);
-	}
-	function HeadSize(height) {
-	  return height / BodyRatio(height);
-	}
-	function RandomSpeciesName(species) {
-	  return lan(draw(D.randomCharaNamePool));
-	}
-
-	var __defProp = Object.defineProperty;
-	var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-	var __hasOwnProp = Object.prototype.hasOwnProperty;
-	var __propIsEnum = Object.prototype.propertyIsEnumerable;
-	var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-	var __spreadValues = (a, b) => {
-	  for (var prop in b || (b = {}))
-	    if (__hasOwnProp.call(b, prop))
-	      __defNormalProp(a, prop, b[prop]);
-	  if (__getOwnPropSymbols)
-	    for (var prop of __getOwnPropSymbols(b)) {
-	      if (__propIsEnum.call(b, prop))
-	        __defNormalProp(a, prop, b[prop]);
-	    }
-	  return a;
-	};
-	class Organs {
-	  constructor(obj) {
-	    if (!isValid(obj)) {
-	      slog("warn", "Invalid organs object:", obj);
-	      return;
-	    }
-	    const { type, pos, group, name } = obj;
-	    this.name = name;
-	    this.type = type;
-	    this.pos = pos;
-	    this.group = group;
-	    this.initSexStats(name);
-	    this.init(obj);
-	    if (!this.hediff)
-	      this.hediff = [];
-	  }
-	  init(obj) {
-	    const { side, count, size, sens, shape, trait } = obj;
-	    if (side)
-	      this.side = side;
-	    if (count)
-	      this.count = count;
-	    if (size)
-	      this.sizeLv = size.default;
-	    if (sens)
-	      this.sens = sens.default;
-	    if (typeof shape === "string")
-	      this.shape = shape;
-	    if (trait)
-	      this.initTrait(trait);
-	    const { adj } = obj;
-	    if (adj) {
-	      this.initStats(adj);
-	    }
-	  }
-	  initSexStats(part) {
-	    switch (part) {
-	      case "vagina":
-	      case "anus":
-	      case "penis":
-	      case "urethral":
-	        if (!this.size)
-	          this.size = [0, 0];
-	      case "mouth":
-	      case "clitoris":
-	        if (!this.size)
-	          this.size = 0;
-	      case "breasts":
-	        if (!this.sizeLv)
-	          this.sizeLv = 0;
-	        if (!this.sens)
-	          this.sens = 0;
-	        break;
-	    }
-	    return this;
-	  }
-	  initStats(adj) {
-	    const { sens, d, l, size, trait } = adj;
-	    if (sens)
-	      this.sens = sens;
-	    if (d)
-	      this.size[0] = d;
-	    if (l)
-	      this.size[1] = l;
-	    if (size)
-	      this.sizeLv = size;
-	    if (trait)
-	      this.initTrait(trait);
-	    return this;
-	  }
-	  initProduce(config) {
-	    this.produce = config.type;
-	    if (config.amountPerDay || config.amountPerSize) {
-	      this.amount = { cur: 0 };
-	    }
-	    if (config.amountPerDay) {
-	      this.amount.day = config.amountPerDay;
-	    }
-	    if (config.amountPerSize) {
-	      this.amount.max = config.amountPerSize * (this.sizeLv || 1);
-	    }
-	    return this;
-	  }
-	  initCapacity(config, size) {
-	    if (!this.capacity) {
-	      this.capacity = [0, 0];
-	    }
-	    if (config.default) {
-	      this.capacity[1] = config.default;
-	    }
-	    if (config.scale) {
-	      this.capacity[1] = size * config.scale;
-	    }
-	    return this;
-	  }
-	  initTrait(config) {
-	    if (!this.trait) {
-	      this.trait = [];
-	    }
-	    if (typeof config === "string") {
-	      this.trait.push(config);
-	    } else if (Array.isArray(config)) {
-	      this.trait.push(...config);
-	    }
-	    return this;
-	  }
-	  initClitoris(BodyRatio) {
-	    this.size = this.sizeLv + BodyRatio;
-	    return this;
-	  }
-	  initMouth(height) {
-	    this.size = Organs.MouthDiameter(height, this.sizeLv);
-	    return this;
-	  }
-	  initUrethral(gender, config, height) {
-	    const option = this.group;
-	    if (typeof option === "object" && option[gender]) {
-	      this.group = option[gender];
-	    }
-	    this.initCapacity(config, height);
-	    if (this.group === "penis") {
-	      this.capacity[1] /= 5;
-	    }
-	    return this;
-	  }
-	  initUrethralSize(height, penis) {
-	    switch (this.group) {
-	      case "penis":
-	        if (!penis) {
-	          slog(
-	            "error",
-	            "Caught error on init urethral size. the urethral depent on penis, but not penis data found:",
-	            this,
-	            penis
-	          );
-	          return;
-	        }
-	        this.size[0] = Organs.UrethralDiameter(penis.size[0], this.sizeLv);
-	        this.size[1] = Math.floor(penis.size[1] * 1.2 + 0.5);
-	        break;
-	      default:
-	        this.size[0] = Organs.UrethralGeneralDiameter(height, this.sizeLv);
-	        this.size[1] = Organs.UrethralGeneralDepth(height);
-	    }
-	    return this;
-	  }
-	  initVagina(height, config) {
-	    this.size[0] = Organs.VagiDiameter(height, this.sizeLv);
-	    this.size[1] = Organs.VagiDepth(height);
-	    this.initCapacity(config, height);
-	    return this;
-	  }
-	  initAnal(height, config) {
-	    this.size[0] = Organs.AnalDiameter(height, this.sizeLv);
-	    this.size[1] = Organs.AnalDepth(height);
-	    if (config == null ? void 0 : config.trait)
-	      this.trait = config.trait;
-	    this.initCapacity(config, height);
-	    return this;
-	  }
-	  initPenis() {
-	    const size = D.Psize[this.sizeLv];
-	    const d = random(size.d[0], size.d[1]) + random(8);
-	    const l = random(size.l[0], size.l[1]) + random(8);
-	    if (!this.size[0])
-	      this.size[0] = d;
-	    if (!this.size[1])
-	      this.size[1] = l;
-	    return this;
-	  }
-	  static theoriticalMaxiumHoleSize(height) {
-	    return height / 10 * 0.9;
-	  }
-	  static strechLevelSize(height) {
-	    return this.theoriticalMaxiumHoleSize(height) / 12;
-	  }
-	  static VagiDiameter(height, sizeLv) {
-	    const max = this.strechLevelSize(height) * 1.1;
-	    return Math.floor(max + sizeLv * max) + random(-2, 2);
-	  }
-	  static VagiDepth(height) {
-	    return Math.floor(height / 21 + 0.5) + random(-4, 8);
-	  }
-	  static AnalDiameter(height, sizeLv) {
-	    const max = this.strechLevelSize(height);
-	    return Math.floor(max + sizeLv * max) + random(-2, 2);
-	  }
-	  static AnalDepth(height) {
-	    return Math.floor(height / 12 + 0.5) + random(-4, 8);
-	  }
-	  static MaxUrethralSize(height) {
-	    return this.theoriticalMaxiumHoleSize(height) / 4;
-	  }
-	  static UrethralStrechLevelSize(height) {
-	    return this.MaxUrethralSize(height) / 12;
-	  }
-	  static UrethralGeneralDiameter(height, sizeLv) {
-	    const max = this.UrethralStrechLevelSize(height);
-	    return Math.floor(max + sizeLv * max) + random(-2, 4) / 10;
-	  }
-	  static UrethralGeneralDepth(height) {
-	    return Math.floor(height / 30) + random(-4, 8);
-	  }
-	  static UrethralDiameter(penisDiameter, sizeLv) {
-	    const max = penisDiameter * 0.8 / 12;
-	    return Math.floor(max + sizeLv * max) + random(-2, 2) / 10;
-	  }
-	  static MouthDiameter(height, sizeLv) {
-	    const multip = 1 + sizeLv * 0.15;
-	    return Math.floor(height / 40 * multip) + random(10);
-	  }
-	  static addHediff(organ, type, hediff) {
-	    organ.hediff.push(__spreadValues({ type }, hediff));
-	    return organ;
-	  }
-	}
-
 	function fixLanArr(obj) {
 	  const lang = ["CN", "EN", "JP"];
 	  let result = [];
@@ -2533,6 +1761,236 @@
 	    }
 	  });
 	  slog("log", "All Species Loaded: ", Species.data);
+	}
+
+	var __defProp = Object.defineProperty;
+	var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+	var __hasOwnProp = Object.prototype.hasOwnProperty;
+	var __propIsEnum = Object.prototype.propertyIsEnumerable;
+	var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+	var __spreadValues = (a, b) => {
+	  for (var prop in b || (b = {}))
+	    if (__hasOwnProp.call(b, prop))
+	      __defNormalProp(a, prop, b[prop]);
+	  if (__getOwnPropSymbols)
+	    for (var prop of __getOwnPropSymbols(b)) {
+	      if (__propIsEnum.call(b, prop))
+	        __defNormalProp(a, prop, b[prop]);
+	    }
+	  return a;
+	};
+	class Organs {
+	  constructor(obj) {
+	    if (!isValid(obj)) {
+	      slog("warn", "Invalid organs object:", obj);
+	      return;
+	    }
+	    const { type, pos, group, name } = obj;
+	    this.name = name;
+	    this.type = type;
+	    this.pos = pos;
+	    this.group = group;
+	    this.initSexStats(name);
+	    this.init(obj);
+	    if (!this.hediff)
+	      this.hediff = [];
+	  }
+	  init(obj) {
+	    const { side, count, size, sens, shape, trait } = obj;
+	    if (side)
+	      this.side = side;
+	    if (count)
+	      this.count = count;
+	    if (size)
+	      this.sizeLv = size.default;
+	    if (sens)
+	      this.sens = sens.default;
+	    if (typeof shape === "string")
+	      this.shape = shape;
+	    if (trait)
+	      this.initTrait(trait);
+	    const { adj } = obj;
+	    if (adj) {
+	      this.initStats(adj);
+	    }
+	  }
+	  initSexStats(part) {
+	    switch (part) {
+	      case "vagina":
+	      case "anus":
+	      case "penis":
+	      case "urethral":
+	        if (!this.size)
+	          this.size = [0, 0];
+	      case "mouth":
+	      case "clitoris":
+	        if (!this.size)
+	          this.size = 0;
+	      case "breasts":
+	        if (!this.sizeLv)
+	          this.sizeLv = 0;
+	        if (!this.sens)
+	          this.sens = 0;
+	        break;
+	    }
+	    return this;
+	  }
+	  initStats(adj) {
+	    const { sens, d, l, size, trait } = adj;
+	    if (sens)
+	      this.sens = sens;
+	    if (d)
+	      this.size[0] = d;
+	    if (l)
+	      this.size[1] = l;
+	    if (size)
+	      this.sizeLv = size;
+	    if (adj.trait)
+	      this.initTrait(trait);
+	    return this;
+	  }
+	  initProduce(config) {
+	    this.produce = config.type;
+	    if (!(config.amountPerDay || config.volumePerSize || config.volume))
+	      return this;
+	    this.volume = { cur: 0 };
+	    const { volume = 0, amountPerDay = 0, volumePerSize = 0 } = config;
+	    this.volume.day = amountPerDay;
+	    this.volume.max = volume || volumePerSize * (this.sizeLv || 1);
+	    return this;
+	  }
+	  initCapacity(config, size) {
+	    if (!this.capacity) {
+	      this.capacity = [0, 0];
+	    }
+	    if (config.default) {
+	      this.capacity[1] = config.default;
+	    }
+	    if (config.scale) {
+	      this.capacity[1] = size * config.scale;
+	    }
+	    return this;
+	  }
+	  initTrait(config) {
+	    if (!this.trait) {
+	      this.trait = [];
+	    }
+	    if (typeof config === "string") {
+	      this.trait.push(config);
+	    } else if (Array.isArray(config)) {
+	      this.trait.push(...config);
+	    }
+	    return this;
+	  }
+	  initClitoris(BodyRatio) {
+	    this.size = this.sizeLv + BodyRatio;
+	    return this;
+	  }
+	  initMouth(height) {
+	    this.size = Organs.MouthDiameter(height, this.sizeLv);
+	    return this;
+	  }
+	  initUrethral(gender, config, height) {
+	    const option = this.group;
+	    if (typeof option === "object" && option[gender]) {
+	      this.group = option[gender];
+	    }
+	    this.initCapacity(config, height);
+	    if (this.group === "penis") {
+	      this.capacity[1] /= 5;
+	    }
+	    return this;
+	  }
+	  initUrethralSize(height, penis) {
+	    switch (this.group) {
+	      case "penis":
+	        if (!penis) {
+	          slog(
+	            "error",
+	            "Caught error on init urethral size. the urethral depent on penis, but not penis data found:",
+	            this,
+	            penis
+	          );
+	          return;
+	        }
+	        this.size[0] = Organs.UrethralDiameter(penis.size[0], this.sizeLv);
+	        this.size[1] = Math.floor(penis.size[1] * 1.2 + 0.5);
+	        break;
+	      default:
+	        this.size[0] = Organs.UrethralGeneralDiameter(height, this.sizeLv);
+	        this.size[1] = Organs.UrethralGeneralDepth(height);
+	    }
+	    return this;
+	  }
+	  initVagina(height, config) {
+	    this.size[0] = Organs.VagiDiameter(height, this.sizeLv);
+	    this.size[1] = Organs.VagiDepth(height);
+	    this.initCapacity(config, height);
+	    return this;
+	  }
+	  initAnal(height, config) {
+	    this.size[0] = Organs.AnalDiameter(height, this.sizeLv);
+	    this.size[1] = Organs.AnalDepth(height);
+	    if (config == null ? void 0 : config.trait)
+	      this.trait = config.trait;
+	    this.initCapacity(config, height);
+	    return this;
+	  }
+	  initPenis(scale = 1) {
+	    const size = D.Psize[this.sizeLv];
+	    const d = random(size.d[0], size.d[1]) + random(8);
+	    const l = random(size.l[0], size.l[1]) + random(8);
+	    if (!this.size[0])
+	      this.size[0] = d * scale;
+	    if (!this.size[1])
+	      this.size[1] = l * scale;
+	    return this;
+	  }
+	  static theoriticalMaxiumHoleSize(height) {
+	    return height / 10 * 0.9;
+	  }
+	  static strechLevelSize(height) {
+	    return this.theoriticalMaxiumHoleSize(height) / 12;
+	  }
+	  static VagiDiameter(height, sizeLv) {
+	    const max = this.strechLevelSize(height) * 1.1;
+	    return Math.floor(max + sizeLv * max) + random(-2, 2);
+	  }
+	  static VagiDepth(height) {
+	    return Math.floor(height / 21 + 0.5) + random(-4, 8);
+	  }
+	  static AnalDiameter(height, sizeLv) {
+	    const max = this.strechLevelSize(height);
+	    return Math.floor(max + sizeLv * max) + random(-2, 2);
+	  }
+	  static AnalDepth(height) {
+	    return Math.floor(height / 12 + 0.5) + random(-4, 8);
+	  }
+	  static MaxUrethralSize(height) {
+	    return this.theoriticalMaxiumHoleSize(height) / 4;
+	  }
+	  static UrethralStrechLevelSize(height) {
+	    return this.MaxUrethralSize(height) / 12;
+	  }
+	  static UrethralGeneralDiameter(height, sizeLv) {
+	    const max = this.UrethralStrechLevelSize(height);
+	    return Math.floor(max + sizeLv * max) + random(-2, 4) / 10;
+	  }
+	  static UrethralGeneralDepth(height) {
+	    return Math.floor(height / 30) + random(-4, 8);
+	  }
+	  static UrethralDiameter(penisDiameter, sizeLv) {
+	    const max = penisDiameter * 0.8 / 12;
+	    return Math.floor(max + sizeLv * max) + random(-2, 2) / 10;
+	  }
+	  static MouthDiameter(height, sizeLv) {
+	    const multip = 1 + sizeLv * 0.15;
+	    return Math.floor(height / 40 * multip) + random(10);
+	  }
+	  static addHediff(organ, type, hediff) {
+	    organ.hediff.push(__spreadValues({ type }, hediff));
+	    return organ;
+	  }
 	}
 
 	class Species {
@@ -2684,7 +2142,7 @@
 	          body[key].initAnal(height, part);
 	          break;
 	        case "penis":
-	          body[key].initPenis();
+	          body[key].initPenis((part == null ? void 0 : part.scale) || 1);
 	          break;
 	        case "urethral":
 	          body[key].initUrethral(gender, part, height);
@@ -2705,6 +2163,9 @@
 	    }
 	    if (body.urethral) {
 	      body.urethral.initUrethralSize(height, body.penis);
+	    }
+	    if (body.penis) {
+	      fixPenisProduce(body.penis, this.id);
 	    }
 	    return body;
 	  }
@@ -2729,6 +2190,112 @@
 	  }
 	}
 	Species.data = {};
+
+	function GenerateHeight(size, scale = 1) {
+	  if (typeof size !== "number") {
+	    size = random(5);
+	  }
+	  const r = D.bodysize[size];
+	  const height = random(r[0], r[1]) + random(30);
+	  return height * scale;
+	}
+	function GenerateWeight(height) {
+	  const r = height / 1e3;
+	  const BMI = 19 + random(-2, 4);
+	  return Math.floor(r * r * BMI + 0.5) + random(30) / 10;
+	}
+	function BodyRatio(height) {
+	  const select = new SelectCase();
+	  select.case([240, 800], 3.5).case([800, 1240], 4).case([1300, 1400], 4.5).case([1400, 1500], 5).case([1500, 1660], 6).case([1660, 1740], 6.5).case([1740, 1800], 7).else(7.5);
+	  return select.has(height);
+	}
+	function BodySizeCalc(height) {
+	  return Math.floor((height / this.bodyScale - 1300) / 1500);
+	}
+	function HeadSize(height) {
+	  return height / BodyRatio(height);
+	}
+	function fixPenisProduce(p, species) {
+	  if (!p)
+	    return;
+	  let r;
+	  if (species) {
+	    r = Species.data[species];
+	  }
+	  if (!p.produce) {
+	    p.produce = "cum";
+	    p.volume = { cur: 0, day: 0, max: 0 };
+	  }
+	  p.volume.max = Math.floor(p.size[0] * p.size[1] / 360) * 10;
+	  p.volume.max += (p.sizeLv + 1) * (r.produce.penis.volumePerSize || 50);
+	  if (p.trait && p.trait.has("ThickCum"))
+	    p.volume.max *= 3;
+	  p.volume.day = r.produce.penis.volumePerSize || 10;
+	}
+	function setCycle(chara) {
+	  if (!chara.pregnancy) {
+	    initCycle(chara);
+	  }
+	  const { cycle } = chara.pregnancy;
+	  let len, day;
+	  len = cycle.cycleDays + random(cycle.rng);
+	  day = cycle.stageDays;
+	  cycle.lastCircleDays = cycle.cycleDays;
+	  cycle.stages = [0, len - day, len + 0.5];
+	  console.log(chara.pregnancy);
+	}
+	function initParasite(chara) {
+	  chara.parasite = {
+	    maxslot: 6,
+	    type: "",
+	    aware: false,
+	    intestinal: []
+	  };
+	}
+	function initCycle(chara) {
+	  var _a;
+	  const r = (_a = Species) == null ? void 0 : _a.data[chara.species];
+	  let info, len = [24, 36], day = [3, 5], rng = [0, 3], frng = [0, 2], ovul = 1, type = "menst";
+	  if (r) {
+	    info = r.cycleInfo;
+	    type = info.type;
+	    len = info.cycleDays;
+	    rng = info.cycleRng;
+	    day = info.baseDays;
+	    ovul = info.ovulateNum;
+	    frng = info.ovulateRng;
+	  }
+	  if (!chara.pregnancy) {
+	    chara.pregnancy = {
+	      womb: {
+	        maxslot: info.wombSlot || 3,
+	        state: "normal",
+	        aware: false,
+	        fetus: []
+	      },
+	      bellysize: 0,
+	      sperm: []
+	    };
+	    if (chara.gender != "male") {
+	      chara.pregnancy.cycle = {
+	        type,
+	        cycleDays: random(len[0], len[1]),
+	        stageDays: random(day[0], day[1]),
+	        rng: random(rng[0], rng[1]),
+	        current: 0,
+	        state: "normal",
+	        running: true,
+	        stages: [],
+	        ovulate: ovul,
+	        frng: random(frng[0], frng[1]),
+	        lastCircleDays: 0
+	      };
+	    }
+	  }
+	}
+	function RandomSpeciesName(species) {
+	  return lan(draw(D.randomCharaNamePool));
+	}
 
 	class Creature {
 	  static newId(species) {
@@ -2782,6 +2349,7 @@
 	    if (this.randomchara) {
 	      this.RandomInitDefault();
 	    }
+	    $(document).trigger(":initCreature", [this, obj]);
 	    return this;
 	  }
 	  InitCommon() {
@@ -2799,7 +2367,13 @@
 	      this.RandomInitBody();
 	      this.RandomInitApp();
 	    } else {
-	      let adj = { bodysize: random(5), breasts: { sizeLv: this.gender === "male" ? 0 : random(10) } };
+	      let adj = {
+	        bodysize: random(5),
+	        breasts: {
+	          sizeLv: this.gender === "male" ? 0 : random(10),
+	          penis: { sizeLv: this.gender === "female" ? 0 : random(7) }
+	        }
+	      };
 	      this.initSpecies(adj);
 	    }
 	  }
@@ -3026,22 +2600,23 @@
 	      this.name = obj.name;
 	    else if (!this.name)
 	      this.name = lan(draw(D.randomCharaNamePool));
-	    this.midname = obj.midname || "";
-	    this.surname = obj.surname || "";
-	    this.nickname = obj.nickname || "";
-	    this.callname = obj.callname || "";
+	    const { midname = "", surname = "", nickname = "", callname = "" } = obj;
+	    this.midname = midname;
+	    this.surname = surname;
+	    this.nickname = nickname;
+	    this.callname = callname;
 	    this.fullname = Chara.combineName(this);
-	    this.title = obj.title || "";
+	    const { title = "", guildRank = 0, position = "any" } = obj;
+	    this.title = title;
 	    this.class = obj.class || "common";
-	    this.guildRank = obj.guildRank || 0;
+	    this.guildRank = guildRank;
 	    this.birthday = obj.birthday || [S.startyear - 20, 1, 1];
 	    this.mood = 50;
 	    this.intro = obj.intro || [lan("\u89D2\u8272\u7B80\u4ECB", "CharaIntro"), lan("\u89D2\u8272\u7B80\u4ECB", "CharaIntro")];
-	    this.position = obj.position || "any";
+	    this.position = position;
 	    this.mark = {};
 	    this.exp = {};
 	    this.expUp = {};
-	    this.pregnancy = {};
 	    this.virginity = {};
 	    this.relation = {};
 	    this.flag = {};
@@ -3068,9 +2643,6 @@
 	    if (obj.sbl) {
 	      this.SituAbility(obj.sbl);
 	    }
-	    if (obj.skill) {
-	      this.skill.push(...obj.skill);
-	    }
 	    if (obj.exp) {
 	      this.Exp(obj.exp);
 	    }
@@ -3080,6 +2652,7 @@
 	    if (obj.virginity) {
 	      this.Virginity(obj.virginity);
 	    }
+	    $(document).trigger(":initCharacter", [this, obj]);
 	  }
 	  initMark() {
 	    Object.keys(D.mark).forEach((key) => {
@@ -3092,14 +2665,23 @@
 	    });
 	  }
 	  initSkin() {
+	    var _a, _b;
 	    this.skin = {};
-	    D.skinlayer.forEach((key) => {
-	      this.skin[key] = [];
-	    });
-	    if (this.gender == "male")
-	      delete this.skin.vagina;
-	    if (this.gender == "female")
-	      delete this.skin.penis;
+	    if (!this.r) {
+	      D.skinlayer.forEach((key) => {
+	        this.skin[key] = [];
+	      });
+	    } else {
+	      let layer = ((_b = (_a = this.r) == null ? void 0 : _a.options) == null ? void 0 : _b.skinLayer) || D.partSkinLayer;
+	      for (let key in layer) {
+	        let list = layer[key];
+	        if (!this.body[key])
+	          continue;
+	        list.forEach((k) => {
+	          this.skin[k] = [];
+	        });
+	      }
+	    }
 	    this.skin.total = {};
 	    return this;
 	  }
@@ -3135,10 +2717,10 @@
 	    D.dailykeys.forEach((key) => {
 	      this.daily[key] = 0;
 	    });
-	    if (this.gender == "female") {
+	    if (!this.body.penis) {
 	      delete this.daily.cum;
 	    }
-	    if (this.gender == "male") {
+	    if (!this.body.vagina) {
 	      delete this.daily.cumV;
 	      delete this.daily.ogV;
 	    }
@@ -3235,6 +2817,65 @@
 	}
 	Chara.data = {};
 
+	const getScar = function(chara, { times = 1, type, part, count = "never" } = {}) {
+	  const skin = chara.skin;
+	  for (let i = 0; i < times; i++) {
+	    skin[part].push([type, count]);
+	  }
+	  return "";
+	};
+	const skinCounter = function(chara, t) {
+	  const dolayer = function(layer, t2) {
+	    for (let i = 0; i < layer.length; i++) {
+	      let k = layer[i];
+	      if (typeof k[1] == "number") {
+	        k[1] -= t2;
+	        if (k[1] <= 0 && k[0] !== "wound") {
+	          layer.splice(i, 1);
+	          i--;
+	        } else if (k[1] <= 0) {
+	          k[0] = "scar";
+	          k[1] = "never";
+	        }
+	      }
+	    }
+	  };
+	  const total = {};
+	  const collect = (skin) => {
+	    for (let i in skin) {
+	      if (i == "total" || i == "detail")
+	        continue;
+	      let layer = skin[i];
+	      dolayer(layer, t);
+	      total[i] = {};
+	      D.scarType.forEach((type) => {
+	        total[i][type] = countArray(layer, type);
+	      });
+	    }
+	    return total;
+	  };
+	  const count = () => {
+	    const result = {};
+	    D.scarType.forEach((type) => {
+	      result[type] = [0, []];
+	    });
+	    for (let i in total) {
+	      for (let k in total[i]) {
+	        if (total[i][k] > 0) {
+	          result[k][0] += total[i][k];
+	          const detail = [i, total[i][k]];
+	          result[k][1].push(detail);
+	        }
+	      }
+	    }
+	    return result;
+	  };
+	  const skinlayer = chara.skin;
+	  collect(skinlayer);
+	  chara.skin.total = count();
+	  return total;
+	};
+
 	const module = {
 	  name: "Creatures",
 	  version: "1.0.0",
@@ -3263,15 +2904,21 @@
 	    GenerateWeight,
 	    RandomSpeciesName,
 	    listAllParts,
+	    setCycle,
+	    BodyRatio,
+	    getScar,
+	    skinCounter,
 	    Fix: {
 	      LanArr: fixLanArr,
-	      BodyRatio,
 	      BodySizeCalc,
-	      HeadSize
+	      HeadSize,
+	      PenisProduce: fixPenisProduce
 	    },
 	    Init: {
 	      InitSpecies,
-	      initBodyObj
+	      BodyObj: initBodyObj,
+	      Womb: initCycle,
+	      parasite: initParasite
 	    }
 	  },
 	  config: {
@@ -3280,6 +2927,309 @@
 	  Init: ["InitSpecies"]
 	};
 	addModule(module);
+
+	class Action {
+	  static makeTemplate(data, mode) {
+	  }
+	  static output(data, mode) {
+	  }
+	  constructor(type, action) {
+	    this.type = type;
+	    for (let key in action) {
+	      let value = action[key];
+	      if (!value)
+	        continue;
+	      if (typeof value === "string" && !isNaN(Number(value))) {
+	        value = Number(value);
+	      }
+	      if (typeof value === "string" && value.indexOf("|") > -1) {
+	        value = value.split("|");
+	      }
+	      if (groupmatch(value, "true", "yes", "y")) {
+	        value = true;
+	      }
+	      if (groupmatch(value, "false", "no", "n")) {
+	        value = false;
+	      }
+	      this[key] = value;
+	    }
+	    if (this.type == "Tentacles") {
+	      this.actPart = ["tentacles"];
+	    }
+	    this.filter = (...arg) => {
+	      return 1;
+	    };
+	    this.check = (...arg) => {
+	      return 1;
+	    };
+	    this.order = (...arg) => {
+	      return 1;
+	    };
+	    this.effect = (...arg) => {
+	      return "";
+	    };
+	  }
+	  static add(id, type, obj) {
+	    Action.data[id] = new Action(type, obj);
+	  }
+	  static get(arg, ...args) {
+	    switch (arg) {
+	      case "actPart":
+	        if (!args[0]) {
+	          slog("warn", "No args for actPart");
+	          return [];
+	        }
+	        return Object.values(Action.data).filter((action) => action.actPart && action.actPart.has(args));
+	      case "targetPart":
+	        if (!args[0]) {
+	          slog("warn", "No args for targetPart");
+	          return [];
+	        }
+	        return Object.values(Action.data).filter((action) => action.targetPart && action.targetPart.has(args));
+	      case "type":
+	        if (!args[0]) {
+	          slog("warn", "No args for type");
+	          return [];
+	        }
+	        return Object.values(Action.data).filter((action) => action.type == args[0]);
+	      default:
+	        return Object.values(Action.data).filter((action) => action.name == arg || action.id == arg);
+	    }
+	  }
+	  static set(id) {
+	    if (!Action.data[id]) {
+	      slog("error", "Error occured when setting action: " + id);
+	      return new Action("error", { name: "Error", id: "error" });
+	    }
+	    return Action.data[id];
+	  }
+	  Check(callback) {
+	    this.check = callback;
+	    return this;
+	  }
+	  Filter(callback) {
+	    this.filter = callback;
+	    return this;
+	  }
+	  Order(callback) {
+	    this.order = callback;
+	    return this;
+	  }
+	  Effect(callback) {
+	    this.effect = callback;
+	    return this;
+	  }
+	  Name(calback) {
+	    this.alterName = calback;
+	    return this;
+	  }
+	  ForceAble() {
+	    this.forceAble = true;
+	    return this;
+	  }
+	  AutoKeep() {
+	    this.autokeep = true;
+	    return this;
+	  }
+	  Ready(callback) {
+	    this.onReady = callback;
+	    return this;
+	  }
+	  Options(str) {
+	    this.options = str;
+	    return this;
+	  }
+	  Set(key, value) {
+	    this[key] = value;
+	    return this;
+	  }
+	}
+	Action.data = {};
+	Action.kojo = {};
+
+	const InitActionList = function() {
+	  let tables = scEra.table.get("ActionList");
+	  for (const type of Object.keys(tables)) {
+	    let list = tables[type];
+	    list.forEach((data) => {
+	      if (data.actPart)
+	        data.actPart = extendParts(data.actPart);
+	      if (data.targetPart)
+	        data.targetPart = extendParts(data.targetPart);
+	      Action.data[data.id] = new Action(type, data);
+	    });
+	  }
+	  console.log("ActionList", Action.data);
+	};
+	const InitKojoAction = function() {
+	};
+	const extendParts = function(raw) {
+	  let list = "mbpcvauehfnsrgd";
+	  let re = raw;
+	  if (raw.match(/^--\S+$/)) {
+	    raw = raw.replace("--", "");
+	    for (let i in raw) {
+	      list = list.replace(raw[i], "");
+	    }
+	    re = list;
+	  }
+	  if (raw == "all") {
+	    re = list;
+	  }
+	  const part = {
+	    m: "mouth",
+	    b: "breast",
+	    p: "penis",
+	    c: "clitoris",
+	    v: "vagina",
+	    a: "anal",
+	    u: "urin",
+	    e: "ears",
+	    h: ["handL", "handR"],
+	    f: "foot",
+	    n: "neck",
+	    s: "butts",
+	    r: "nipple",
+	    g: "thighs",
+	    d: "abdomen"
+	  };
+	  const arr = re.split("").map((char) => part[char]).flat();
+	  return arr;
+	};
+
+	Action.makeGroup = "";
+	Action.makeTemplate = function(data, mode) {
+	  const { name, template, targetPart, actPart, type } = data;
+	  let isCounter = mode.includes("counter");
+	  let isKojo = mode.includes("kojo");
+	  let groupTitle = `:: Action_${type}_Options[script]
+`;
+	  let txt = [
+	    `/* ${name} */`,
+	    `Action.set('${data.id}')`,
+	    `     .Filter(()=>{`,
+	    `         return 1`,
+	    `      })`,
+	    `     .Check(()=>{`,
+	    `         return 1`,
+	    `      })`,
+	    `     .Order(()=>{`,
+	    `         return 0`,
+	    `      })`,
+	    ``,
+	    ``
+	  ].join("\n");
+	  if (groupmatch(mode, "kojo", "msg") || isKojo)
+	    txt = "";
+	  const converttemplate = (template2, ...args) => {
+	    if (!args[0])
+	      args[0] = "{0}";
+	    if (!args[1])
+	      args[1] = "{1}";
+	    const charaA = isCounter ? "<<target>>" : "<<you>>";
+	    const charaB = isCounter ? "<<you>>" : "<<target>>";
+	    const replace2 = isCounter ? args[1] : args[0];
+	    const replace3 = isCounter ? args[0] : args[1];
+	    return template2.replace(/\{0}/g, charaA).replace(/\{1}/g, charaB).replace(/\{2}/g, replace2).replace(/\{3}/g, replace3);
+	  };
+	  const ctx = (use, parts, reverse) => {
+	    if (!template) {
+	      return "";
+	    }
+	    return parts.map((tar) => {
+	      const m2 = reverse ? D.bodyDict[use] : D.bodyDict[tar];
+	      const m3 = reverse ? D.bodyDict[tar] : use ? D.bodyDict[use] : "{actPart}";
+	      return `<<case '${tar}'>>
+${isKojo ? "/* " : ""}${converttemplate(template, m2, m3)}<br>${isKojo ? " */" : ""}
+`;
+	    }).join("");
+	  };
+	  let titlehead = isKojo ? "Kojo_NPCID_" : "";
+	  let titleend = isKojo ? "[noMsg]" : "";
+	  let titlemain = isCounter ? "Counter" : "Action";
+	  let title = `:: ${titlehead}${titlemain}_${data.id}${titleend}`;
+	  if (mode == "script") {
+	    if (Action.makeGroup !== type) {
+	      Action.makeGroup = type;
+	      return groupTitle + txt;
+	    } else {
+	      return txt;
+	    }
+	  } else if (!groupmatch(mode, "kojo", "msg") && !isKojo) {
+	    txt = `:: Action_${data.id}_Options[script]
+` + txt;
+	  }
+	  const head = `${title}
+/* ${name} */
+`;
+	  const makeTxt = function(part, use, parts, reverse) {
+	    const main = `<<switch T.${part ? "actPart" : "selectPart"}>>
+${ctx(use, parts, reverse)}<</switch>>
+
+
+`;
+	    return head + main;
+	  };
+	  switch (type) {
+	    case "Train":
+	    case "Tentacles":
+	      txt += makeTxt(0, actPart ? actPart[0] : "", targetPart);
+	      break;
+	    case "Item":
+	      txt += makeTxt(0, "hands", targetPart);
+	      break;
+	    case "Pose":
+	      txt += makeTxt(0, "penis", targetPart);
+	      break;
+	    case "Reverse":
+	      txt += makeTxt(1, "penis", actPart, 1);
+	      break;
+	    default:
+	      if (template) {
+	        txt += converttemplate(template);
+	      } else {
+	        txt += `${head}<<you>>\u5728$location.name${name}\u3002<br>
+
+
+`;
+	      }
+	  }
+	  return txt;
+	};
+	Action.output = function(mode, type) {
+	  if (mode.has("id")) {
+	    mode.replace("-id", "");
+	    const data = Action.data[type];
+	    return Action.makeTemplate(data, mode);
+	  }
+	  const txt = Object.values(Action.data).filter(
+	    (action) => mode == "kojo" && !groupmatch(action.type, "\u5E38\u89C4", "\u76EE\u5F55", "\u5176\u4ED6", "\u56FA\u6709") || type && action.type == type || !type && action.type !== "\u56FA\u6709"
+	  ).map((data) => Action.makeTemplate(data, mode)).join("");
+	  download(txt, "Actiontemplate" + (type ? `_${type}` : ""), "twee");
+	};
+
+	const modules = {
+	  name: "Action",
+	  version: "1.0.0",
+	  des: "Action module for interaction",
+	  data: {},
+	  database: Action.data,
+	  classObj: {
+	    Action
+	  },
+	  func: {
+	    Init: {
+	      InitActionList,
+	      KojoAction: InitKojoAction
+	    }
+	  },
+	  config: {
+	    globalFunc: {},
+	    globaldata: true
+	  },
+	  Init: ["InitActionList"]
+	};
+	addModule(modules);
 
 	slog(
 	  "log",

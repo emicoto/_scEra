@@ -48,8 +48,9 @@
 <bodygroup type='natural'>
 	<!-- pos: s=side, f=front, b=back, t=top, d=bottom, l=left, r=right, i=inside, o=outside, e=end, rt=root -->
 	<head name="head" group='head' pos='t'></head>
-	<ears name='ear' shape='elf' group='head' pos='s' count='2' side='l/r'></ears>
+	<ears name='ear' shape='demonic' group='head' pos='s' count='2' side='l/r'></ears>
 	<brain name='brain' group='head' pos='i'></brain>
+   <horns name='horn' shape='demonic' group='head' pos='t'></horns>
 
 	<eyes name='eye' group='face' pos='t' count='2' side='l/r'></eyes>
 	<nose name='nose' group='face' pos='c'></nose>
@@ -82,15 +83,15 @@
    
    <vagina name='vagina' group='genitals' pos='i'>
       <sens default='0'></sens>
-      <shape>elf</shape>
+      <shape>demonic</shape>
       <!-- scale is times of height(mm), unit is ml -->
       <capacity scale='0.8'></capacity>
    </vagina>
    <clitoris name='clitoris' group='genitals' pos='i' herm='false'></clitoris>
 
-   <penis name='penis' group='genitals' pos='f'>
-      <size default='3' max='5'></size>
-      <shape>elf</shape>
+   <penis name='penis' trait='ThickCum||Bulge' group='genitals' pos='f'>
+      <size default='4' max='7' scale='1.1'></size>
+      <shape>demonic</shape>
    </penis>
    <testicles name='testicles' group='genitals' pos='rt' herm='false'></testicles>
 
@@ -109,26 +110,28 @@
 </bodygroup>
 
 <produce>
-   <breasts type='milk' amountPerSize='100' amountPerDay='30'></breasts>
-   <penis type='cum' amountPerSize='50' amountPerDay='10'></penis>
+   <breasts type='milk' volumePerSize='120' amountPerDay='40'></breasts>
+   <penis type='cum' volumePerSize='120' amountPerDay='100'></penis>
    <vagina type='lovejuice'></vagina>
 </produce>
 
-<cycle type='menst' maleHasIntestinalWomb='false'>
-	<circleDays min='3' max='5'></circleDays>
-	<circleRng min='3' max='5'></circleRng>
-	<pregDays>300</pregDays>
+<cycle type='heat' maleHasIntestinalWomb='false'>
+   <cycleDays min='30' max='60'></cycleDays>
+   <cycleRng min='3' max='7'></cycleRng>
+	<basedays min='5' max='7'></basedays>
+	<pregDays>320</pregDays>
 	<pregType>babies</pregType>
 	<ovulateNum>1</ovulateNum>
-	<frng min='0' max='2'></frng>
-	<wombSlot>3</wombSlot>
+	<frng min='1' max='4'></frng>
+	<wombSlot>6</wombSlot>
 </cycle>
 
 <avatar>
 	<headtype>pointy||round||square</headtype>
 	<bodytype>human</bodytype>
-	<eartype>elvin</eartype>
-	<skincolor>pale||white||health||gold</skincolor>
-	<defaulthaircolor>blond</defaulthaircolor>
+	<eartype>deamon</eartype>
+	<skincolor>gray||blue||purple||black||white||pale</skincolor>
+   <eyecolor>blue||silver||amber||purple||lightpurple||black||red</eyecolor>
+	<defaulthaircolor>white</defaulthaircolor>
 </avatar>
 </race>

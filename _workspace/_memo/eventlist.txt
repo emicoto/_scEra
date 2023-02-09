@@ -1,0 +1,37 @@
+:initCharacter
+:initCreature
+
+scEra:ready
+scEra:apply
+
+
+modules:loaded
+module:registered
+
+sugarcube:ready  -- when sugarcube startup
+Era:start  -- after Era system start in sugarcube module
+
+:passageinit
+:passagestart
+:passagerender
+:passagedisplay
+:passageend
+
+:initstory    -- afert Story.init()
+:storyinit    -- before wikify :: StoryInit
+
+:storyready   -- after Engine.start()
+
+:enginerestart -- on Engin.restart()
+
+:afterload  -- after load all modules
+
+readystatechange -- when loadscreen unlock
+
+$dialogBody
+:dialogclosing
+:dialogclose
+:dialogclosed
+:dialogopening
+:dialogopen
+:dialogopened

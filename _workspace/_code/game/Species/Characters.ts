@@ -1,5 +1,18 @@
 import { Creature } from ".";
-import { Dict, jobclass, sblkey, markkey, charaposi, dailykeys, ablkey, expkey, appearance, statskey } from "../types";
+import {
+	Dict,
+	jobclass,
+	sblkey,
+	markkey,
+	charaposi,
+	dailykeys,
+	ablkey,
+	expkey,
+	appearance,
+	statskey,
+	Womb,
+	Parasite,
+} from "../types";
 
 declare function lan(arg, ...args): string;
 declare function slog(type: "log" | "warn" | "error", ...args): void;
@@ -48,9 +61,9 @@ export interface Chara extends Creature {
 	expUp?: Dict<number>; //a temp value for record the exp up
 
 	//pregnancy status
-	pregnancy?: any;
+	pregnancy?: Womb;
 	//parasite status
-	parasite?: any;
+	parasite?: Parasite;
 
 	//anything on skin. like tattoo, scar, etc.
 	skin?: any;
@@ -103,30 +116,33 @@ export class Chara extends Creature {
 		//init names
 		if (obj.name) this.name = obj.name;
 		else if (!this.name) this.name = lan(draw(D.randomCharaNamePool));
-		this.midname = obj.midname || "";
-		this.surname = obj.surname || "";
-		this.nickname = obj.nickname || "";
-		this.callname = obj.callname || "";
+
+		const { midname = "", surname = "", nickname = "", callname = "" } = obj;
+		this.midname = midname;
+		this.surname = surname;
+		this.nickname = nickname;
+		this.callname = callname;
 		this.fullname = Chara.combineName(this);
 
 		//init information
-		this.title = obj.title || "";
+		const { title = "", guildRank = 0, position = "any" } = obj;
+
+		this.title = title;
 		this.class = obj.class || "common";
-		this.guildRank = obj.guildRank || 0;
+		this.guildRank = guildRank;
 
 		this.birthday = obj.birthday || [S.startyear - 20, 1, 1];
 		this.mood = 50;
 
 		this.intro = obj.intro || [lan("角色简介", "CharaIntro"), lan("角色简介", "CharaIntro")];
 
-		this.position = obj.position || "any";
+		this.position = position;
 
 		//init objects
 		this.mark = {};
 		this.exp = {};
 		this.expUp = {};
 
-		this.pregnancy = {};
 		this.virginity = {};
 		this.relation = {};
 		this.flag = {};
@@ -155,9 +171,6 @@ export class Chara extends Creature {
 		if (obj.sbl) {
 			this.SituAbility(obj.sbl);
 		}
-		if (obj.skill) {
-			this.skill.push(...obj.skill);
-		}
 		if (obj.exp) {
 			this.Exp(obj.exp);
 		}
@@ -167,6 +180,7 @@ export class Chara extends Creature {
 		if (obj.virginity) {
 			this.Virginity(obj.virginity);
 		}
+		$(document).trigger(":initCharacter", [this, obj]);
 	}
 	initMark() {
 		Object.keys(D.mark).forEach((key) => {
@@ -181,12 +195,22 @@ export class Chara extends Creature {
 	initSkin() {
 		this.skin = {};
 
-		D.skinlayer.forEach((key) => {
-			this.skin[key] = [];
-		});
+		if (!this.r) {
+			D.skinlayer.forEach((key) => {
+				this.skin[key] = [];
+			});
+		} else {
+			let layer = this.r?.options?.skinLayer || D.partSkinLayer;
 
-		if (this.gender == "male") delete this.skin.vagina;
-		if (this.gender == "female") delete this.skin.penis;
+			for (let key in layer) {
+				let list = layer[key];
+				if (!this.body[key]) continue;
+
+				list.forEach((k) => {
+					this.skin[k] = [];
+				});
+			}
+		}
 
 		this.skin.total = {};
 
@@ -235,10 +259,10 @@ export class Chara extends Creature {
 			this.daily[key] = 0;
 		});
 
-		if (this.gender == "female") {
+		if (!this.body.penis) {
 			delete this.daily.cum;
 		}
-		if (this.gender == "male") {
+		if (!this.body.vagina) {
 			delete this.daily.cumV;
 			delete this.daily.ogV;
 		}

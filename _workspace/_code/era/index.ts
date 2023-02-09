@@ -3,6 +3,7 @@ import { getJson } from "./utils";
 export * from "./utils";
 declare var scEra: typeof window.scEra;
 declare function slog(type: "log" | "warn" | "error", ...args: any[]): void;
+declare function dlog(type: "log" | "warn" | "error", ...args: any[]): void;
 declare var jQuery: typeof window.jQuery;
 declare var D: typeof window.D;
 //------------------------------------------------------------------------------
@@ -52,7 +53,7 @@ export const applyClass = function () {
 		} catch (e) {
 			slog("warn", `Failed to apply class ${key}. Error:`, e);
 		}
-		slog("log", `Class ${key} applied successfully.`);
+		dlog("log", `Class ${key} applied successfully.`);
 	});
 };
 
@@ -111,7 +112,7 @@ async function loadBasicDefinationJson() {
 //
 //-------------------------------------------------------------
 
-scEra.version = "0.5.0";
+scEra.version = "0.7.0";
 console.time("scEra startup");
 
 $(document).one("sugarcube:startup", async () => {
@@ -144,19 +145,33 @@ $(document).one("scEra:ready", async () => {
 	slog("log", "Start to apply modules:", Object.keys(scEra.modules).join(", "));
 
 	for (let i = 0; i < scEra.loadorder.length; i++) {
-		if (!scEra.modules[scEra.loadorder[i]]) {
-			slog("warn", `Module ${scEra.loadorder[i]} is not loaded. Skipping this module.`);
+		const key = scEra.loadorder[i];
+
+		if (!scEra.modules[key]) {
+			slog("warn", `Module ${key} is not loaded. Skipping this module.`);
 			scEra.loadorder.splice(i, 1);
 			i--;
 		}
 
-		const key = scEra.loadorder[i];
+		if (scEra.config.mod.disable[key]) {
+			dlog("warn", `Module ${key} is disabled in config. Skipping this module.`);
+			scEra.loadorder.splice(i, 1);
+			delete scEra.modules[key];
+			i--;
+			continue;
+		}
 
 		await scEra.applyMod(key);
 	}
 
 	for (const key in scEra.modules) {
 		if (scEra.loadorder.includes(key)) {
+			continue;
+		}
+
+		if (scEra.config.mod.disable[key]) {
+			dlog("warn", `Module ${key} is disabled in config. Skipping this module.`);
+			delete scEra.modules[key];
 			continue;
 		}
 
@@ -195,11 +210,11 @@ $(document).one("scEra:apply", async function () {
 
 	console.timeLog("scEra startup");
 	slog("log", "All initialization functions are applied successfully.");
-	jQuery(document).trigger(":modulesloaded");
+	jQuery(document).trigger("modules:loaded");
 	jQuery.event.trigger({ type: ":afterload" });
 });
 
-$(document).one(":modulesloaded", () => {
+$(document).one("modules:loaded", () => {
 	slog("log", "All modules are loaded successfully.");
 	console.timeEnd("scEra startup");
 	scEra.status = "storyready";

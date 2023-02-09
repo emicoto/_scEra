@@ -180,6 +180,7 @@ export const posDict = {
 //mouth diameter = bodyheight/40 * (1+mouthsize*0.15) + random(10)
 //max mouth size 5
 
+//size is basic on human standard
 export const Psize = [
 	{ l: [40, 60], d: [10, 20] }, //0, micro
 	{ l: [60, 90], d: [20, 36] }, //1, tiny
@@ -195,7 +196,7 @@ export const Psize = [
 //testsize = psize.l/2 + 15 + random(10)
 
 //bodysize to bodyheight
-//the values is basic on human standart, other species has their own scale value.
+//the values is basic on human standard, other species has their own scale value.
 export const bodysize = [
 	[1300, 1450], // 0, tiny
 	[1450, 1600], // 1, small

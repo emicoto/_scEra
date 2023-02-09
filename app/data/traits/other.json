@@ -1,0 +1,55 @@
+[
+	{
+		"name": "性保守",
+		"group": "attitude",
+		"des": "繁衍是神圣的，不该以享乐而为之。",
+		"order": 0
+	},
+	{
+		"name": "性开放",
+		"group": "attitude",
+		"des": "性就是娱乐行为，怎么开心怎么来。",
+		"order": 0
+	},
+	{
+		"name": "禁欲",
+		"group": "attitude",
+		"des": "神啊，请原谅我的罪恶！",
+		"order": -2,
+		"sourceEffect": [
+			["lust", 0.2],
+			["esAll", 1.2]
+		]
+	},
+	{
+		"name": "放纵",
+		"group": "attitude",
+		"des": "性自由今天就要实现！",
+		"order": 2,
+		"sourceEffect": [
+			["lust", 1.8],
+			["esAll", 0.5]
+		]
+	},
+	{
+		"name": "洁癖",
+		"group": "attitude",
+		"des": "脏死了，别碰我！",
+		"order": 0,
+		"sourceEffect": [
+			["lust", 0.2],
+			["resist", 2],
+			["esAll", 0.9]
+		]
+	},
+	{
+		"name": "性瘾",
+		"group": "attitude",
+		"des": "快，正面上我！！",
+		"order": 10,
+		"sourceEffect": [
+			["lust", 2.5],
+			["libido", 3]
+		]
+	}
+]

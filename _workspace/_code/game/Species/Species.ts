@@ -1,5 +1,5 @@
 import { Dict, cycleInfo, genderFull, statskey } from "../types";
-import { BodyRatio } from "./CommonFunc";
+import { BodyRatio, fixPenisProduce } from "./CommonFunc";
 import { initBodyObj } from "./InitFunc";
 import { Organs } from "./Organs";
 declare function groupmatch(arg, ...args): boolean;
@@ -39,7 +39,7 @@ export interface Species {
 	cycleInfo?: cycleInfo; // menstrual cycle and pregnancy settings
 
 	//body produuce
-	produce?: Dict<{ type; amount?; amountPerDay?; amountPerSize? }, string>;
+	produce?: Dict<{ type; volume?; amountPerDay?; volumePerSize? }, string>;
 
 	//avatar configuration
 	//this is for generate avatar for the species
@@ -236,7 +236,7 @@ export class Species {
 					body[key].initAnal(height, part);
 					break;
 				case "penis":
-					body[key].initPenis();
+					body[key].initPenis(part?.scale || 1);
 					break;
 				case "urethral":
 					body[key].initUrethral(gender, part, height);
@@ -259,6 +259,10 @@ export class Species {
 		//the urethral depent on gender and other organ, so init it at last.
 		if (body.urethral) {
 			body.urethral.initUrethralSize(height, body.penis);
+		}
+		//fix the produce
+		if (body.penis) {
+			fixPenisProduce(body.penis, this.id);
 		}
 
 		return body;

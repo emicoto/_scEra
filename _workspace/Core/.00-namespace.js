@@ -119,6 +119,7 @@ window.scEra = {
 	 * @see {@link scEra.config}
 	 */
 	config: {},
+	setup: {},
 
 	/**
 	 * @namespace
@@ -266,7 +267,12 @@ window.defineGlobalShortcuts = (shortcuts) => {
 		Ui: scEra.UIControl,
 	};
 
-	defineGlobalShortcuts(shortcuts);
+	defineGlobalNamespaces(shortcuts);
+	Object.defineProperty(window, "S", {
+		get: () => {
+			return scEra.setup;
+		},
+	});
 })();
 
 //------------------------------------------------------------------------------

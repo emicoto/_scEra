@@ -5,6 +5,7 @@ import "./Maps";
 import "./Traits";
 import "./Items";
 import "./Species";
+import "./Action";
 
 declare global {
 	interface Window {
@@ -21,6 +22,10 @@ declare global {
 		fixers; //修复器
 		language; //语言
 		initializations; //初始化
+		scEra;
+		worldMap;
+		jQuery;
+
 		D; // data;
 		Db; // database;
 		F; // utils;
@@ -31,10 +36,8 @@ declare global {
 		Fix; // fixers;
 		Init; // initializations;
 		Ui; // UIControl;
-		scEra;
-		worldMap;
 		S; //setup data
-		jQuery;
+		T; //temporarily variables
 	}
 
 	interface String {

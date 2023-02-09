@@ -22,13 +22,10 @@ $(document).one(":storyready", function () {
 // Note that enabling trace will display all widget calls
 // Note that clog is currently non-configured and will always be invoked
 // TODO: add more granular debug log levels if needed
-function clog() {
-	console.log(`${State.passage}:${d(vContext)}`, ...arguments);
-}
 
 function trace() {
 	if (devOptions.trace) {
-		clog(...arguments);
+		slog("log", `${state.passage}:${d(vContext)}`, ...arguments);
 	}
 }
 
@@ -69,9 +66,9 @@ Macro.add("widget", {
 				handler: (function (widgetCode) {
 					return function () {
 						// Custom code
-						if (!scEra.Stack) scEra.Stack = [];
-						scEra.Stack.push(widgetName);
-						scEra.Perflog.logWidgetStart(widgetName);
+						if (!Perflog.Stack) Perflog.Stack = [];
+						Perflog.Stack.push(widgetName);
+						Perflog.logWidgetStart(widgetName);
 						const newFrame = {};
 						State.variables[VIRTUAL_CURRENT] = newFrame;
 						vStack.push(newFrame);
@@ -155,7 +152,7 @@ Macro.add("widget", {
 							return this.error(`cannot execute widget: ${ex.message}`);
 						} finally {
 							// Custom code
-							scEra.Stack.pop();
+							Perflog.Stack.pop();
 							vStack.pop();
 							vContext.pop();
 							State.variables[VIRTUAL_CURRENT] = priorFrame;
@@ -172,7 +169,7 @@ Macro.add("widget", {
 								// restore prior frame
 								Object.assign(State.variables, priorFrame);
 							}
-							scEra.Perflog.logWidgetEnd(widgetName);
+							Perflog.logWidgetEnd(widgetName);
 							// End custom code
 
 							// Revert the `_args` variable shadowing.

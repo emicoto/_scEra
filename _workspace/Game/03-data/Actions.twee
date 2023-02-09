@@ -1,0 +1,153 @@
+<!-- a table for actions  -->
+:: ActionList[table]
+/* general action */
+@General
+#id         ,name          ,time ,tags          ,placement       ,setting,
+Relax       ,放松          ,15   ,休息区         ,沙发|椅子        ,canTrain,;
+Walk        ,散步          ,15   ,室外
+Plant       ,种植          ,30   ,种植区
+Bath        ,洗澡          ,30   ,沐浴|澡堂      ,浴室
+Read        ,读书          ,60   ,阅读区         ,书架
+Learn       ,学习          ,60   ,教室           ,书桌
+Class       ,听课          ,15   ,教室           ,               ,canTrain
+HomeWork    ,做作业        ,120  ,             ,书桌
+Shop        ,购物          ,20   ,商店
+Cook        ,煮饭          ,15   ,厨房
+Sing        ,唱歌          ,5    ,            ,canTrain
+Dance       ,跳舞          ,10   ,活动|舞台
+PlayMusic   ,演奏          ,5    ,乐器
+Fish        ,钓鱼          ,30   ,钓鱼区
+Gather      ,采集          ,20   ,采集区
+Mine        ,挖矿          ,30   ,挖矿区
+
+/* action for each character */
+@Contact
+#id         ,name         ,time  ,setting
+Talk        ,闲聊         ,5     ,canTrain
+Look        ,观察         ,2     ,canTrain
+Talk2       ,近况         ,5
+Interest    ,兴趣         ,5
+PetHead     ,摸头         ,2
+Firm        ,调情         ,3
+Gift        ,送礼         ,2
+AskMoney    ,借钱         ,3
+Payback     ,还钱         ,3
+AskHelp     ,求助         ,3
+
+/* Filters */
+@Menu
+#id         ,name       ,setting
+Interaction ,交流
+Touch       ,接触
+TrySex      ,推倒       ,alterName
+Keep        ,持续       ,alterName
+Coop        ,配合
+Resit       ,抵抗
+useHands    ,用手       ,alterName
+useMouth    ,用口
+usePenis    ,用阴茎
+useVagina   ,用阴道
+useAnal     ,用肛门
+useFoot     ,用脚
+Combat      ,战斗       ,alterName
+Magic       ,魔法
+Items       ,道具
+Tentacles   ,触手
+Order       ,命令
+Self        ,自慰
+Other       ,其他
+
+/* Train  */
+@Train
+#id ,name  ,mode ,actPart  ,targetPart ,autokeep  ,template ,setting
+reset, 复位, 0, , , , ,doStraight
+t0, 接吻, 1.5, m, m, y,{0}吻上了{1}的嘴唇。, doStraight
+t1, 亲吻, 2, m, --mvaur, n, {0}亲吻在了{1}的{2}上，轻吮吸舔，试图留下自己的印记。
+t2, 抚摸, 1, h, --ur, n, {0}的手轻抚着{1}的{2}。
+t3, 按摩, 1, h, bpvahnsg, n, {0}给按摩着{1}的{2}。
+t3, 揉捏, 1.5, h, bpces, n, {0}揉捏着{1}的{2}。
+t4, 吸舔, 2, m, --mub, n, {0}吸住了{1}的{2}，在上面用舌头反复舔舐着。
+t5, 吸咬, 3, m, --mbvaud, n, {0}含住{1}的{2}，吸吮轻咬着。
+t6, 逗弄, 2, h, pcvaer, n, {0}反复逗弄着{1}的{2}。
+t7, 指交, 3, h, mvau, n, {0}的手指浅浅插入{1}的{2}，在入口附近摩擦着。
+t8, 性交, 2.5, p, va, n
+t9, 抽插, 3, p, mva, y, {0}活动腰身，在{1}的{2}反复出入着。,doStraight
+t10, 撸动, 3, h, p, y, {0}握住{1}的{2}，前后撸动着。
+t11, 拳交, 3, h, va, n, {0}的拳头粗暴地捅进了{1}的{2}里面，反复抽插着。
+t12, 深入, 3, p, va, n, {0}深深插入了{1}的{2}。
+t13, 口交, 3, 9, m, y,{0}让{1}含住了自己的阴茎。
+
+/* reverse mode */
+@Reverse
+#id, name, mode, actPart, targetPart, autokeep, template, setting
+r0, 逆口交, 1, m, hp, y, {0}用{3}含住了{1}的{2}，用舌头反复舔动。
+r1, 逆性交, 3, va, p, n
+r2, 收紧, 3, va, ph, n, {0}控制自身{3}，紧紧夹住了{1}的{2}。, doStraight
+
+@Pose
+#id, name, targetPart, templte
+pose0, 正常位, va, {0}把身体覆盖在{1}身上，掰开{1}的双腿从正面把阴茎插进了{2}。
+pose1, 背后位, va, {0}如同野兽般把{1}按倒在身下，掰开肉瓣从后面进入了{1}的身体。
+pose2, 正座位, va, {0}让{1}面对面坐在自己身上，一边亲吻着对方一边让{1}缓缓坐下将自己的阴茎收纳到{2}里。
+pose3, 背座位, va, {0}让{1}背对自己跨坐到身上，从背后搂住对方，让其慢慢坐下把{0}的阴茎吞入{2}里。
+pose4, 骑乘位, va, {0}让{1}骑在自己身上，一手扶着对方腰身让其以舒适的角度把{0}的阴茎收入{2}中。
+pose5, 侧卧位, va, {0}让{1}侧卧躺在自己身边，一手穿过对方腰身，从后面缓缓插入{1}的{2}。
+pose6, 趴卧位, va, {0}让{1}趴卧在床上，拿枕头垫高对方小腹后，以俯卧撑的姿势从后方贯穿了{1}的{2}。
+pose7, 站立位, va, {0}让{1}站立在自己身前，用手臂支撑对方，从正面把阴茎插入{1}的{2}。
+pose8, 背后立位, va, {0}让{1}找个地方站好，然后从背后把阴茎插入{1}的{2}。
+pose9, 抱立位, va, 
+pose10, 反抱立位, va,
+pose11, 屈曲位, va,
+
+@Item
+#id, name, mode, targetPart, setting, template
+Rotor, 跳蛋, 2, varpc, toy1 ,{0}将跳蛋贴在{1}的{2}，刺激着。
+Vibrator, 震动棒, 2, va, toy2 , {0}将震动棒放进了{1}的{2}。
+
+@Tentacles
+#id, name, mode, targetPart, template, setting
+x0, 揉捏(触), 2, bpcr, 触手缠绕在{1}的{2}上，巧妙地反复揉捏给予刺激。
+x1, 逗弄(触), 2, --bhfnsgd, 蠕动、摩擦、按捏。触手反复逗弄着{1}的{2}，给予极大的刺激。
+x2, 吸舔(触), 2, rpc, 吸盘触手吸附在{1}的{2}上，反复吸舔着。
+x3, 吸咬(触), 2, rpc, 口器触手含住{1}的{2}，吸吮轻咬着。
+x4, 撸动(触), 3, p, 触手缠绕住{1}的{2}，反复撸动着。
+x5, 插入(触), 2, mvaue, 触手钻进了{1}敞开的{2}，缓缓往内深入。
+x6, 蠕动(触), 2, --hfd, 触手在{1}的{2}慢慢蠕动着。
+x7, 抽插(触), 3, mvaue, 触手不停在{1}的{2}进出，抽插蠕动着。,doStraight
+x8, 深入(触), 3, mvau, 触手往{1}的{2}内部发出了进攻，往更深处蠕进。
+x9, 抽送(触), 3, mvau, 触手激烈地在{1}的{2}进出着，反复抽送着触身给予莫大的刺激。,doStraight
+x10, 鞭打(触), 3, bpcasrg, 触手甩动触鞭，用巧妙的力度鞭打在{1}的{2}上。
+x11, 刺入(触), 3, pcvanrs, 触手伸出尖锐的细针，狠狠地刺入了{1}的{2}。
+x12, 灌入(触), 3, mva, 触手往{1}的{2}灌入大量的药液。
+x13, 注射(触), 3, --mehfg, 触手伸出尖锐的针头，刺入{1}的{2}并注入药液。
+
+/* 魔法，setting是消耗MP */
+@Magic
+#id      ,name    ,time ,setting
+m0       ,静心咒  ,3    ,15
+m1       ,净化术  ,5    ,30
+
+/* 特殊命令类 */
+@Command
+#id         ,name       ,setting
+Stream      ,直播       ,alterName
+Party       ,派对       ,alterName
+
+/* 其他 */
+@Other
+#id         ,name       ,setting
+Clothes     ,衣服管理
+Behavior    ,行为管理
+GetNude     ,一键脱光
+
+/* 固有选项, setting是出口 */
+@System
+#id         ,name           ,setting
+move        ,移动       ,Map
+fall        ,下沉
+rise        ,上浮
+sleep       ,睡觉       ,Sleep
+resetAct    ,清除动作
+resetAll    ,全部
+stopTouch   ,住手
+resetMode   ,走开

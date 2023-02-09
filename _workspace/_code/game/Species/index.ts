@@ -14,8 +14,18 @@ import { Creature } from "./Creature";
 import { Chara } from "./Characters";
 import { species } from "./BasicData";
 import { bodyDict, bodyGroup, Psize, existency, bodysize } from "./bodyparts";
-import { GenerateHeight, GenerateWeight, BodyRatio, BodySizeCalc, HeadSize, RandomSpeciesName } from "./CommonFunc";
+import {
+	GenerateHeight,
+	GenerateWeight,
+	BodyRatio,
+	BodySizeCalc,
+	HeadSize,
+	RandomSpeciesName,
+	fixPenisProduce,
+} from "./CommonFunc";
 import { fixLanArr, InitSpecies, initBodyObj, listAllParts } from "./InitFunc";
+import { initCycle, initParasite, setCycle } from "./CommonFunc";
+import { getScar, skinCounter } from "./Scars";
 
 const module = {
 	name: "Creatures",
@@ -45,15 +55,21 @@ const module = {
 		GenerateWeight,
 		RandomSpeciesName,
 		listAllParts,
+		setCycle,
+		BodyRatio,
+		getScar,
+		skinCounter,
 		Fix: {
 			LanArr: fixLanArr,
-			BodyRatio,
 			BodySizeCalc,
 			HeadSize,
+			PenisProduce: fixPenisProduce,
 		},
 		Init: {
 			InitSpecies,
-			initBodyObj,
+			BodyObj: initBodyObj,
+			Womb: initCycle,
+			parasite: initParasite,
 		},
 	},
 	config: {

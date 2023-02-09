@@ -16,7 +16,7 @@ itemGroup.forEach((group) => {
 });
 
 async function loadItems() {
-	const filesdata = await getJson("./json/items.json").then((res) => {
+	const filesdata = await getJson("./data/items.json").then((res) => {
 		slog("log", "Items loaded:", res);
 		return res;
 	});

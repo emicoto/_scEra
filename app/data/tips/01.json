@@ -1,0 +1,83 @@
+[
+	{
+		"id": "mage",
+		"title": ["法师", "Mage"],
+		"content": [
+			"对魔法有所了解，能灵活运用各种攻击魔法进行战斗的职业。",
+			"A job that is familiar with magic and can use various attack magic flexibly to fight."
+		]
+	},
+	{
+		"id": "scholar",
+		"title": ["学者", "Scholar"],
+		"content": [
+			"了解魔法理论，对各种魔法术式与魔法物品进行研究，擅长分析的职业。",
+			"A job that is familiar with magic theory, can research various magic formulas and magic items, and is good at analysis."
+		]
+	},
+	{
+		"id": "warrior",
+		"title": ["魔战士", "Warrior"],
+		"content": [
+			"善于运用魔力强化自身，通过格斗或使用近程武器进行战斗的战士。",
+			"A warrior who is good at using magic to strengthen himself and fight with melee weapons or melee weapons."
+		]
+	},
+	{
+		"id": "ranger",
+		"title": ["魔枪手", "Ranger"],
+		"content": [
+			"善于运用魔力强化武器，使用远程武器进行战斗的枪手。",
+			"A shooter who is good at using magic to strengthen weapons and fight with long-range weapons."
+		]
+	},
+	{
+		"id": "medics",
+		"title": ["治疗师", "Medics"],
+		"content": [
+			"对药物、人体、生物有所了解，擅长用魔法给人或生物进行治疗的职业。",
+			"A job that is familiar with medicine, human body and biology, and is good at using magic to treat people or animals."
+		]
+	},
+	{
+		"id": "paladin",
+		"title": ["圣骑士", "Paladin"],
+		"content": [
+			"信仰圣灵，擅长圣灵魔法与防御术法，使用盾牌与魔法屏障在前排抵御伤害的职业。",
+			"A job that believes in the Holy Spirit, is good at holy magic and defensive magic, and uses a shield and a magic barrier to resist damage in the front row."
+		]
+	},
+	{
+		"id": "alchemist",
+		"title": ["炼金术师", "Alchemist"],
+		"content": [
+			"对魔法物理与化学有所了解，能合成、改造物品的职业。",
+			"A job that is familiar with magic, physics and chemistry, and can synthesize and modify items."
+		]
+	},
+
+	{
+		"id": "curse",
+		"title": ["魔咒", "Curse"],
+		"content": [
+			"被施加在伊希尔（精灵主角）身上的诅咒。诅咒的本体是？",
+			"A curse that is cast on Isil (the main character of the elf). The body of the curse is?"
+		]
+	},
+
+	{
+		"id": "ayres",
+		"title": ["艾瑞斯", "Ayres"],
+		"content": [
+			"作为半魔人的主角。默认性别为男性，男性时外貌是灰皮白色短发帅哥，扶她以及女性时外貌是灰皮白色长发大胸美女。诅咒之主的化身。游戏主控角色，剧情主角，调教时的第一执行者。"
+		]
+	},
+
+	{
+		"id": "isil",
+		"title": ["伊希露"],
+		"content": [
+			"作为光精灵的主角。默认性别为男性，男性是外貌是白肤淡金长发美少年，扶她以及女性时外貌是白肤淡金长发平胸美少女。被诅咒寄生的人。游戏主控角色，剧情主角，主要调教对象。"
+		]
+	}
+]

@@ -1,0 +1,43 @@
+[
+	{
+		"name": "高调",
+		"group": "behavior",
+		"des": "还有谁不知道我？",
+		"order": 2
+	},
+	{
+		"name": "低调",
+		"group": "behavior",
+		"des": "应该没人知道我吧……？",
+		"order": 0
+	},
+	{
+		"name": "高自尊",
+		"group": "behavior",
+		"des": "我是有尊严的人，钱也不能收买我。",
+		"order": -10
+	},
+	{
+		"name": "无节操",
+		"group": "behavior",
+		"des": "尊严又不能吃，只要给我钱，什么都能满足你。",
+		"order": 10
+	},
+	{
+		"name": "贞洁",
+		"group": "behavior",
+		"des": "性behavior只能跟结婚对象做，而且必须得婚后。",
+		"order": 0,
+		"sourceEffect": [["lust", 0.9]]
+	},
+	{
+		"name": "放荡",
+		"group": "behavior",
+		"des": "想做就做，没人可以约束我。",
+		"order": 5,
+		"sourceEffect": [
+			["lust", 1.5],
+			["favo", 1.5]
+		]
+	}
+]
