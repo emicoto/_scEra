@@ -6,25 +6,14 @@ import "./Traits";
 import "./Items";
 import "./Species";
 import "./Action";
+import "./Command";
 
 declare global {
 	interface Window {
-		loadOrder; //加载顺序
-		settings; //设置
-		data; //数据
-		database; //数据库
-		utils; //工具
-		documentGenerator; //文档生成器
-		modules; //模块
 		Config; //配置
-		UIControl; //UI控制
-		conditions; //条件
-		fixers; //修复器
-		language; //语言
-		initializations; //初始化
-		scEra;
 		worldMap;
 		jQuery;
+		scEra;
 
 		D; // data;
 		Db; // database;
@@ -38,6 +27,14 @@ declare global {
 		Ui; // UIControl;
 		S; //setup data
 		T; //temporarily variables
+		V; //variables
+		C;
+		pc;
+		tc;
+		player;
+		target;
+		Using;
+		SugarCube;
 	}
 
 	interface String {
@@ -45,6 +42,10 @@ declare global {
 	}
 	interface Array<T> {
 		has: Function;
+	}
+
+	interface game {
+		debug: boolean;
 	}
 }
 declare var Config: typeof window.Config;

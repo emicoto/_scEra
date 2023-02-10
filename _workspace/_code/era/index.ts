@@ -1,11 +1,22 @@
 import { getJson } from "./utils";
 
 export * from "./utils";
+
+declare global {
+	interface Window {
+		game: {
+			InitStory: () => void;
+		};
+	}
+}
+
 declare var scEra: typeof window.scEra;
 declare function slog(type: "log" | "warn" | "error", ...args: any[]): void;
 declare function dlog(type: "log" | "warn" | "error", ...args: any[]): void;
 declare var jQuery: typeof window.jQuery;
 declare var D: typeof window.D;
+declare var V: typeof window.V;
+declare var game: typeof window.game;
 //------------------------------------------------------------------------------
 //
 //   scEra.regist
@@ -32,7 +43,7 @@ export const addModule = function (modules) {
 		scEra.modules[modules.name][key] = modules[key];
 	}
 
-	slog("log", `Module ${modules.name} is registered.`);
+	dlog("log", `Module ${modules.name} is registered.`);
 	return true;
 };
 
@@ -106,6 +117,31 @@ async function loadBasicDefinationJson() {
 	}
 }
 
+game.InitStory = function () {
+	V.system = S.gameConfig;
+	V.flag = S.gameFlags;
+
+	for (const [key, value] of Object.entries(S.gameVars)) {
+		V[key] = value;
+	}
+
+	V.date = {
+		year: S.date[0],
+		month: S.date[1],
+		day: S.date[2],
+		time: S.date[3],
+	};
+
+	V.location = {
+		name: "",
+		mapId: "",
+		printname: "",
+		chara: [],
+	};
+
+	V.event = {};
+};
+
 //-------------------------------------------------------------
 //
 //   startup
@@ -122,7 +158,28 @@ $(document).one("sugarcube:startup", async () => {
 	scEra.status = "ready";
 });
 
-$(document).one(":initstory", () => {
+$(document).one("Era:start", () => {
+	scEra.config.onEra = true;
+	scEra.status = "start";
+
+	// those properties are not defined at this point, so we just define them as empty objects
+	Object.defineProperties(window, {
+		Story: { value: scEra.story, writable: false },
+		Wikifier: { value: scEra.wikifier },
+		V: { get: () => scEra.state.variables },
+		T: { get: () => scEra.state.temporary },
+		C: { get: () => scEra.state.variables.chara },
+		Flag: {
+			get: () => scEra.state.variables.flag,
+		},
+	});
+
+	console.log("variables is ready:", V);
+	// delete parser that adds unneeded line breaks -ng
+	scEra.wikifier.Parser.delete("lineBreak");
+});
+
+$(document).one(":initstorydata", () => {
 	const checkId = setInterval(() => {
 		//check if the basic defination json files are loaded
 		if (scEra.status !== "ready") {
@@ -187,6 +244,7 @@ $(document).one("scEra:ready", async () => {
 	console.timeLog("scEra startup");
 	slog("log", "Finish to apply classes.");
 
+	scEra.status = "initmodules";
 	jQuery(document).trigger("scEra:apply");
 });
 
@@ -210,16 +268,27 @@ $(document).one("scEra:apply", async function () {
 
 	console.timeLog("scEra startup");
 	slog("log", "All initialization functions are applied successfully.");
+
+	scEra.status = "modulesready";
+	jQuery(document).trigger("modules:init");
+});
+
+$(document).one("modules:init", () => {
+	//start to init the scripting.
+	////start to init the maps, game, characters, etc.
+
+	slog("log", "All modules are loaded successfully.");
+	console.timeLog("scEra startup");
+
 	jQuery(document).trigger("modules:loaded");
-	jQuery.event.trigger({ type: ":afterload" });
 });
 
 $(document).one("modules:loaded", () => {
-	slog("log", "All modules are loaded successfully.");
-	console.timeEnd("scEra startup");
+	//everything is ready
 	scEra.status = "storyready";
 });
 
 $(document).one(":storyready", () => {
+	console.timeEnd("scEra startup");
 	slog("log", "Story is ready.");
 });

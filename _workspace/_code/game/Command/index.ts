@@ -1,6 +1,7 @@
 export * from "./com";
 
-import { Com, InitComMacros, InitComList } from "./com";
+import { Com } from "./com";
+import { InitComList, InitComSystem } from "./initFunc";
 
 const modules = {
 	name: "Command",
@@ -12,14 +13,14 @@ const modules = {
 	},
 	func: {
 		Init: {
-			InitComMacros,
 			InitComList,
+			InitComSystem,
 		},
 	},
 	config: {
 		globaldata: true,
 	},
-	Init: ["InitComMacros", "InitComList"],
+	Init: ["InitComList", "InitComSystem"],
 };
 
 declare function addModule(modules): boolean;

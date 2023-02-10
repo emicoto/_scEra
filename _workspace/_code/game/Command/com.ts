@@ -1,7 +1,6 @@
 import { Dict } from "../types";
 
-declare var scEra: typeof window.scEra;
-declare var T:typeof window.T;
+declare function now(): string;
 
 export interface Com {
 	id?: string;
@@ -16,57 +15,19 @@ export interface Com {
 	alterName: (...args) => string;
 }
 
-export function InitComList() {
-	const table: any = scEra.table.get("ComList") as any;
-	for (let key of Object.keys(table)) {
-		let list = table[key];
-		list.forEach((obj) => {
-			Com.new(obj.id, obj);
-		});
-	}
-	console.log(Com.data);
-}
-
-export function InitComMacros() {
-	//添加macro com
-	Macro.add("com", {
-		tags: null,
-		handler: function () {
-			let { contents, args } = this.payload[0];
-
-			if (args.length === 0) {
-				return this.error("no command text specified");
-			}
-
-			if (!T.comcount) T.comcount = 1;
-			else T.comcount++;
-
-			let comId = args[2];
-
-			let output = `<div id='com_${T.comcount}' class='command'>
-        <<button '${args[0]}'>>
-        <<set $selectCom to '${comId}'>><<set $passtime to ${args[1]}>>
-        ${contents}
-        <</button>>
-        </div>`;
-
-			if (Config.debug) console.log(output);
-
-			jQuery(this.output).wiki(output);
-		},
-	});
-}
-
 //era classic command system
 export class Com {
 	public static data: Dict<Com>;
 	//add new command
-	static new(id, obj) {
-		Com.data[id] = new Com(obj);
-		return Com.data[id];
+	static new(key, obj) {
+		Com.data[obj.id] = new Com(key, obj);
+		return Com.data[obj.id];
 	}
 	//get command
 	static set(id, time) {
+		if (!Com.data[id]) {
+			return console.log(`[error] ${now()} | no such command`);
+		}
 		if (time) {
 			return Com.data[id].Set("time", time);
 		} else {

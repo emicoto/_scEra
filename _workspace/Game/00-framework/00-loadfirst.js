@@ -14,7 +14,7 @@ if (window.fs === undefined || window.fs === null) {
 } else {
 	slog("log", "node.js supported");
 	var fs = window.fs;
-	Config.node = true;
+	Config.nodejs = true;
 }
 
 //---------------------------------------------------------------------------
@@ -27,18 +27,6 @@ Config.lan = "CN";
 Config.defLan = "CN";
 Config.secLan = "EN";
 Config.supportLan = ["CN", "EN"];
-
-//---------------------------------------------------------------------------
-//
-//  Era setting
-//
-//---------------------------------------------------------------------------
-
-Config.onEra = true;
-Era.status = "start";
-
-//trigger event let Era know the sugarcube is ready
-jQuery(document).trigger("sugarcube:ready");
 
 //---------------------------------------------------------------------------
 //
@@ -79,5 +67,4 @@ Config.saves.isAllowed = function () {
 	return true;
 };
 
-// delete parser that adds unneeded line breaks -ng
-Wikifier.Parser.delete("lineBreak");
+slog("log", "Start to init scripting. 00-loadfirst.js loaded");

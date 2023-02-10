@@ -902,7 +902,7 @@
 	  });
 	  return worldMap$1[boardId][spotId];
 	}
-	const modules$3 = {
+	const modules$4 = {
 	  name: "Maps",
 	  version: "1.0.0",
 	  des: "A module for map system.",
@@ -942,7 +942,7 @@
 	  },
 	  Init: ["initWorldMap"]
 	};
-	addModule(modules$3);
+	addModule(modules$4);
 
 	var __async$2 = (__this, __arguments, generator) => {
 	  return new Promise((resolve, reject) => {
@@ -1209,7 +1209,7 @@
 	  });
 	}
 
-	const modules$2 = {
+	const modules$3 = {
 	  name: "Traits",
 	  version: "1.0.0",
 	  des: "A module for trait system.",
@@ -1236,7 +1236,7 @@
 	  },
 	  Init: ["Traitlist"]
 	};
-	addModule(modules$2);
+	addModule(modules$3);
 
 	class Items {
 	  static newId(group, name, cate) {
@@ -1452,7 +1452,7 @@
 	    slog("log", "All items loaded:", Db.Items);
 	  });
 	}
-	const modules$1 = {
+	const modules$2 = {
 	  name: "Items",
 	  version: "1.0.0",
 	  des: "A module for items system.",
@@ -1474,7 +1474,7 @@
 	  },
 	  Init: ["loadItems"]
 	};
-	addModule(modules$1);
+	addModule(modules$2);
 
 	const bodyDict = {
 	  head: "\u5934\u90E8",
@@ -2928,10 +2928,55 @@
 	};
 	addModule(module);
 
+	/**
+	 * @fileoverview Actions
+	 * @version 1.0.0
+	 * @license MIT
+	 * @namespace Action
+	 *
+	 * @author LuneFox
+	 * @description
+	 * 1.0.0
+	 */
 	class Action {
 	  static makeTemplate(data, mode) {
+	    return "";
 	  }
 	  static output(data, mode) {
+	  }
+	  static add(id, type, obj) {
+	    Action.data[id] = new Action(type, obj);
+	  }
+	  static get(arg, ...args) {
+	    switch (arg) {
+	      case "actPart":
+	        if (!args[0]) {
+	          slog("warn", "No args for actPart");
+	          return [];
+	        }
+	        return Object.values(Action.data).filter((action) => action.actPart && action.actPart.has(args));
+	      case "targetPart":
+	        if (!args[0]) {
+	          slog("warn", "No args for targetPart");
+	          return [];
+	        }
+	        return Object.values(Action.data).filter((action) => action.targetPart && action.targetPart.has(args));
+	      case "type":
+	        if (!args[0]) {
+	          slog("warn", "No args for type");
+	          return [];
+	        }
+	        return Object.values(Action.data).filter((action) => action.type == args[0]);
+	      default:
+	        return Object.values(Action.data).filter((action) => action.name == arg || action.id == arg);
+	    }
+	  }
+	  static set(id) {
+	    if (!Action.data[id]) {
+	      slog("error", "Error occured when setting action: " + id);
+	      return new Action("error", { name: "Error", id: "error" });
+	    }
+	    return Action.data[id];
 	  }
 	  constructor(type, action) {
 	    this.type = type;
@@ -2968,40 +3013,6 @@
 	    this.effect = (...arg) => {
 	      return "";
 	    };
-	  }
-	  static add(id, type, obj) {
-	    Action.data[id] = new Action(type, obj);
-	  }
-	  static get(arg, ...args) {
-	    switch (arg) {
-	      case "actPart":
-	        if (!args[0]) {
-	          slog("warn", "No args for actPart");
-	          return [];
-	        }
-	        return Object.values(Action.data).filter((action) => action.actPart && action.actPart.has(args));
-	      case "targetPart":
-	        if (!args[0]) {
-	          slog("warn", "No args for targetPart");
-	          return [];
-	        }
-	        return Object.values(Action.data).filter((action) => action.targetPart && action.targetPart.has(args));
-	      case "type":
-	        if (!args[0]) {
-	          slog("warn", "No args for type");
-	          return [];
-	        }
-	        return Object.values(Action.data).filter((action) => action.type == args[0]);
-	      default:
-	        return Object.values(Action.data).filter((action) => action.name == arg || action.id == arg);
-	    }
-	  }
-	  static set(id) {
-	    if (!Action.data[id]) {
-	      slog("error", "Error occured when setting action: " + id);
-	      return new Action("error", { name: "Error", id: "error" });
-	    }
-	    return Action.data[id];
 	  }
 	  Check(callback) {
 	    this.check = callback;
@@ -3188,7 +3199,7 @@ ${ctx(use, parts, reverse)}<</switch>>
 	      if (template) {
 	        txt += converttemplate(template);
 	      } else {
-	        txt += `${head}<<you>>\u5728$location.name${name}\u3002<br>
+	        txt += `${head}<<you>>\u5728${name}\u3002<br>
 
 
 `;
@@ -3203,12 +3214,12 @@ ${ctx(use, parts, reverse)}<</switch>>
 	    return Action.makeTemplate(data, mode);
 	  }
 	  const txt = Object.values(Action.data).filter(
-	    (action) => mode == "kojo" && !groupmatch(action.type, "\u5E38\u89C4", "\u76EE\u5F55", "\u5176\u4ED6", "\u56FA\u6709") || type && action.type == type || !type && action.type !== "\u56FA\u6709"
+	    (action) => mode == "kojo" && !groupmatch(action.type, "General", "Menu", "Other", "System") || type && action.type == type || !type && action.type !== "System"
 	  ).map((data) => Action.makeTemplate(data, mode)).join("");
 	  download(txt, "Actiontemplate" + (type ? `_${type}` : ""), "twee");
 	};
 
-	const modules = {
+	const modules$1 = {
 	  name: "Action",
 	  version: "1.0.0",
 	  des: "Action module for interaction",
@@ -3228,6 +3239,151 @@ ${ctx(use, parts, reverse)}<</switch>>
 	    globaldata: true
 	  },
 	  Init: ["InitActionList"]
+	};
+	addModule(modules$1);
+
+	class Com {
+	  static new(key, obj) {
+	    Com.data[obj.id] = new Com(key, obj);
+	    return Com.data[obj.id];
+	  }
+	  static set(id, time) {
+	    if (!Com.data[id]) {
+	      return console.log(`[error] ${now()} | no such command`);
+	    }
+	    if (time) {
+	      return Com.data[id].Set("time", time);
+	    } else {
+	      return Com.data[id];
+	    }
+	  }
+	  constructor(type, obj = {}) {
+	    const { id = "error", name = "error", tags = [], time = 5 } = obj;
+	    this.id = id;
+	    this.name = name;
+	    this.tags = [type];
+	    this.time = time;
+	    if (tags.length)
+	      this.tags = this.tags.concat(tags);
+	    const ignore = ["id", "name", "tags", "time"];
+	    for (let key in obj) {
+	      if (ignore.includes(key))
+	        continue;
+	      this[key] = obj[key];
+	    }
+	    this.filter = () => {
+	      return true;
+	    };
+	    this.check = () => {
+	      return true;
+	    };
+	    this.source = () => {
+	    };
+	    this.order = () => {
+	      return 0;
+	    };
+	  }
+	  Check(callback) {
+	    this.check = callback;
+	    return this;
+	  }
+	  Filter(callback) {
+	    this.filter = callback;
+	    return this;
+	  }
+	  Effect(callback) {
+	    this.source = callback;
+	    return this;
+	  }
+	  Tags(...arr) {
+	    if (!this.tags)
+	      this.tags = [];
+	    this.tags = this.tags.concat(arr);
+	    this.tags = [...new Set(this.tags)];
+	    return this;
+	  }
+	  Order(callback) {
+	    this.order = callback;
+	    return this;
+	  }
+	  AlterName(callback) {
+	    this.alterName = callback;
+	    return this;
+	  }
+	  ForceAble() {
+	    this.forceAble = true;
+	    return this;
+	  }
+	  Set(key, ...args) {
+	    this[key] = args[0];
+	    return this;
+	  }
+	}
+	Com.data = {};
+
+	function InitComList() {
+	  const table = scEra.table.get("ComList");
+	  for (let key of Object.keys(table)) {
+	    let list = table[key];
+	    list.forEach((obj) => {
+	      Com.new(key, obj);
+	    });
+	  }
+	  console.log(Com.data);
+	}
+	function InitComSystem() {
+	  const html = `
+<div id='hidden' class='hidden'>you can't see me.</div>
+<div id='location'></div>
+<br>
+<div id='content' class='content' onClick='if(S.msg)Com.next();'>
+    <div id='contentMsg'>
+    </div>
+<div id="msg_end" style="height:0px; overflow:hidden"></div>
+</div>
+
+<div id='commandmenu'>
+
+</div>
+<br>
+<div id='commandzone'>
+
+</div>
+<div id='next'>
+</div>
+
+<script>
+Com.updateMovement();
+Com.updateScene();
+Com.updateMenu();
+Com.listUp();
+<\/script>
+`;
+	  scEra.newPsg("MainLoop", html);
+	  const html2 = `<<if !$selectCom>>
+<<set $selectCom = ''>>
+<</if>>`;
+	  scEra.newPsg("MainLoop:Before", html2);
+	}
+
+	const modules = {
+	  name: "Command",
+	  des: "A classic era-like command system.",
+	  version: "1.0.0",
+	  database: Com.data,
+	  classObj: {
+	    Com
+	  },
+	  func: {
+	    Init: {
+	      InitComList,
+	      InitComSystem
+	    }
+	  },
+	  config: {
+	    globaldata: true
+	  },
+	  Init: ["InitComList", "InitComSystem"]
 	};
 	addModule(modules);
 

@@ -1,0 +1,1 @@
+F.summonChara = function () {};

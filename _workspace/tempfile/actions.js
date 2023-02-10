@@ -1,54 +1,10 @@
-import { Dict } from "../types";
-
-declare function groupmatch(value, ...args): boolean;
-declare function slog(type: "log" | "warn" | "error", ...args): void;
-
-export interface Action {
-	id?: string;
-	name?: string;
-	time?: number;
-	mode?: number;
-	actPart?: string[];
-	targetPart?: string[];
-	setting?: any;
-	template?: string;
-	type?: string;
-	autokeep?: boolean;
-	tags?: string[];
-	placement?: string[];
-	forceAble?: boolean;
-	options?: string | string[];
-
-	filter?: (arg, ...args) => 0 | 1;
-	check?: (arg, ...args) => 0 | 1;
-	order?: (arg, ...args) => 0 | 1;
-	effect?: (arg, ...args) => any;
-	alterName?: (...args) => string;
-	onReady?: (...args) => any;
-}
-/**
- * @fileoverview Actions
- * @version 1.0.0
- * @license MIT
- * @namespace Action
- *
- * @author LuneFox
- * @description
- * 1.0.0
- */
-export class Action {
-	public static data: Dict<Action>;
-	public static kojo: any;
-	static makeGroup: string;
-
-	public static makeTemplate(data, mode): string {
-		return "";
-	}
-	public static output(data, mode) {}
-	public static add(id: string, type: string, obj) {
+class Action {
+	static data;
+	static kojo;
+	static add(id, type, obj) {
 		Action.data[id] = new Action(type, obj);
 	}
-	public static get(arg, ...args) {
+	static get(arg, ...args) {
 		switch (arg) {
 			case "actPart":
 				if (!args[0]) {
@@ -72,14 +28,14 @@ export class Action {
 				return Object.values(Action.data).filter((action) => action.name == arg || action.id == arg);
 		}
 	}
-	public static set(id) {
+	static set(id) {
 		if (!Action.data[id]) {
 			slog("error", "Error occured when setting action: " + id);
 			return new Action("error", { name: "Error", id: "error" });
 		}
 		return Action.data[id];
 	}
-	constructor(type, action: any) {
+	constructor(type, action) {
 		this.type = type;
 		for (let key in action) {
 			let value = action[key];
@@ -155,15 +111,12 @@ export class Action {
 		this.onReady = callback;
 		return this;
 	}
-	Options(str: string | string[]) {
+	Options(str) {
 		this.options = str;
 		return this;
 	}
-	Set(key: string, value: any) {
+	Set(key, value) {
 		this[key] = value;
 		return this;
 	}
 }
-
-Action.data = {};
-Action.kojo = {};

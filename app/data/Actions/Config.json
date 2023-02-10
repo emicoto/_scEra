@@ -1,0 +1,21 @@
+{
+	"typeDict": {
+		"General": "常规",
+		"Interact": "交流",
+		"Menu": "主要",
+		"Touch": "接触",
+		"Reverse": "逆位",
+		"Pose": "姿势",
+		"Item": "道具",
+		"Tentacles": "触手",
+		"Magic": "魔法",
+		"Combat": "战斗",
+		"Onani": "自慰",
+		"Command": "命令",
+		"Other": "其他",
+		"System": "固有"
+	},
+	"systemType": ["Menu", "Other", "System"],
+	"generalType": ["General", "Interact", "System", "Menu", "Other"],
+	"kojoType": ["Interact", "Touch", "Reverse", "Pose", "Item", "Temtacles", "Magic", "Combat", "Onani", "Extra"]
+}

@@ -264,7 +264,8 @@ export function setPath(obj, path, value?) {
 	const pathArray = path.split(".");
 	const last = pathArray.pop();
 	for (const p of pathArray) {
-		obj = obj[p] || {};
+		if (!obj[p]) obj[p] = {};
+		obj = obj[p];
 	}
 	if (value) {
 		obj[last] = value;

@@ -21,7 +21,7 @@ Gather      ,采集          ,20   ,采集区
 Mine        ,挖矿          ,30   ,挖矿区
 
 /* action for each character */
-@Contact
+@Interact
 #id         ,name         ,time  ,setting
 Talk        ,闲聊         ,5     ,canTrain
 Look        ,观察         ,2     ,canTrain
@@ -37,7 +37,7 @@ AskHelp     ,求助         ,3
 /* Filters */
 @Menu
 #id         ,name       ,setting
-Interaction ,交流
+Interact    ,交流
 Touch       ,接触
 TrySex      ,推倒       ,alterName
 Keep        ,持续       ,alterName
@@ -58,7 +58,7 @@ Self        ,自慰
 Other       ,其他
 
 /* Train  */
-@Train
+@Touch
 #id ,name  ,mode ,actPart  ,targetPart ,autokeep  ,template ,setting
 reset, 复位, 0, , , , ,doStraight
 t0, 接吻, 1.5, m, m, y,{0}吻上了{1}的嘴唇。, doStraight

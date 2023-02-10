@@ -29,10 +29,6 @@ const Perflog = {};
 	defineGlobalNamespaces(window.game);
 
 	const shortcuts = {
-		Story: Story,
-		Wikifier: Wikifier,
-		State: State,
-
 		Errors: window.game.Errors,
 		Perflog: window.game.Perflog,
 	};
@@ -41,12 +37,6 @@ const Perflog = {};
 
 	// those properties are not defined at this point, so we just define them as empty objects
 	Object.defineProperties(window, {
-		V: { get: () => State.variables },
-		T: { get: () => State.temporary },
-		C: { get: () => State.variables.chara },
-		Flag: {
-			get: () => State.variables.flag,
-		},
 		tc: { get: () => State.variables.tc, set: (v) => (State.variables.tc = v) },
 		pc: {
 			get: () => State.variables.pc,
@@ -62,8 +52,7 @@ const Perflog = {};
 
 	console.timeLog("scEra startup");
 
-	slog("log", "All the namespace are registered in window.game and window.cEra.");
-	slog("log", "Checking the SugarCube state, story, setup:", State.variables);
+	slog("log", "All the namespace are registered in window.game and window.scEra.");
 
 	//------------------------------------------------------------------------------
 })();

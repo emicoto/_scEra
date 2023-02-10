@@ -1,0 +1,131 @@
+
+:: PassageHeader
+<<script>>
+if(passage()=='Start')
+$('#story-header').hide();
+else
+$('#story-header').show();
+<</script>>
+
+看看<br>
+
+
+:: TestStart
+<div id='test'></div>
+<<if $mode is 'normal'>>
+多了些什么东西吗？<br>
+<</if>>
+
+<<if $mode is 'event'>>
+一切的开始……<br>
+一个普通的路人甲，被一场意外的车祸带到了一个陌生的世界。<br>
+这个世界里，有着各种各样的怪物，有着各种各样的魔法，有着各种各样的人。<br
+这个世界里，有着各种各样的事情，有着各种各样的机会，有着各种各样的选择。<br>
+这个世界里，有着各种各样的……<br>
+
+<</if>>
+总之先做个试验。<br>
+
+<<='ab\ncd\ref\tgl\n'>>
+
+<<link "点我看看" "Start" >>
+<<if $mode isnot 'normal'>>
+    <<set $mode to 'normal'>>
+<<else>>
+    <<set $mode to 'event'>>
+<</if>>
+<</link>><br>
+
+<<link '点我重启'>>
+<<run Engine.restart()>>
+<</link>><br>
+
+<<link '测试段落' 'Test'>>
+<</link>><br>
+
+
+
+:: Test
+一个测试用段落。<br>
+看看能不能正常显示。<br>
+
+<<if $mode is "event">>
+ 有event模式的话，就显示这个。<br>
+<<else>>
+   没有event模式的话，就显示这个。<br>
+<</if>>
+
+<<link 'back' 'Start'>>
+<</link>>
+
+:: Test:EN
+a test passage.<br>
+see if it can be displayed normally.<br>
+
+<<if $mode is "event">>
+  if there is event mode, then display this.<br>
+<<else>>
+   if there is no event mode, then display this.<br>
+<</if>>
+
+<<link 'back' 'Start'>>
+<</link>>
+
+
+:: Test:Before
+<<run 
+   console.log('Test:Before is running.')
+>>
+<<=lan('测试前置','test before')>><br>
+<<test >>
+
+:: PassageFooter
+<<test2>>
+
+:: Widget[widget]
+
+<<widget "test">>
+   <<if $mode is "event">>
+      <<set $test to "event">>
+      <<script>>slog('log', 'test in event', V.test, T.runningTitle)<</script>>
+   <<else>>
+      <<set $test to "normal">>
+      <<script>>slog('log', 'test in normal', V.test, T.runningTitle)<</script>>
+   <</if>>
+<</widget>>
+
+<<widget "test2">>
+   a general widget.<br>
+   ???
+<</widget>>
+
+:: A CSV[csv]
+No., Name, Age, Job, Salary
+1, John, 24, Engineer, 10000
+2, Mary, 23, Designer, 15000
+3, Bob, 25, Engineer, 20000
+4, Alice, 26, Engineer, 25000
+5, Jack, 27, Designer, 30000
+
+:: A Table[table]
+
+@Salary
+#No., Name, Age, Job, Salary
+1, John, 24, Engineer, 10000
+2, Mary, 23, Designer, 15000
+3, Bob, 25, Engineer, 20000
+4, Alice, 26, Engineer, 25000
+5, Jack, 27, Designer, 30000
+
+:: A Xml[xml]
+<?xml version="1.0" encoding="UTF-8"?>
+<bookstore>
+   <book>
+      <title lang="en">Harry Potter</title>
+      <price>29.99</price>
+   </book>
+   <book>
+      <title lang="en">Learning XML</title>
+      <price>39.95</price>
+   </book>
+</bookstore>

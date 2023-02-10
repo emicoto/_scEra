@@ -6,7 +6,7 @@ declare function download(filename, text, type): void;
 declare var D: typeof window.D;
 
 Action.makeGroup = "";
-Action.makeTemplate = function (data, mode) {
+Action.makeTemplate = function (data: Action, mode: string) {
 	const { name, template, targetPart, actPart, type } = data;
 
 	let isCounter = mode.includes("counter");
@@ -104,7 +104,7 @@ Action.makeTemplate = function (data, mode) {
 			if (template) {
 				txt += converttemplate(template);
 			} else {
-				txt += `${head}<<you>>在$location.name${name}。<br>\n\n\n`;
+				txt += `${head}<<you>>在${name}。<br>\n\n\n`;
 			}
 	}
 
@@ -121,9 +121,9 @@ Action.output = function (mode, type) {
 	const txt = Object.values(Action.data)
 		.filter(
 			(action) =>
-				(mode == "kojo" && !groupmatch(action.type, "常规", "目录", "其他", "固有")) ||
+				(mode == "kojo" && !groupmatch(action.type, "General", "Menu", "Other", "System")) ||
 				(type && action.type == type) ||
-				(!type && action.type !== "固有")
+				(!type && action.type !== "System")
 		)
 		.map((data) => Action.makeTemplate(data, mode))
 		.join("");

@@ -1,6 +1,7 @@
 import { Action } from "./Action";
 
 declare var scEra: typeof window.scEra;
+declare var V: typeof window.V;
 
 export const InitActionList = function () {
 	let tables = scEra.table.get("ActionList") as any;
@@ -58,4 +59,8 @@ const extendParts = function (raw) {
 		.map((char) => part[char])
 		.flat();
 	return arr;
+};
+
+export const InitActionMode = function () {
+	V.actionMode = "normal";
 };

@@ -211,7 +211,9 @@
 	  const pathArray = path.split(".");
 	  const last = pathArray.pop();
 	  for (const p of pathArray) {
-	    obj = obj[p] || {};
+	    if (!obj[p])
+	      obj[p] = {};
+	    obj = obj[p];
 	  }
 	  if (value) {
 	    obj[last] = value;
@@ -293,7 +295,7 @@
 	      continue;
 	    scEra.modules[modules.name][key] = modules[key];
 	  }
-	  slog("log", `Module ${modules.name} is registered.`);
+	  dlog("log", `Module ${modules.name} is registered.`);
 	  return true;
 	};
 	const applyClass = function() {
@@ -354,6 +356,26 @@
 	    }
 	  });
 	}
+	game.InitStory = function() {
+	  V.system = S.gameConfig;
+	  V.flag = S.gameFlags;
+	  for (const [key, value] of Object.entries(S.gameVars)) {
+	    V[key] = value;
+	  }
+	  V.date = {
+	    year: S.date[0],
+	    month: S.date[1],
+	    day: S.date[2],
+	    time: S.date[3]
+	  };
+	  V.location = {
+	    name: "",
+	    mapId: "",
+	    printname: "",
+	    chara: []
+	  };
+	  V.event = {};
+	};
 	scEra.version = "0.7.5";
 	console.time("scEra startup");
 	$(document).one("sugarcube:startup", () => __async(void 0, null, function* () {
@@ -361,7 +383,23 @@
 	  console.timeLog("scEra startup");
 	  scEra.status = "ready";
 	}));
-	$(document).one(":initstory", () => {
+	$(document).one("Era:start", () => {
+	  scEra.config.onEra = true;
+	  scEra.status = "start";
+	  Object.defineProperties(window, {
+	    Story: { value: scEra.story, writable: false },
+	    Wikifier: { value: scEra.wikifier },
+	    V: { get: () => scEra.state.variables },
+	    T: { get: () => scEra.state.temporary },
+	    C: { get: () => scEra.state.variables.chara },
+	    Flag: {
+	      get: () => scEra.state.variables.flag
+	    }
+	  });
+	  console.log("variables is ready:", V);
+	  scEra.wikifier.Parser.delete("lineBreak");
+	});
+	$(document).one(":initstorydata", () => {
 	  const checkId = setInterval(() => {
 	    if (scEra.status !== "ready") {
 	      return;
@@ -406,6 +444,7 @@
 	  applyClass();
 	  console.timeLog("scEra startup");
 	  slog("log", "Finish to apply classes.");
+	  scEra.status = "initmodules";
 	  jQuery(document).trigger("scEra:apply");
 	}));
 	$(document).one("scEra:apply", function() {
@@ -423,16 +462,20 @@
 	    }
 	    console.timeLog("scEra startup");
 	    slog("log", "All initialization functions are applied successfully.");
-	    jQuery(document).trigger("modules:loaded");
-	    jQuery.event.trigger({ type: ":afterload" });
+	    scEra.status = "modulesready";
+	    jQuery(document).trigger("modules:init");
 	  });
 	});
-	$(document).one("modules:loaded", () => {
+	$(document).one("modules:init", () => {
 	  slog("log", "All modules are loaded successfully.");
-	  console.timeEnd("scEra startup");
+	  console.timeLog("scEra startup");
+	  jQuery(document).trigger("modules:loaded");
+	});
+	$(document).one("modules:loaded", () => {
 	  scEra.status = "storyready";
 	});
 	$(document).one(":storyready", () => {
+	  console.timeEnd("scEra startup");
 	  slog("log", "Story is ready.");
 	});
 

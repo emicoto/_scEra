@@ -1,0 +1,49 @@
+[
+	{
+		"id": "Relax",
+		"name": ["放松", "Relax"],
+		"time": 15,
+		"tags": ["restarea"],
+		"placement": ["sofa", "chair", "bed"],
+		"setting": ["canTrain"],
+		"template": [
+			"<<you>>找了个舒适的地方坐了下来，放松了一下。",
+			"<<you>> found a comfortable place and relaxed for a while."
+		]
+	},
+	{
+		"id": "Walk",
+		"name": ["散步", "Walk"],
+		"time": 15,
+		"tags": ["outdoor"],
+		"template": [
+			"<<you>>在<<location>>散了会步，观赏着<<location>>的风景。",
+			"<<you>> took a walk in <<location>> and enjoyed the scenery."
+		]
+	},
+	{
+		"id": "Plant",
+		"name": ["种植", "Plant"],
+		"time": 30,
+		"tags": ["plantarea"],
+		"template": ["<<you>>在<<location>>种植了一些_plant。", "<<you>> planted some _plant in <<location>>."]
+	},
+	{
+		"id": "Bath",
+		"name": ["洗澡", "Bath"],
+		"time": 30,
+		"tags": ["bathroom", "showers"],
+		"template": ["<<you>>洗了个澡。", "<<you>> took a bath."]
+	},
+	{
+		"id": "Read",
+		"name": ["阅读", "Read"],
+		"time": 60,
+		"tags": ["library", "readingroom"],
+		"placement": ["bookshelf"],
+		"template": [
+			"<<you>>从书架上找了本_book的书，坐下来开始阅读。",
+			"<<you>> found a book about _book and started reading."
+		]
+	}
+]
