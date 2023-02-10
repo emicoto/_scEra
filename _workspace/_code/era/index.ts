@@ -148,7 +148,7 @@ game.InitStory = function () {
 //
 //-------------------------------------------------------------
 
-scEra.version = "0.7.5";
+scEra.version = "0.9.0";
 console.time("scEra startup");
 
 $(document).one("sugarcube:startup", async () => {
