@@ -11,6 +11,12 @@ module:registered
 sugarcube:ready  -- when sugarcube startup
 Era:start  -- after Era system start in sugarcube module
 
+
+Dialogs.set -- global event. on a dialog event to be set
+#dialog
+start -- local event. on a dialog event had start
+
+
 :passageinit
 :passagestart
 :passagerender

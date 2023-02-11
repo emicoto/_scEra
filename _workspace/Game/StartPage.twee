@@ -22,22 +22,19 @@
 
 :: Start [nosave]
 <<run
-   slog('log','Loading Titlescreen...')
-   V.event = { fullTitle = 'A Test Chapter'}
+   slog('log','Loading Titlescreen...');
+   _count = 0
+
 >>
-<dialog></dialog>
-<div id='hidden' class='hidden'>you can't see me.</div>
 
-<div id='content' class='content'>
-    <div id='contentMsg' >
-    </div>
-<div id="msg_end" style="height:0px; overflow:hidden"></div>
-</div>
+ready to dialog.
+<span id='counter'>_count</span>
 
-<<done>>
-
-<script>
-Dialog.initScene(true)
-</script>
-
-<</done>>
+<<repeat 1s>>
+   <<run _count++>>
+   <<replace #counter>>_count<</replace>>
+   <<if _count is 5>>
+      <<run Dialogs.set({tp:'Test',nm:'Chapter'})>>
+      <<stop>>
+   <</if>>
+<</repeat>>

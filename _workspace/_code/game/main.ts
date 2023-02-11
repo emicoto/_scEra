@@ -7,6 +7,8 @@ import "./Items";
 import "./Species";
 import "./Action";
 import "./Command";
+import "./Dialog";
+import "./Kojo";
 
 declare global {
 	interface Window {

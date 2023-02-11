@@ -46,6 +46,7 @@ Macro.add("selection", {
 		 *--------------------------------------------*/
 
 		let output = "";
+		let jump;
 
 		for (let i = 1; i < len; i++) {
 			if (Config.debug) {
@@ -64,6 +65,13 @@ Macro.add("selection", {
 				args.delete(sid);
 			}
 
+			//check if there a jump in args
+			if (args.includes("jump")) {
+				jump = true;
+				//remove jump from args
+				args.delete("jump");
+			}
+
 			if (event) {
 				/*--------------------------------------------
 				 *  on event mode
@@ -74,26 +82,46 @@ Macro.add("selection", {
 				if (Story.has(`${T.eventTitle}:s${sid}`) && V.mode !== "history") {
 					txt = Story.get(`${T.eventTitle}:s${sid}`).text;
 				}
-
-				contents = `<<set $event.sp to${sid}>><<set V.event.phase to 0>>${txt}\n${contents}`;
-
-				V.event.lastPhase = V.event.phase - 1;
+				contents = `<<set $event.lastPhase to ${T.msgId - 1}>>${txt}\n${contents}`;
 			}
 
 			/*--------------------------------------------
 			 * add common twine script
 			 *--------------------------------------------*/
-			contents = `<<set $seletId to ${sid}>><<unset _selectwait>><<removelink>>${contents}`;
-
+			contents = `<<set $selectId to ${sid}>><<unset _selectwait>><<run Ui.removelink();T.afterselect = true>>${contents}`;
 			/*--------------------------------------------
-			 *  on replace mode
-			 *  switch to linkreplace then when player selected
-			 *  will replace to the contents
+			 *  on jump mode let the event dialog jump to selected branch
 			 *--------------------------------------------*/
-			if (replace) {
+			if (jump) {
+				console.log(args);
+				let exit = args[1].match(/ep\d+|sp\d+/g);
+				let code = "";
+				if (exit) {
+					exit.forEach((set) => {
+						let id = set.match(/\d+/g)[0];
+						let type = set.match(/[a-z]+/g)[0];
+						code += `V.event.${type} = ${id};`;
+					});
+				}
+
+				contents = `<<link "${args[0]}">>${contents}<<run ${code}Ui.removelink(); Dialogs.start();>><</link>>`;
+			}
+			//--------------------------------------------
+			//  on replace mode
+			//  switch to linkreplace then when player selected
+			//  will replace to the contents
+			//--------------------------------------------
+			else if (replace) {
 				contents = `<<linkreplace "${args[0]}">>${contents}<</linkreplace>>`;
-			} else {
-				let exit = args[1] ? `"${args[1]}"` : "$passage";
+			}
+			//--------------------------------------------
+			// otherwise just add link
+			//--------------------------------------------
+			else {
+				let exit = "$passage";
+				if (args[1]) exit = `"${args[1]}"`;
+				if (event) exit = "";
+
 				contents = `<<link "${args[0]}" ${exit}>>${contents}<</link>>`;
 			}
 
@@ -101,11 +129,11 @@ Macro.add("selection", {
 		}
 		if (Config.debug) console.log(output);
 
-		jQuery(this.output).wiki(`<<set _selectwait to true>><div id='selectzone>${ouput}</div>`);
+		jQuery(this.output).wiki(`<<set _selectwait to true>><div id='selectzone'>${output}</div>`);
 	},
 });
 
 Ui.removelink = function () {
-	$("#selectzone").remove();
+	$("#contentMsg a").remove();
 };
 DefineMacroS("removelink", Ui.removelink);

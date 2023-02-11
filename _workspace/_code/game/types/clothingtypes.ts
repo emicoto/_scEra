@@ -16,17 +16,36 @@ export type clothcategory =
 	| "none";
 
 export type wearlayers =
-	| "hat"
-	| "neck"
-	| "face"
-	| "ears"
+	| "head"
 	| "cover"
 	| "outfitUp"
 	| "outfitBt"
 	| "innerUp"
 	| "innerBt"
 	| "hands"
-	| "shoes"
+	| "legs"
+	| "feet"
+	| "neck"
+	| "face"
+	| "ears"
+	| "chest"
+	| "bottom";
+
+export type equipslot =
+	| "weapon"
+	| "shield"
+	| "head"
+	| "cover"
+	| "outfitUp"
+	| "outfitBt"
+	| "innerUp"
+	| "innerBt"
+	| "hands"
+	| "legs"
+	| "feet"
+	| "neck"
+	| "face"
+	| "ears"
 	| "chest"
 	| "bottom";
 

@@ -48,6 +48,9 @@ S.date = [4066, 3, 14, 1, 1120];
 //default exit link after event
 S.defaultExit = "MainLoop";
 
+//default next button text at end of msg
+S.defaultNext = "Next Step";
+
 //set the ignore value of the command when check the order
 S.ignoreOrder = 20;
 

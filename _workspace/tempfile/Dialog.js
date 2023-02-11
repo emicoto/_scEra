@@ -4,11 +4,11 @@
 //
 //------------------------------------------------------------------------
 /**
- * @name Dialog
+ * @name Dialogs
  * @description
  * A dialog system for handle dialog flow and selection
  */
-class DialogFlow {
+class Dialogs {
 	constructor(title) {
 		const raw = scEra.getPsg(title).split("\n");
 		this.logs = [];
@@ -102,15 +102,17 @@ class DialogFlow {
 
 		if (e.ep) {
 			title += `_ep${e.ep}`;
-			DialogFlow.record("ep", `ep${e.ep}`);
+			Dialogs.record("ep", `ep${e.ep}`);
 		}
 
 		if (e.sp) {
 			title += `:sp${e.sp}`;
-			DialogFlow.record("sp", `sp${e.sp}`);
+			Dialogs.record("sp", `sp${e.sp}`);
 		}
 
-		S.msg = new DialogFlow(title);
+		console.log("InitScene", title);
+
+		S.msg = new Dialogs(title);
 		T.eventTitle = title;
 
 		const log = S.msg.logs[0];
@@ -119,20 +121,17 @@ class DialogFlow {
 		this.wiki(log, 0);
 
 		T.msgId = 0;
-		V.event.sp = 0;
-
-		if (first) this.trigger();
 	}
 
 	static trigger() {
 		//set a onclick event to the div
 		$("#contentMsg").on("click", function () {
-			this.next();
+			Dialogs.next();
 		});
 
 		//when MsgEnd trigger, then flow to next chapter
-		$("dialog").one("MsgEnd", function () {
-			this.nextScene();
+		$("dialog").on("MsgEnd", function () {
+			Dialogs.nextScene();
 		});
 
 		//trun a trigger
@@ -147,6 +146,11 @@ class DialogFlow {
 	static next() {
 		//if the select is waiting for user input, then return
 		if (T.selectwait) {
+			return;
+		}
+		//if after select but not the end of msg, then return wait for the next msg
+		if (T.afterselect && T.msgId < S.msg.logs.length - 1) {
+			delete T.afterselect;
 			return;
 		}
 
@@ -172,6 +176,8 @@ class DialogFlow {
 		const e = V.event;
 		const config = S.msg.config;
 		const { type = "end", exit = S.defaultExit, exitButton = "Next Step" } = config;
+
+		console.log("nextScene", type, config, e, V.selectId);
 
 		switch (type) {
 			case "return":
@@ -215,7 +221,7 @@ class DialogFlow {
 	 * usually used in the end of ep or sp, then jump to the other event
 	 * -------------------------------------------------------------*/
 	static jump(config) {
-		conste = V.event;
+		const e = V.event;
 		const setList = ["name", "eid", "ch", "ep"];
 		setList.forEach((key) => {
 			if (config[key]) e[key] = config[key];
@@ -251,30 +257,31 @@ class DialogFlow {
 
 		this.InitScene();
 	}
+	//---------------------------------------------------------------
+	//  record the dialog to the memory
+	//  char is the type of the point, like ep, sp, etc.
+	//  point is the point of the dialog, like ep1, sp1, etc.
+	//---------------------------------------------------------------
+	static record(char, point) {
+		const { type, id } = V.event;
+		let now = point;
+
+		if (char === "sp" && V.event.ep) {
+			now = `ep${V.event.ep}:` + point;
+		}
+
+		let memory = setPath(V, `memory.${type}.${id}`);
+		if (!memory || !memory[point]) {
+			setPath(V, `memory.${type}.${id}.${point}`, []);
+			memory = setPath(V, `memory.${type}.${id}`);
+		}
+		if (!memory[point].includes(now)) {
+			memory[point].push(now);
+		}
+	}
 }
 
-window.Dialog = DialogFlow;
-
-//record the dialog to the memory
-//char is the type of the point, like ep, sp, etc.
-//point is the point of the dialog, like ep1, sp1, etc.
-DialogFlow.record = function (char, point) {
-	const { type, id } = V.event;
-	let now = point;
-
-	if (char === "sp" && V.event.ep) {
-		now = `ep${V.event.ep}:` + point;
-	}
-
-	let memory = setPath(V, `memory.${type}.${id}`);
-	if (!memory || !memory[point]) {
-		setPath(V, `memory.${type}.${id}.${point}`, []);
-		memory = setPath(V, `memory.${type}.${id}`);
-	}
-	if (!memory[point].includes(now)) {
-		memory[point].push(now);
-	}
-};
+window.Dialogs = Dialogs;
 
 P.flow = function (text, time = 60, hasDashline) {
 	let dashline = hasDashline ? "<<dashline>>" : "";
@@ -287,6 +294,10 @@ P.flow = function (text, time = 60, hasDashline) {
 	msg_end.scrollIntoView();
 };
 
+P.clearComment = function (text) {
+	return text.replace(/\s/g, "").replace(/\/\*(.+)\*\//g, "");
+};
+
 /**
  * @name P.txt
  * @description convert text
@@ -296,13 +307,12 @@ P.txt = function (text) {
 	const trans = function (t) {
 		let script = false;
 
+		//clean the comment
+		t = P.clearComment(t);
+
 		//clean the <fr> tag trans to <br>
 		if (t.includes("<fr>")) {
 			t = t.replace("<fr>", "<br>");
-		}
-		//clean the comment
-		else if (t.match(/\/\*(.+)\*\//)) {
-			t = t.replace(/\/\*(.+)\*\//, "");
 		}
 		//if is script zone, skip it until the end of the script
 		else if ((t.includes("<script") && !t.includes("/script")) || (t.includes("<<run") && !t.includes(">>"))) {

@@ -43,7 +43,7 @@ const createActionBtn = function (currentSelect, actionData, layer) {
 const createOptionBtn = function (actionId, option, selectType) {
 	//console.log(actionId, option, selectType);
 
-	let name = D.bodyparts[option];
+	let name = D.bodyDict[option];
 	if (selectType == "actor") {
 		name = `用${name}`;
 	}
@@ -131,7 +131,7 @@ Action.updateMenu = function () {
 	const layer1 = ["交流", "常规", "目录"];
 	const layer2 = ["逆位", "接触", "道具", "触手", "魔法", "战斗", "命令"];
 	const options = ["体位", "其他"];
-	const systems = Action.typeFilter("固有");
+	const systems = Action.typeFilter("system");
 
 	//可选部位
 	const actorOption = Action.SelectableParts(selectId, 1);

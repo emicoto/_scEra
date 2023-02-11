@@ -1,0 +1,7 @@
+sugarcube-2:
+  macros:
+    selection:
+      name: selection
+      container: true
+    select:
+      name: select

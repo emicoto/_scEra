@@ -2876,7 +2876,7 @@
 	  return total;
 	};
 
-	const module = {
+	const module$2 = {
 	  name: "Creatures",
 	  version: "1.0.0",
 	  des: "A module for species and character system.",
@@ -2926,7 +2926,7 @@
 	  },
 	  Init: ["InitSpecies"]
 	};
-	addModule(module);
+	addModule(module$2);
 
 	/**
 	 * @fileoverview Actions
@@ -3386,6 +3386,704 @@ Com.listUp();
 	  Init: ["InitComList", "InitComSystem"]
 	};
 	addModule(modules);
+
+	const flow = function(text, time = 60, hasDashline) {
+	  let dashline = hasDashline ? "<<dashline>>" : "";
+	  new Wikifier(null, `<<append #contentMsg transition>><<timed ${time}ms>>${text}${dashline}<</timed>><</append>>`);
+	  setTimeout(() => {
+	    msg_end.scrollIntoView();
+	  }, time);
+	  msg_end.scrollIntoView();
+	};
+	const clearComment = function(text) {
+	  return text.replace(/<!--[\s\S]*?-->/g, "").replace(/\/\*[\s\S]*?\*\//g, "");
+	};
+	const converTxt = function(text) {
+	  const trans = function(t) {
+	    let script = false;
+	    t = clearComment(t);
+	    if (t.includes("<fr>")) {
+	      t = t.replace("<fr>", "<br>");
+	    }
+	    if (t.includes("<script") && !t.includes("/script") || t.includes("<<run") && !t.includes(">>")) {
+	      script = true;
+	    } else if (script && t.has("/script", ">>")) {
+	      script = false;
+	    } else if (script) ; else {
+	      if (!t.match(/<<if|<<select|<<case|<<\/|<<switch|<<else|<<run|<script|<br>/)) {
+	        t += "<br>";
+	      }
+	    }
+	    return t;
+	  };
+	  if (typeof text === "string" && !text.includes("\n")) {
+	    return trans(text);
+	  } else if (typeof text === "string") {
+	    text = text.split("\n");
+	  }
+	  const txt = [];
+	  for (let i = 0; i < text.length; i++) {
+	    txt[i] = trans(text[i]);
+	  }
+	  return txt.join("");
+	};
+	const setMsg = function(msg, add) {
+	  if (!S.msg)
+	    S.msg = [];
+	  if (add) {
+	    if (!S.msg.length)
+	      S.msg[0] = "";
+	    S.msg[S.msg.length - 1] += msg;
+	  } else if (msg.includes("<fr>")) {
+	    S.msg = S.msg.concat(msg.split("<fr>"));
+	  } else {
+	    S.msg.push(msg);
+	  }
+	};
+	const resetMsg = function() {
+	  S.msg = [];
+	  T.msgId = 0;
+	  T.noMsg = 0;
+	};
+	const errorView = function(text) {
+	  return `<div class='error-view'><span class='error'>${text}</span></div>`;
+	};
+
+	const _Dialogs = class {
+	  constructor(title, exit = S.defaultExit || "MainLoop", next = S.defaultNext || "Next Step") {
+	    let raw;
+	    if (!Story.has(title)) {
+	      slog("error", "Dialogs: the story is not found:", title);
+	      raw = `<div id='error-view'>Dialogs: the story is not found:${title}</div>`;
+	    } else {
+	      raw = scEra.getPsg(title).split("\n");
+	    }
+	    this.logs = [];
+	    this.option = {};
+	    this.title = title;
+	    this.exit = exit;
+	    this.next = next;
+	    this.init(raw);
+	    if (Config.debug)
+	      console.log(this.logs);
+	  }
+	  init(raw) {
+	    let config, text = [];
+	    let fr;
+	    raw.forEach((line) => {
+	      if (line[0] === "#") {
+	        config = JSON.parse(line.replace("#:", "")) || {};
+	      } else if (line.match(/^\/\*(.+)\*\/$/)) ; else {
+	        if (line.has("<fr>")) {
+	          fr = true;
+	          line.replace("<fr>", "<br>");
+	        }
+	        text.push(line);
+	      }
+	      if (fr || raw[raw.length - 1] === line) {
+	        fr = false;
+	        this.logs.push({ text, config });
+	        config = {};
+	        text = [];
+	      }
+	    });
+	    this.len = this.logs.length;
+	  }
+	  static set(obj) {
+	    const { tp, id, nm, ch, exit = S.defaultExit, next = S.defaultNext } = obj;
+	    if (!tp || !nm)
+	      return;
+	    V.event = {
+	      type: tp,
+	      eid: id,
+	      name: nm,
+	      ch,
+	      ep: 0,
+	      sp: 0,
+	      lastPhase: 0,
+	      lastSelect: 0,
+	      fullTitle: "",
+	      exit,
+	      next
+	    };
+	    let title = this.combineTitle(V.event);
+	    V.event.fullTitle = title;
+	    if (!Story.has(title)) {
+	      new Error(`[error] ${now()} | Dialogs.set: the story is not found:` + title);
+	      return;
+	    }
+	    if (Config.debug)
+	      console.log("Dialogs.set", V.event, T.dialogBefore);
+	    $(document).trigger("dialog:set", V.event);
+	  }
+	  static combineTitle({ eid, type, name, ch }) {
+	    let title = `${type}_${name}`;
+	    if (eid) {
+	      title = `${type}_${eid}_${name}`;
+	    }
+	    if (ch) {
+	      title += `_${ch}`;
+	    }
+	    return title;
+	  }
+	  static before(_title) {
+	    let title = _title || V.event.fullTitle;
+	    T.dialogBefore = "";
+	    if (Story.has(title + "::Before")) {
+	      T.dialogBefore = title + "::Before";
+	      new Wikifier(null, scEra.getPsg(T.dialogBefore));
+	    }
+	    setTimeout(() => {
+	      new Wikifier(null, `<<goto 'DialogMain'>>`);
+	    }, 100);
+	  }
+	  static end(exit) {
+	    let title = V.event.fullTitle;
+	    T.dialogAfter = "";
+	    if (Story.has(title + "::After")) {
+	      T.dialogEnd = title + "::After";
+	      new Wikifier(null, scEra.getPsg(T.dialogAfter));
+	    }
+	    setTimeout(() => {
+	      new Wikifier(null, `<<goto '${exit}'>>`);
+	      this.config = {};
+	      V.event = {};
+	      this.msg = null;
+	    }, 100);
+	  }
+	  static start() {
+	    const e = V.event;
+	    let title = e.fullTitle;
+	    if (e.ep) {
+	      title += `_ep${e.ep}`;
+	      _Dialogs.record("ep", `ep${e.ep}`);
+	    }
+	    if (e.sp) {
+	      title += `:sp${e.sp}`;
+	      _Dialogs.record("sp", `sp${e.sp}`);
+	    }
+	    if (Config.debug)
+	      console.log("InitScene", title);
+	    this.msg = new _Dialogs(title, e.exit, e.next);
+	    T.eventTitle = title;
+	    if (this.config.jump) {
+	      T.msgId = this.config.jump;
+	    } else {
+	      T.msgId = 0;
+	    }
+	    this.config = {};
+	    const log = this.msg.logs[T.msgId];
+	    if (!log)
+	      return "";
+	    this.wiki(log, T.msgId);
+	  }
+	  static wiki(dialog, id) {
+	    if (!dialog) {
+	      let msg = `Error on wikify the dialog: the dialog is undefined or null:${this.msg.title},${id}`;
+	      slog("warn", msg, dialog, this.msg);
+	      return;
+	    }
+	    let config = dialog.config || {};
+	    let txt = converTxt(dialog.text);
+	    this.history.push(txt);
+	    const { type = "", code = "" } = config;
+	    V.event.next = this.nextButton(type);
+	    if (id === this.msg.len - 1) {
+	      this.config = config;
+	    }
+	    flow(txt);
+	    if (code && V.mode !== "history") {
+	      setTimeout(() => {
+	        new Wikifier(null, code);
+	      }, 100);
+	    }
+	  }
+	  static nextButton(type) {
+	    const select = new SelectCase();
+	    select.else("Next").case("return", "Back").case("jump", "End").case(["endPhase", "endEvent", "end"], "Continue");
+	    return select.has(type);
+	  }
+	  static trigger() {
+	    $("#contentMsg").on("click", function() {
+	      _Dialogs.next();
+	    });
+	    $("dialog").on("MsgEnd", function() {
+	      _Dialogs.nextScene();
+	    });
+	    $("dialog").trigger("start", [T.eventTitle, V.event, this.msg]);
+	  }
+	  static next() {
+	    if (T.selectwait) {
+	      return;
+	    }
+	    if (T.afterselect && T.msgId < this.msg.len - 1) {
+	      delete T.afterselect;
+	      return;
+	    }
+	    T.msgId++;
+	    let dialog = this.msg.logs[T.msgId];
+	    if (T.msgId < this.msg.len) {
+	      this.wiki(dialog, T.msgId);
+	    } else {
+	      $("dialog").trigger("MsgEnd");
+	    }
+	  }
+	  static nextScene() {
+	    const e = V.event;
+	    const config = this.config;
+	    const { type = "end", exit = this.msg.exit, exitButton = this.msg.next } = config;
+	    console.log("nextScene", type, config, e, V.selectId);
+	    switch (type) {
+	      case "return":
+	        this.return(config);
+	        break;
+	      case "jump":
+	        this.jump(config);
+	        break;
+	      case "endPhase":
+	        this.endPhase(config);
+	        break;
+	      case "selectEnd":
+	        e.lastId = V.selectId;
+	        e.sp = V.selectId;
+	        this.start();
+	        break;
+	      default:
+	        if (T.msgId <= this.msg.len) {
+	          e.next = exitButton;
+	          V.mode = "normal";
+	        } else {
+	          this.end(exit);
+	        }
+	    }
+	  }
+	  static return(config) {
+	    const e = V.event;
+	    const { phase } = config;
+	    if (phase)
+	      T.msgId = phase;
+	    e.sp = 0;
+	    e.lastId = V.selectId;
+	    V.selectId = 0;
+	    this.start();
+	  }
+	  static jump(config) {
+	    const e = V.event;
+	    const setList = ["name", "eid", "ch", "ep"];
+	    if (config.target) {
+	      e.ep = 0;
+	      e.sp = 0;
+	    }
+	    setList.forEach((key) => {
+	      if (config[key])
+	        e[key] = config[key];
+	    });
+	    if (config.phase) {
+	      this.config.jump = config.phase;
+	    }
+	    setTimeout(() => {
+	      if (config.target && !e.fullTitle.includes(config.target)) {
+	        this.before(config.target);
+	      } else {
+	        e.fullTitle = this.combineTitle(e);
+	        this.start();
+	      }
+	    }, 100);
+	  }
+	  static endPhase(config) {
+	    const e = V.event;
+	    const setList = ["name", "eid", "ch", "ep", "sp"];
+	    let setflag;
+	    setList.forEach((key) => {
+	      if (config[key]) {
+	        e[key] = config[key];
+	        setflag = true;
+	      }
+	    });
+	    if (!setflag) {
+	      e.ep++;
+	    }
+	    T.msgId = 0;
+	    e.lastSelect = V.selectId;
+	    V.selectId = 0;
+	    if (!config.sp)
+	      e.sp = 0;
+	    this.start();
+	  }
+	  static record(char, point) {
+	    const { type, id, ep } = V.event;
+	    let now2 = point;
+	    if (char === "sp" && ep) {
+	      now2 = `ep${ep}:` + point;
+	    }
+	    let memory = setPath(V, `memory.${type}.${id}`);
+	    if (!memory || !memory[point]) {
+	      setPath(V, `memory.${type}.${id}.${point}`, []);
+	      memory = setPath(V, `memory.${type}.${id}`);
+	    }
+	    if (!memory[point].includes(now2)) {
+	      memory[point].push(now2);
+	    }
+	  }
+	  static clear(step) {
+	    let msg = $("#contentMsg").html();
+	    msg = msg.split("<br></span></span>");
+	    let last = msg.pop();
+	    if (msg.length > step) {
+	      msg = msg.slice(0, msg.length - step);
+	      console.log(msg, last);
+	      $("#contentMsg").html(msg.join("<br></span></span>") + last);
+	    } else {
+	      $("#contentMsg").html("");
+	    }
+	    this.next();
+	  }
+	};
+	let Dialogs = _Dialogs;
+	Dialogs.config = {};
+	Dialogs.history = [];
+	Dialogs.history = [];
+	Dialogs.config = {};
+
+	function InitDialogMain() {
+	  let html = `
+   <dialog class='hidden'> you can't see me .</dialog>
+
+      
+
+   <div id='content' class='content'>
+      <div id='contentMsg'>
+      </div>
+
+   <div id="msg_end" style="height:0px; overflow:hidden"></div>
+
+   </div>
+
+
+   <script>
+
+   Dialogs.start();
+
+   Dialogs.trigger();
+
+   <\/script>
+
+   `;
+	  scEra.newPsg("DialogMain", html);
+	  $(document).on("dialog:set", function(event, data) {
+	    console.log(event, data);
+	    Dialogs.before();
+	  });
+	}
+
+	const module$1 = {
+	  name: "Dialogs",
+	  des: "A flow type dialog system.",
+	  version: "1.0.0",
+	  classObj: {
+	    Dialogs
+	  },
+	  func: {
+	    Init: {
+	      InitDialogMain
+	    },
+	    P: {
+	      flow,
+	      txt: converTxt,
+	      msg: setMsg,
+	      error: errorView,
+	      resetMsg
+	    }
+	  },
+	  Init: ["InitDialogMain"]
+	};
+	addModule(module$1);
+
+	const _Kojo = class {
+	  static set(id, color) {
+	    let data = _Kojo.data;
+	    if (!data[id])
+	      data[id] = new _Kojo(id, color);
+	    return data[id];
+	  }
+	  static get(cid, type) {
+	    if (C[cid].kojo !== cid)
+	      cid = C[cid].kojo;
+	    let data = _Kojo.data[cid];
+	    if (!data)
+	      return;
+	    return type ? data[type] : data;
+	  }
+	  static title(cid, type, id, dif = "") {
+	    if (["Before", "After", "Cancel", "Keep", "Failed", "Force"].includes(dif)) {
+	      dif = ":" + dif;
+	    } else if (dif) {
+	      dif = "_" + dif;
+	    }
+	    if (C[cid].kojo !== cid) {
+	      cid = C[cid].kojo;
+	    }
+	    if (id) {
+	      id = `_${id}`;
+	    }
+	    return `Kojo_${cid}_${type}${id}${dif}`;
+	  }
+	  static default(type, id, dif = "", check) {
+	    let head = "Msg_" + type;
+	    if (!type.has("Action")) {
+	      head = type;
+	    }
+	    if (id) {
+	      id = `_${id}`;
+	    }
+	    if (dif)
+	      dif = `:${dif}`;
+	    let title = `${head}${id}${dif}`;
+	    if (check) {
+	      return Story.has(title);
+	    }
+	    return Story.has(title) ? Story.get(title) : "";
+	  }
+	  static has(cid, { type, id = "", dif = "", check }) {
+	    let title = _Kojo.title(cid, type, id, dif);
+	    if (dif) {
+	      dif = `:${dif}`;
+	    }
+	    if (type == "custom") {
+	      title = `Msg_${id}${dif}`;
+	    }
+	    if (check && !Story.has(title)) {
+	      return this.default(type, id, dif, true);
+	    }
+	    return Story.has(title);
+	  }
+	  static put(cid, { type, id, dif, noTag }) {
+	    let title = _Kojo.title(cid, type, id, dif);
+	    if (dif) {
+	      dif = `:${dif}`;
+	    }
+	    if (type == "custom") {
+	      title = `Msg_${id}${dif}`;
+	    }
+	    let retext2 = "";
+	    T.noMsg = 0;
+	    if (Story.has(title)) {
+	      retext2 = Story.get(title);
+	    }
+	    if (cid == V.pc && type == "PCAction" && !V.system.showPCKojo) {
+	      retext2 = "";
+	    }
+	    if (!retext2) {
+	      retext2 = this.default(type, id, dif) || "";
+	    }
+	    if (!retext2 || retext2.tags.has("noMsg")) {
+	      T.noMsg = 1;
+	      return "";
+	    }
+	    let txt2 = checkTxtWithCode(retext2.text);
+	    if (txt2.length > 1) {
+	      retext2 = retext2.text;
+	      let matcher = [`<<nameTag '${cid}'>>`, `<<nameTag "${cid}">>`];
+	      if (!retext2.has(matcher) && !noTag) {
+	        retext2 = `<<nameTag '${cid}'>>` + retext2;
+	      }
+	      if (cid == V.pc)
+	        T.noNameTag = 1;
+	      else
+	        T.noNameTag = 0;
+	      if (!noTag)
+	        retext2 += "<<dashline>>";
+	      return retext2;
+	    }
+	    T.noMsg = 1;
+	    return "";
+	  }
+	  constructor(id, color = "#22A0FC") {
+	    this.id = id;
+	    this.color = color;
+	    this.intro = [];
+	    this.schedule = [];
+	    this.preset = [];
+	    this.filter = () => {
+	      return 1;
+	    };
+	    this.action = [];
+	    this.event = [];
+	    this.home = "void";
+	    this.relation = {};
+	    this.counter = [];
+	  }
+	  Intro(str) {
+	    this.intro = str;
+	    return this;
+	  }
+	  Schedule(action = "stay", ...list) {
+	    const schedule = {
+	      location: list[0],
+	      weekday: list[1] || "all",
+	      starthour: list[2],
+	      endhour: list[3],
+	      stayhour: list[4] || list[3] - list[2],
+	      rate: list[5] || 80
+	    };
+	    this.schedule.push([action, schedule]);
+	    return this;
+	  }
+	  Filter(cond) {
+	    this.filter = cond;
+	    return this;
+	  }
+	  Action(obj) {
+	    this.action.push(obj);
+	    return this;
+	  }
+	  Event(obj) {
+	    this.event.push(obj);
+	    return this;
+	  }
+	  Home(str) {
+	    this.home = str;
+	    return this;
+	  }
+	  Relation(id, des, val) {
+	    this.relation[id] = [val, des];
+	    return this;
+	  }
+	  Counter(obj) {
+	    this.counter.push(obj);
+	    return this;
+	  }
+	  SleepTime(time) {
+	    this.sleeptime = time * 60;
+	    return this;
+	  }
+	  WakeupTime(time) {
+	    this.wakeuptime = time * 60;
+	    return this;
+	  }
+	  Preset(name, ...objs) {
+	    let p2;
+	    if (this.preset.length) {
+	      p2 = this.preset.find((p3) => p3[0] == name);
+	    }
+	    if (p2) {
+	      objs.forEach((o) => {
+	        const i2 = p2[1].findIndex((i3) => i3[0] == o[0]);
+	        if (i2 != -1) {
+	          p2[1].splice(i2, 1);
+	        }
+	      });
+	      p2[1].push(...objs);
+	    } else {
+	      this.preset.push([name, objs]);
+	    }
+	    return this;
+	  }
+	};
+	let Kojo = _Kojo;
+	Kojo.data = {};
+	const convertKojo = function(txt) {
+	  if (!txt.includes("<<=Kojo.put"))
+	    return txt;
+	  console.log("find kojo?");
+	  const match = txt.match(/<<=Kojo.put(.+?)>>/g);
+	  match.forEach((p) => {
+	    const t = p.match(/<<=Kojo.put\((.+?)\)>>/);
+	    const code = t[0].replace("<<=", "").replace(">>", "");
+	    console.log(code);
+	    txt = txt.replace(p, eval(code));
+	  });
+	  return txt;
+	};
+	const checkTxtWithCode = function(text) {
+	  const raw = text.replace(/\/\*(.+)\*\//g, "").split(/\n/);
+	  const condition = [];
+	  const retext = [];
+	  let count = 0;
+	  raw.forEach((txt2) => {
+	    if (txt2.match(/<<if(.+)>>/) || txt2.match(/<<else(.+)>>/) || txt2.match(/<<case(.+)>>/) || txt2.match(/switch/) || txt2.match(/<<else>>/) || txt2.match(/<<default>>/)) {
+	      let code2 = txt2.match(/<<(.+)>>/)[1];
+	      count++;
+	      condition[count] = code2;
+	    } else if (!count) {
+	      retext[1e3] += txt2;
+	    } else {
+	      if (retext[count] === void 0)
+	        retext[count] = "";
+	      retext[count] += txt2;
+	    }
+	  });
+	  if (condition.length === 0)
+	    return P.countText(text);
+	  let isSwitch, switchcond, code, result = "";
+	  condition.forEach((con, i) => {
+	    if (con.includes("switch")) {
+	      isSwitch = true;
+	      switchcond = `${con.replace(/switch/g, "")} ===`;
+	    }
+	    if (con.includes("if"))
+	      isSwitch = false;
+	    if (isSwitch && con.includes("case")) {
+	      code = `${switchcond} ${con.replace(/case/g, "")}`;
+	      if (eval(code)) {
+	        result += P.countText(retext[i]);
+	      }
+	      retext[i] = "";
+	    } else if (!isSwitch && con.includes("if")) {
+	      code = con.replace(/elseif/g, "").replace(/if/g, "").replace(/is/g, "==").replace(/isnot/g, "!=").replace(/lte/g, "<=").replace(/gte/g, ">=").replace(/lt/g, "<").replace(/gt/g, ">").replace(/and/g, "&&").replace(/or/g, "||").replace(/\$/g, "V.").replace(/_/g, "T.");
+	      if (eval(code)) {
+	        result += P.countText(retext[i]);
+	      }
+	      retext[i] = "";
+	    }
+	  });
+	  let txt = P.countText(retext.join(""));
+	  return result + txt;
+	};
+	const countText = function(text2) {
+	  text2 = P.clearComment(text2);
+	  const regExp = [
+	    /<script[\s\S]*?<\/script>/g,
+	    /<<run[\s\S]*?>>/g,
+	    /<<if(.+)>>/g,
+	    /<<else(.+)>>/g,
+	    /<<\/(.+)>>/g,
+	    /<<switch(.+)>>/g,
+	    /<<case(.+)>>/g,
+	    /<<select(.+)>>/g,
+	    /<<replace(.+)>>/g,
+	    /<<set(.+)>>/g,
+	    /<br>/g,
+	    /<<else>>/g,
+	    /<<default>>/g,
+	    /<fr>/g
+	  ];
+	  regExp.forEach((reg) => {
+	    text2 = text2.replace(reg, "");
+	  });
+	  if (Config.debug)
+	    console.log(text2);
+	  return text2.length;
+	};
+
+	const module = {
+	  name: "Kojo",
+	  version: "1.0.0",
+	  des: "A management system for character event, custom action, schedule, etc.",
+	  database: Kojo.data,
+	  classObj: {
+	    Kojo
+	  },
+	  func: {
+	    P: {
+	      convertKojo,
+	      checkTxtWithCode,
+	      countText
+	    }
+	  },
+	  dependencies: ["Dialog"]
+	};
+	addModule(module);
 
 	slog(
 	  "log",

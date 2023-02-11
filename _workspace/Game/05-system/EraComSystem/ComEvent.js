@@ -66,7 +66,7 @@ if (window.Com) {
 			const { id, time } = com;
 			let name = "";
 
-			if (typeof com.name === "function") name = com.name();
+			if (com.alterName) name = com.alterName();
 			else name = com.name;
 
 			let txt = "";

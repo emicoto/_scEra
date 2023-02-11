@@ -1,7 +1,7 @@
 ;(function (exports) {
 	'use strict';
 
-	var __async$1 = (__this, __arguments, generator) => {
+	var __async$2 = (__this, __arguments, generator) => {
 	  return new Promise((resolve, reject) => {
 	    var fulfilled = (value) => {
 	      try {
@@ -35,14 +35,14 @@
 	  return true;
 	}
 	function getJson(path) {
-	  return __async$1(this, null, function* () {
+	  return __async$2(this, null, function* () {
 	    const files = [];
 	    const response = yield fetch(path);
 	    const filelist = yield response.json();
 	    slog("log", `Loading json files from ${path}:`, filelist);
 	    const folder = path.split("/").slice(0, -1).join("/");
-	    const requests = filelist.map((file) => __async$1(this, null, function* () {
-	      return new Promise((resolve, reject) => __async$1(this, null, function* () {
+	    const requests = filelist.map((file) => __async$2(this, null, function* () {
+	      return new Promise((resolve, reject) => __async$2(this, null, function* () {
 	        dlog("log", "trying to load json file: ", folder + "/" + file, "...");
 	        const response2 = yield fetch(folder + "/" + file);
 	        const json = yield response2.json();
@@ -258,7 +258,7 @@
 	  getJson: { value: getJson }
 	});
 
-	var __async = (__this, __arguments, generator) => {
+	var __async$1 = (__this, __arguments, generator) => {
 	  return new Promise((resolve, reject) => {
 	    var fulfilled = (value) => {
 	      try {
@@ -331,7 +331,7 @@
 	  applyClass: { get: () => scEra.applyClass }
 	});
 	function loadBasicDefinationJson() {
-	  return __async(this, null, function* () {
+	  return __async$1(this, null, function* () {
 	    const filesdata = yield getJson("./data/main.json").then((res) => {
 	      slog("log", "Main data file loaded:", res);
 	      return res;
@@ -376,7 +376,30 @@
 	  };
 	  V.event = {};
 	};
-	scEra.version = "0.9.0";
+
+	const version = "0.9.5";
+	scEra.version = version;
+
+	var __async = (__this, __arguments, generator) => {
+	  return new Promise((resolve, reject) => {
+	    var fulfilled = (value) => {
+	      try {
+	        step(generator.next(value));
+	      } catch (e) {
+	        reject(e);
+	      }
+	    };
+	    var rejected = (value) => {
+	      try {
+	        step(generator.throw(value));
+	      } catch (e) {
+	        reject(e);
+	      }
+	    };
+	    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+	    step((generator = generator.apply(__this, __arguments)).next());
+	  });
+	};
 	console.time("scEra startup");
 	$(document).one("sugarcube:startup", () => __async(void 0, null, function* () {
 	  yield loadBasicDefinationJson();
@@ -499,12 +522,14 @@
 	exports.inrange = inrange;
 	exports.isObject = isObject;
 	exports.isValid = isValid;
+	exports.loadBasicDefinationJson = loadBasicDefinationJson;
 	exports.maybe = maybe;
 	exports.random = random;
 	exports.roll = roll;
 	exports.setPath = setPath;
 	exports.sum = sum;
 	exports.swap = swap;
+	exports.version = version;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 
