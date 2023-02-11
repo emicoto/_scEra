@@ -42,6 +42,8 @@ S.gameVars = {
 	tc: "",
 };
 
+S.startyear = 4066;
+
 //time setting. year, month, day, weekday, time(minute)
 S.date = [4066, 3, 14, 1, 1120];
 
