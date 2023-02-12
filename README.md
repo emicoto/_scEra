@@ -76,8 +76,10 @@ those function can let you manage game data in easier way.
 
 
 ## Passage Editor
-scEra.newPsg(passageTitle, htmltext)  -- dymanic add new passage to 
+scEra.newPsg(passageTitle, htmltext)  -- dymanic add new passage to story
+
 scEra.setPsg(passageTitle, htmltext)  -- dymanic set exist passage to story. the html arg will replace all html text of the given passage.
+
 scEra.patchPsg(passageTitle, htmltext) -- dymanic patch html text to the last line of exist passage .
 
 ## Dialog System
