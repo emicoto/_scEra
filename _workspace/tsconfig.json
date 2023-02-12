@@ -1,0 +1,38 @@
+{
+   "compilerOptions": {
+      "target": "es2016",
+      "module": "commonjs",
+      "sourceMap": true,
+      "declaration": true,
+      "resolveJsonModule": true,
+      "composite": true,
+      "incremental": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports": true,
+      "allowJs": true,
+      "lib": [
+         "dom",
+         "esnext"
+      ],
+      "baseUrl": "./",
+      "paths": {
+         "@data": [
+            "./Code",
+            "./Game"
+         ],
+         "@src": [
+            "./Code"
+         ],
+      }
+   },
+   "exclude": [
+      "node_modules",
+      "gh-pages",
+      "./app",
+      ".twine",
+      "_workspace/_memo",
+      "_memo"
+   ],
+}

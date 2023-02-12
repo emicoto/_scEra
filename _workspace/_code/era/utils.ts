@@ -30,6 +30,12 @@ export function isValid(props) {
 	return true;
 }
 
+export async function loadJson(path) {
+	const response = await fetch(path);
+	const json = await response.json();
+	return json;
+}
+
 export async function getJson(path) {
 	const files: any[] = [];
 

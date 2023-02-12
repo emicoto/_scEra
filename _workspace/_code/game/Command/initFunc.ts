@@ -1,5 +1,7 @@
 import { Com } from "./com";
 declare var scEra: typeof window.scEra;
+declare var T: typeof window.T;
+declare function DefineMacros(name: string, func: Function): void;
 
 export function InitComList() {
 	const table: any = scEra.table.get("ComList") as any;
@@ -48,4 +50,35 @@ Com.listUp();
 <</if>>`;
 
 	scEra.newPsg("MainLoop:Before", html2);
+	addMacro();
+	DefineMacros("resetScene", Com.resetScene);
+}
+
+function addMacro() {
+	scEra.macro.add("com", {
+		tags: null,
+		handler: function () {
+			let { contents, args } = this.payload[0];
+
+			if (args.length === 0) {
+				return this.error("no command text specified");
+			}
+
+			if (!T.comcount) T.comcount = 1;
+			else T.comcount++;
+
+			let comId = args[2];
+
+			let output = `<div id='com_${T.comcount}' class='command'>
+        <<button '${args[0]}'>>
+        <<set _inputCom to '${comId}'>><<set $passtime to ${args[1]}>>
+        ${contents}
+        <</button>>
+        </div>`;
+
+			if (Config.debug) console.log(output);
+
+			jQuery(this.output).wiki(output);
+		},
+	});
 }

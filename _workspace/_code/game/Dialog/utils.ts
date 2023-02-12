@@ -3,7 +3,6 @@
 //--------------------------------------------------
 declare var msg_end: HTMLElement;
 declare var T: typeof window.T;
-declare var S: typeof window.S;
 
 //--------------------------------------------------
 //
@@ -81,20 +80,20 @@ export const converTxt = function (text) {
 };
 
 export const setMsg = function (msg: string, add?) {
-	if (!S.msg) S.msg = [];
+	if (!T.msg) T.msg = [];
 
 	if (add) {
-		if (!S.msg.length) S.msg[0] = "";
-		S.msg[S.msg.length - 1] += msg;
+		if (!T.msg.length) T.msg[0] = "";
+		T.msg[T.msg.length - 1] += msg;
 	} else if (msg.includes("<fr>")) {
-		S.msg = S.msg.concat(msg.split("<fr>"));
+		T.msg = T.msg.concat(msg.split("<fr>"));
 	} else {
-		S.msg.push(msg);
+		T.msg.push(msg);
 	}
 };
 
 export const resetMsg = function () {
-	S.msg = [];
+	T.msg = [];
 	T.msgId = 0;
 	T.noMsg = 0;
 };

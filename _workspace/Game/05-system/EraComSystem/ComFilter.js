@@ -13,7 +13,7 @@ if (window.Com) {
 		//write your code here to set the order of the command
 		return 0;
 	};
-	Com.globalCond = function (comId) {
+	Com.globalCheck = function (comId) {
 		//write your code here to check the condition of the command
 		return 1;
 	};

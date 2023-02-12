@@ -37,16 +37,11 @@ const Perflog = {};
 
 	// those properties are not defined at this point, so we just define them as empty objects
 	Object.defineProperties(window, {
-		tc: { get: () => State.variables.tc, set: (v) => (State.variables.tc = v) },
-		pc: {
-			get: () => State.variables.pc,
-			set: (v) => (State.variables.pc = v),
-		},
 		player: {
-			get: () => State.variables.chara[pc],
+			get: () => State.variables.player,
 		},
 		target: {
-			get: () => State.variables.chara[tc],
+			get: () => State.variables.target,
 		},
 	});
 

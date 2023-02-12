@@ -4,6 +4,7 @@ declare function slog(type: "log" | "warn" | "error", ...args: any[]): void;
 declare function dlog(type: "log" | "warn" | "error", ...args: any[]): void;
 declare var D: typeof window.D;
 declare var V: typeof window.V;
+declare var F: typeof window.F;
 declare var game: typeof window.game;
 //--------------------------------------
 //------------------------------------------------------------------------------
@@ -130,3 +131,46 @@ game.InitStory = function () {
 
 	V.event = {};
 };
+
+/* Define macro, passing arguments to function and store them in $args, preserving & restoring previous $args
+ */
+function definemacro(macroName, macroFunction, tags, skipArgs) {
+	scEra.macro.add(macroName, {
+		isWidget: true,
+		tags,
+		skipArgs,
+		handler() {
+			try {
+				const oldArgs = SugarCube.State.temporary.args;
+				SugarCube.State.temporary.args = this.args.slice();
+				macroFunction.apply(this, this.args);
+				if (typeof oldArgs === "undefined") {
+					delete SugarCube.State.temporary.args;
+				} else {
+					SugarCube.State.temporary.args = oldArgs;
+				}
+			} catch (e) {
+				slog("error", `Error while executing macro ${macroName}:`, e);
+			}
+		},
+	});
+}
+
+/**
+ * Define macro, where macroFunction returns text to wikify & print
+ */
+const DefineMacro = function (macroName, macroFunction, tags, skipArgs, maintainContext) {
+	definemacro(
+		macroName,
+		function () {
+			$(this.output).wiki(macroFunction.apply(maintainContext ? this : null, this.args));
+		},
+		tags,
+		skipArgs
+	);
+};
+
+Object.defineProperties(window, {
+	DefineMacros: { get: () => DefineMacro },
+	defineMacro: { get: () => definemacro },
+});

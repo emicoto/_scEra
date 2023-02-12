@@ -26,6 +26,7 @@ const modules = {
 		globaldata: true,
 	},
 	Init: ["InitActionList"],
+	dependencies: ["Dialogs"],
 };
 
 declare function addModule(modules): boolean;

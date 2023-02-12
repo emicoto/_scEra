@@ -29,6 +29,11 @@ S.gameFlags = {
 S.gameVars = {
 	//any variable here
 	location: {},
+	time: {
+		passed: 0,
+		total: 0,
+		now: 0,
+	},
 	chara: {},
 	player: {
 		name: "",

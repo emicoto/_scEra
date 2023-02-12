@@ -13,25 +13,48 @@ export interface Com {
 	order: () => number;
 	forceAble: boolean;
 	alterName: (...args) => string;
+	before: () => any;
 }
 
 //era classic command system
 export class Com {
 	public static data: Dict<Com>;
+
+	//-------------------------------------------------------------
+	//  static methods, those methos implamented in the main.ts
+	//-------------------------------------------------------------
+	static globalFilter: (id: string) => 1 | 0;
+	static resetScene: () => void;
+	static updateScene: () => void;
+	static Event: (selectCom: any, arg1?: number) => void;
+	static globalOrder: (id: any) => number;
+	static globalCheck: (id: any) => 0 | 1;
+	static showFilters: () => string;
+	static listUp: () => void;
+	static shownext: () => void;
+	static hide: () => void;
+	static reset: () => void;
+	static updateMenu: () => void;
+	static next: () => void;
+	static Check: (id: any) => void;
+	static After: () => string;
+	static endEvent: () => void;
+	static updateMovement: () => string;
 	//add new command
 	static new(key, obj) {
 		Com.data[obj.id] = new Com(key, obj);
 		return Com.data[obj.id];
 	}
 	//get command
-	static set(id, time) {
-		if (!Com.data[id]) {
+	static set(id: string, time: number) {
+		let data: Com = Com.data[id] as Com;
+		if (!data) {
 			return console.log(`[error] ${now()} | no such command`);
 		}
 		if (time) {
-			return Com.data[id].Set("time", time);
+			return data.Set("time", time);
 		} else {
-			return Com.data[id];
+			return data;
 		}
 	}
 

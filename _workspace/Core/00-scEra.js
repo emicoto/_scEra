@@ -34,6 +34,13 @@
 	  }
 	  return true;
 	}
+	function loadJson(path) {
+	  return __async$2(this, null, function* () {
+	    const response = yield fetch(path);
+	    const json = yield response.json();
+	    return json;
+	  });
+	}
 	function getJson(path) {
 	  return __async$2(this, null, function* () {
 	    const files = [];
@@ -376,6 +383,41 @@
 	  };
 	  V.event = {};
 	};
+	function definemacro(macroName, macroFunction, tags, skipArgs) {
+	  scEra.macro.add(macroName, {
+	    isWidget: true,
+	    tags,
+	    skipArgs,
+	    handler() {
+	      try {
+	        const oldArgs = SugarCube.State.temporary.args;
+	        SugarCube.State.temporary.args = this.args.slice();
+	        macroFunction.apply(this, this.args);
+	        if (typeof oldArgs === "undefined") {
+	          delete SugarCube.State.temporary.args;
+	        } else {
+	          SugarCube.State.temporary.args = oldArgs;
+	        }
+	      } catch (e) {
+	        slog("error", `Error while executing macro ${macroName}:`, e);
+	      }
+	    }
+	  });
+	}
+	const DefineMacro = function(macroName, macroFunction, tags, skipArgs, maintainContext) {
+	  definemacro(
+	    macroName,
+	    function() {
+	      $(this.output).wiki(macroFunction.apply(maintainContext ? this : null, this.args));
+	    },
+	    tags,
+	    skipArgs
+	  );
+	};
+	Object.defineProperties(window, {
+	  DefineMacros: { get: () => DefineMacro },
+	  defineMacro: { get: () => definemacro }
+	});
 
 	const version = "0.9.5";
 	scEra.version = version;
@@ -402,6 +444,15 @@
 	};
 	console.time("scEra startup");
 	$(document).one("sugarcube:startup", () => __async(void 0, null, function* () {
+	  let config = yield loadJson("config.json");
+	  if (config.loadorder) {
+	    scEra.loadorder = config.loadorder;
+	  }
+	  if (config.disable) {
+	    config.disable.forEach((modid) => {
+	      scEra.config.mod.disable[modid] = true;
+	    });
+	  }
 	  yield loadBasicDefinationJson();
 	  console.timeLog("scEra startup");
 	  scEra.status = "ready";
@@ -523,6 +574,7 @@
 	exports.isObject = isObject;
 	exports.isValid = isValid;
 	exports.loadBasicDefinationJson = loadBasicDefinationJson;
+	exports.loadJson = loadJson;
 	exports.maybe = maybe;
 	exports.random = random;
 	exports.roll = roll;

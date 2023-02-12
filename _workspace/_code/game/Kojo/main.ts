@@ -83,6 +83,7 @@ export class Kojo {
 	 * Kojo.get("kojo1", "intro") // return kojo intro
 	 */
 	static get(cid: string, type?: string) {
+		if (!cid) return;
 		//当角色口上与角色id不一致时
 		//when the cid is not the same as kojo id
 		if (C[cid].kojo !== cid) cid = C[cid].kojo;
@@ -101,6 +102,7 @@ export class Kojo {
 	 */
 
 	static title(cid, type, id, dif = "") {
+		if (!cid) return;
 		if (["Before", "After", "Cancel", "Keep", "Failed", "Force"].includes(dif)) {
 			dif = ":" + dif;
 		} else if (dif) {
@@ -159,6 +161,7 @@ export class Kojo {
 		if (type == "custom") {
 			title = `Msg_${id}${dif}`;
 		}
+		if (!title) return;
 		//if not found the title, then try to find the default one
 		if (check && !Story.has(title)) {
 			return this.default(type, id, dif, true);
@@ -181,6 +184,7 @@ export class Kojo {
 		if (type == "custom") {
 			title = `Msg_${id}${dif}`;
 		}
+		if (!title) return;
 
 		let retext: any = "";
 
@@ -266,6 +270,8 @@ export class Kojo {
 	 *
 	 */
 	Schedule(action: string = "stay", ...list: any) {
+		if (list.length == 1 && list[0] instanceof Array) list = list[0];
+		if (!list[0]) return this;
 		const schedule: schedule = {
 			location: list[0],
 			weekday: list[1] || "all",

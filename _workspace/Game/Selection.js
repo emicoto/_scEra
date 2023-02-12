@@ -136,4 +136,4 @@ Macro.add("selection", {
 Ui.removelink = function () {
 	$("#contentMsg a").remove();
 };
-DefineMacroS("removelink", Ui.removelink);
+DefineMacros("removelink", Ui.removelink);

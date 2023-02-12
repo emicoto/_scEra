@@ -17,7 +17,7 @@ const module = {
 			countText,
 		},
 	},
-	dependencies: ["Dialog"],
+	dependencies: ["Dialogs"],
 };
 
 declare function addModule(module): boolean;

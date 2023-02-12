@@ -1,5 +1,5 @@
 export * from "./com";
-
+export * from "./main";
 import { Com } from "./com";
 import { InitComList, InitComSystem } from "./initFunc";
 
@@ -21,6 +21,7 @@ const modules = {
 		globaldata: true,
 	},
 	Init: ["InitComList", "InitComSystem"],
+	dependencies: ["Dialogs", "Kojo"],
 };
 
 declare function addModule(modules): boolean;

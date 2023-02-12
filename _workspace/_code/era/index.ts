@@ -1,4 +1,5 @@
 import { applyClass, loadBasicDefinationJson } from "./main";
+import { loadJson } from "./utils";
 
 export * from "./utils";
 export * from "./version";
@@ -23,8 +24,17 @@ declare var V: typeof window.V;
 //
 //-------------------------------------------------------------
 console.time("scEra startup");
-
 $(document).one("sugarcube:startup", async () => {
+	let config = await loadJson("config.json");
+	if (config.loadorder) {
+		scEra.loadorder = config.loadorder;
+	}
+	if (config.disable) {
+		config.disable.forEach((modid) => {
+			scEra.config.mod.disable[modid] = true;
+		});
+	}
+
 	await loadBasicDefinationJson();
 	console.timeLog("scEra startup");
 

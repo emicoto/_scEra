@@ -3238,7 +3238,8 @@ ${ctx(use, parts, reverse)}<</switch>>
 	    globalFunc: {},
 	    globaldata: true
 	  },
-	  Init: ["InitActionList"]
+	  Init: ["InitActionList"],
+	  dependencies: ["Dialogs"]
 	};
 	addModule(modules$1);
 
@@ -3248,13 +3249,14 @@ ${ctx(use, parts, reverse)}<</switch>>
 	    return Com.data[obj.id];
 	  }
 	  static set(id, time) {
-	    if (!Com.data[id]) {
+	    let data = Com.data[id];
+	    if (!data) {
 	      return console.log(`[error] ${now()} | no such command`);
 	    }
 	    if (time) {
-	      return Com.data[id].Set("time", time);
+	      return data.Set("time", time);
 	    } else {
-	      return Com.data[id];
+	      return data;
 	    }
 	  }
 	  constructor(type, obj = {}) {
@@ -3321,6 +3323,211 @@ ${ctx(use, parts, reverse)}<</switch>>
 	}
 	Com.data = {};
 
+	Com.showFilters = function() {
+	  const general = clone(S.ComFilterGeneral);
+	  const train = clone(S.ComFilterTrain);
+	  const end = "<<=Com.listUp()>><</link>>";
+	  const generalink = [];
+	  const trainlink = [];
+	  general.forEach((k) => {
+	    generalink.push(`<<link '${k}'>><<set $currentFilter to '${k}'>>${end}`);
+	  });
+	  train.forEach((k) => {
+	    trainlink.push(`<<link '${k}'>><<set $currentFilter to '${k}'>>${end}`);
+	  });
+	  return `<<link '\u5168\u90E8'>><<set $currentFilter to 'all'>>${end} \uFF5C ${generalink.join(
+    ""
+  )}<<if $mode is 'train'>>${trainlink.join("")}<</if>>`;
+	};
+	Com.listUp = function() {
+	  const command = [];
+	  Object.values(Com.data).forEach((com) => {
+	    const { id, time } = com;
+	    let name = "";
+	    if (com.alterName)
+	      name = com.alterName();
+	    else
+	      name = com.name;
+	    let txt = "";
+	    if (com.filter() && Com.globalFilter(id)) {
+	      txt = `<<com '${name}' ${time} ${id}>><<run Com.Check('${id}')>><</com>>`;
+	    } else if (V.system.showAllCommand) {
+	      txt = `<div class='command unable'><<button '${name}'>><</button>></div>`;
+	    }
+	    command.push(txt);
+	  });
+	  if (command.length) {
+	    new Wikifier(null, `<<replace #commandzone>>${command.join("")}<</replace>>`);
+	  }
+	};
+	Com.shownext = function() {
+	  let html = `<<link 'Next'>><<run Com.next()>><</link>>`;
+	  new Wikifier(null, `<<replace #commandzone transition>>${html}<</replace>>`);
+	};
+	Com.hide = function() {
+	  new Wikifier(null, `<<replace #commandmenu>> <</replace>>`);
+	  new Wikifier(null, "<<replace #commandzone>> <</replace>>");
+	};
+	Com.reset = function() {
+	  T.comPhase = "reset";
+	  V.location.chara.forEach((cid) => {
+	    F.charaEvent(cid);
+	  });
+	  V.lastCom = V.selectCom;
+	  const clearlist = ["comCancel", "onselect", "comAble", "orderGoal", "force", "msgId"];
+	  clearlist.forEach((k) => {
+	    delete T[k];
+	  });
+	  delete T.msg;
+	  T.msgId = 0;
+	  T.comorder = 0;
+	  T.reason = "";
+	  T.order = "";
+	  V.selectCom = 0;
+	  Com.resetScene();
+	};
+	Com.updateMenu = function() {
+	  const list = [[true, "System", "SystemOption", ""]];
+	  let menu = [];
+	  list.forEach((a) => {
+	    if (a[0])
+	      menu.push(`<<link '[ ${a[1]} ]' '${a[2]}'>>${a[3]}<</link>>`);
+	  });
+	  const html = `<span class='filter'>Filter: ${Com.showFilters()}</span>\u3000\uFF5C\u3000${menu.join("")}`;
+	  new Wikifier(null, `<<replace #commandmenu>>${html}<</replace>>`);
+	};
+	Com.resetScene = function() {
+	  V.target = C[V.tc];
+	  V.player = C[V.pc];
+	  Com.updateScene();
+	  Com.listUp();
+	  Com.updateMenu();
+	  return "";
+	};
+	Com.next = function() {
+	  if (T.msgId < T.msg.length && T.msg[T.msgId].has("<<selection", "<<linkreplace") && !T.selectwait) {
+	    T.msg[T.msgId] += "<<unset _selectwait>><<set _onselect to 1>>";
+	    T.selectwait = 1;
+	  }
+	  if (T.comPhase == "before" && T.msgId >= T.msg.length && !T.onselect && !T.selectwait) {
+	    Com.Event(V.selectCom, 1);
+	  } else {
+	    if (T.msgId < T.msg.length && !T.onselect) {
+	      P.flow(T.msg[T.msgId]);
+	      T.msgId++;
+	    }
+	  }
+	};
+	Com.Check = function(id) {
+	  const com = Com.data[id];
+	  T.comorder = 0;
+	  T.reason = "";
+	  T.order = "";
+	  T.orderGoal = Com.globalOrder(id) + com.order();
+	  T.comAble = Com.globalCheck(id) && com.check();
+	  T.msgId = 0;
+	  T.comPhase = "before";
+	  let txt = "";
+	  let c;
+	  if (Story.has(`Kojo_${V.tc}_Com`)) {
+	    new Wikifier("#hidden", Story.get(`Kojo_${V.tc}_Com`).text);
+	  }
+	  Com.hide();
+	  Com.shownext();
+	  if (V.system.showOrder && T.order) {
+	    P.msg(`\u914D\u5408\u5EA6\u68C0\u6D4B\uFF1A${T.order}\uFF1D${T.comorder}/${T.orderGoal}<br><<dashline>>`);
+	  }
+	  P.msg(
+	    `${Story.get("Command::Before").text}<<run Com.next()>><<if _noMsg>><<unset _noMsg>><<else>><<dashline>><</if>>`
+	  );
+	  let type = "Com", dif = "Before";
+	  if (Kojo.has(V.pc, { type, id, dif, check: 1 })) {
+	    txt = Kojo.put(V.pc, { type, id, dif });
+	    P.msg(txt);
+	    c = 1;
+	  }
+	  if (Kojo.has(V.tc, { type, id, dif })) {
+	    txt = Kojo.put(V.tc, { type, id, dif });
+	    P.msg(txt);
+	    c = 1;
+	  }
+	  if (com == null ? void 0 : com.before)
+	    com.before();
+	  if (!Story.has(`Com_${id}`)) {
+	    P.flow("\u7F3A\u4E4F\u4E8B\u4EF6\u6587\u672C", 30, 1);
+	    Com.resetScene();
+	  } else if (c) {
+	    Com.shownext();
+	    Com.next();
+	  } else {
+	    Com.Event(id);
+	  }
+	};
+	Com.Event = function(id, next) {
+	  const com = Com.data[id];
+	  const resetHtml = `<<run Com.reset()>>`;
+	  let txt = "", type = "Com";
+	  T.msg = [];
+	  T.msgId = 0;
+	  T.comPhase = "event";
+	  T.lastCom = T.selectCom;
+	  T.selectCom = id;
+	  $("#contentMsg a").remove();
+	  if (T.comCancel) {
+	    P.msg(resetHtml);
+	  } else if (T.comAble) {
+	    if (T.orderGoal === 0 || V.system.debug || T.orderGoal > 0 && T.comorder >= T.orderGoal || (com == null ? void 0 : com.forceAble) && T.comorder + S.ignoreOrder >= T.orderGoal) {
+	      T.passtime = com.time;
+	      if (T.comorder < T.orderGoal && !V.system.debug) {
+	        T.msg.push(
+	          `\u914D\u5408\u5EA6\u4E0D\u8DB3\uFF1A${T.order}\uFF1D${T.comorder}/${T.orderGoal}<br>${(com == null ? void 0 : com.forceAble) ? "<<run Com.next()>>" : ""}<br>`
+	        );
+	        if (Kojo.has(V.pc, { type, id, dif: "Force", check: 1 })) {
+	          txt = Kojo.put(V.pc, { type, id, dif: "Force" });
+	        }
+	        if (txt.includes("Kojo.put") === false && Kojo.has(V.tc, { type, id, dif: "Force" })) {
+	          txt += Kojo.put(V.tc, { type, id, dif: "Force" });
+	        }
+	        T.force = true;
+	      } else {
+	        txt = Kojo.put(V.pc, { type, id });
+	        if (txt.includes("Kojo.put") === false && Kojo.has(V.tc, { type, id })) {
+	          txt += Kojo.put(V.tc, { type, id });
+	        }
+	      }
+	      if (txt.includes("Kojo.put"))
+	        txt = F.convertKojo(txt);
+	      P.msg(txt);
+	      P.msg(`<<run Com.data['${id}'].source(); F.passtime(T.passtime); Com.After()>>`, 1);
+	      if (Kojo.has(V.pc, { type, id, dif: "After", check: 1 })) {
+	        txt = `<br><<set _comPhase to 'after'>>` + Kojo.put(V.pc, { type, id, dif: "After" });
+	        if (txt.includes("Kojo.put"))
+	          txt = F.convertKojo(txt);
+	        P.msg(txt);
+	      }
+	      if (txt.includes("Kojo.put") === false && Kojo.has(V.tc, { type, id, dif: "After" })) {
+	        P.msg(Kojo.put(V.tc, { type, id, dif: "After" }));
+	      }
+	      P.msg("<<run Com.endEvent()>>", 1);
+	    } else {
+	      P.msg(`\u914D\u5408\u5EA6\u4E0D\u8DB3\uFF1A${T.order}\uFF1D${T.comorder}/${T.orderGoal}<br><<run F.passtime(1); >>`);
+	      P.msg(resetHtml, 1);
+	    }
+	  } else {
+	    if (Kojo.has(V.pc, { type, id, dif: "Cancel", check: 1 })) {
+	      txt = Kojo.put(V.pc, { type, id, dif: "Cancel" });
+	      P.msg(txt);
+	    } else
+	      P.msg(
+	        `\u300B\u6761\u4EF6\u4E0D\u8DB3\u65E0\u6CD5\u6267\u884C\u6307\u4EE4\uFF1A${typeof com.name === "function" ? com.alterName() : com.name}<br>\u539F\u56E0\uFF1A${T.reason}<br>`
+	      );
+	    P.msg("<<run F.passtime(1)>>", 1);
+	    P.msg(resetHtml, 1);
+	  }
+	  Com.shownext();
+	  Com.next();
+	};
+
 	function InitComList() {
 	  const table = scEra.table.get("ComList");
 	  for (let key of Object.keys(table)) {
@@ -3364,6 +3571,33 @@ Com.listUp();
 <<set $selectCom = ''>>
 <</if>>`;
 	  scEra.newPsg("MainLoop:Before", html2);
+	  addMacro();
+	  DefineMacros("resetScene", Com.resetScene);
+	}
+	function addMacro() {
+	  scEra.macro.add("com", {
+	    tags: null,
+	    handler: function() {
+	      let { contents, args } = this.payload[0];
+	      if (args.length === 0) {
+	        return this.error("no command text specified");
+	      }
+	      if (!T.comcount)
+	        T.comcount = 1;
+	      else
+	        T.comcount++;
+	      let comId = args[2];
+	      let output = `<div id='com_${T.comcount}' class='command'>
+        <<button '${args[0]}'>>
+        <<set _inputCom to '${comId}'>><<set $passtime to ${args[1]}>>
+        ${contents}
+        <</button>>
+        </div>`;
+	      if (Config.debug)
+	        console.log(output);
+	      jQuery(this.output).wiki(output);
+	    }
+	  });
 	}
 
 	const modules = {
@@ -3383,7 +3617,8 @@ Com.listUp();
 	  config: {
 	    globaldata: true
 	  },
-	  Init: ["InitComList", "InitComSystem"]
+	  Init: ["InitComList", "InitComSystem"],
+	  dependencies: ["Dialogs", "Kojo"]
 	};
 	addModule(modules);
 
@@ -3428,20 +3663,20 @@ Com.listUp();
 	  return txt.join("");
 	};
 	const setMsg = function(msg, add) {
-	  if (!S.msg)
-	    S.msg = [];
+	  if (!T.msg)
+	    T.msg = [];
 	  if (add) {
-	    if (!S.msg.length)
-	      S.msg[0] = "";
-	    S.msg[S.msg.length - 1] += msg;
+	    if (!T.msg.length)
+	      T.msg[0] = "";
+	    T.msg[T.msg.length - 1] += msg;
 	  } else if (msg.includes("<fr>")) {
-	    S.msg = S.msg.concat(msg.split("<fr>"));
+	    T.msg = T.msg.concat(msg.split("<fr>"));
 	  } else {
-	    S.msg.push(msg);
+	    T.msg.push(msg);
 	  }
 	};
 	const resetMsg = function() {
-	  S.msg = [];
+	  T.msg = [];
 	  T.msgId = 0;
 	  T.noMsg = 0;
 	};
@@ -3807,6 +4042,8 @@ Com.listUp();
 	    return data[id];
 	  }
 	  static get(cid, type) {
+	    if (!cid)
+	      return;
 	    if (C[cid].kojo !== cid)
 	      cid = C[cid].kojo;
 	    let data = _Kojo.data[cid];
@@ -3815,6 +4052,8 @@ Com.listUp();
 	    return type ? data[type] : data;
 	  }
 	  static title(cid, type, id, dif = "") {
+	    if (!cid)
+	      return;
 	    if (["Before", "After", "Cancel", "Keep", "Failed", "Force"].includes(dif)) {
 	      dif = ":" + dif;
 	    } else if (dif) {
@@ -3852,6 +4091,8 @@ Com.listUp();
 	    if (type == "custom") {
 	      title = `Msg_${id}${dif}`;
 	    }
+	    if (!title)
+	      return;
 	    if (check && !Story.has(title)) {
 	      return this.default(type, id, dif, true);
 	    }
@@ -3865,6 +4106,8 @@ Com.listUp();
 	    if (type == "custom") {
 	      title = `Msg_${id}${dif}`;
 	    }
+	    if (!title)
+	      return;
 	    let retext2 = "";
 	    T.noMsg = 0;
 	    if (Story.has(title)) {
@@ -3918,6 +4161,10 @@ Com.listUp();
 	    return this;
 	  }
 	  Schedule(action = "stay", ...list) {
+	    if (list.length == 1 && list[0] instanceof Array)
+	      list = list[0];
+	    if (!list[0])
+	      return this;
 	    const schedule = {
 	      location: list[0],
 	      weekday: list[1] || "all",
@@ -3980,8 +4227,8 @@ Com.listUp();
 	    return this;
 	  }
 	};
-	let Kojo = _Kojo;
-	Kojo.data = {};
+	let Kojo$1 = _Kojo;
+	Kojo$1.data = {};
 	const convertKojo = function(txt) {
 	  if (!txt.includes("<<=Kojo.put"))
 	    return txt;
@@ -4070,9 +4317,9 @@ Com.listUp();
 	  name: "Kojo",
 	  version: "1.0.0",
 	  des: "A management system for character event, custom action, schedule, etc.",
-	  database: Kojo.data,
+	  database: Kojo$1.data,
 	  classObj: {
-	    Kojo
+	    Kojo: Kojo$1
 	  },
 	  func: {
 	    P: {
@@ -4081,7 +4328,7 @@ Com.listUp();
 	      countText
 	    }
 	  },
-	  dependencies: ["Dialog"]
+	  dependencies: ["Dialogs"]
 	};
 	addModule(module);
 

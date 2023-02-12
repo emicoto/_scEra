@@ -37,6 +37,7 @@ declare global {
 		target;
 		Using;
 		SugarCube;
+		Kojo;
 	}
 
 	interface String {
