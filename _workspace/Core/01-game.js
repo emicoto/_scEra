@@ -914,6 +914,7 @@
 	    worldMap: worldMap$1
 	  },
 	  classObj: {
+	    GameMap,
 	    Boards,
 	    Spots
 	  },

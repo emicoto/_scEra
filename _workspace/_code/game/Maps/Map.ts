@@ -5,7 +5,7 @@ import { Dict, maptype, maptags, rarity, dirside, spotType, tileType, boardtype,
 //  declare zone
 //-----------------------------------------------------
 declare var worldMap: typeof window.worldMap;
-declare var config: typeof window.config;
+declare var Config: typeof window.Config;
 declare var S: typeof window.S;
 declare var D: typeof window.D;
 

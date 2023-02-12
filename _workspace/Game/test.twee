@@ -1,14 +1,17 @@
 
-:: PassageHeader
-<<script>>
-if(passage()=='Start')
-$('#story-header').hide();
-else
-$('#story-header').show();
-<</script>>
+:: DialogTest
+<<set _count to 0>>
+ready to dialog.
+<span id='counter'>_count</span>
 
-看看<br>
-
+<<repeat 1s>>
+   <<run _count++>>
+   <<replace #counter>>_count<</replace>>
+   <<if _count is 5>>
+      <<run Dialogs.set({tp:'Test',nm:'Chapter'})>>
+      <<stop>>
+   <</if>>
+<</repeat>>
 
 :: TestStart
 <div id='test'></div>
@@ -57,6 +60,8 @@ $('#story-header').show();
 
 <<link 'back' 'Start'>>
 <</link>>
+<<link 'switch' $passage>>
+<</link>>
 
 :: Test:EN
 a test passage.<br>
@@ -80,19 +85,7 @@ see if it can be displayed normally.<br>
 <<test >>
 
 :: PassageFooter
-<<test2>>
 
-:: Widget[widget]
-
-<<widget "test">>
-   <<if $mode is "event">>
-      <<set $test to "event">>
-      <<script>>slog('log', 'test in event', V.test, T.runningTitle)<</script>>
-   <<else>>
-      <<set $test to "normal">>
-      <<script>>slog('log', 'test in normal', V.test, T.runningTitle)<</script>>
-   <</if>>
-<</widget>>
 
 <<widget "test2">>
    a general widget.<br>

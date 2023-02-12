@@ -1,0 +1,63 @@
+:: PassageHeader
+<<run
+    $passage = passage(); $tags = tags($passage);
+    if($tags.has('title','nobar')){
+        UIBar.stow();
+        UIBar.hide();
+    }
+    else if(UIBar.isHidden()){
+        UIBar.unstow();
+        UIBar.show();
+    }
+    if($tags.has('title','nobar')){
+        $('#story-header').addClass('hidden')
+    }
+    else{
+       $('#story-header').removeClass('hidden') 
+    }
+>>
+
+
+这里是header. 每个页面都会运行。<br>
+
+
+:: StoryCaption
+一个空白的模板。<br>
+你可以在这里添加你的故事简介。<br>
+<br>
+
+scEra beta 1.0.0<br>
+<a url='https://github.com/emicoto/_scEra'>github</a><br>
+<a url='https://afdian.net/a/lolidrop'>爱发电</a><br>
+
+/* 这里显示目前操作角色的信息 */
+
+
+<div id='random_tips'>
+</div>
+<div id='update_note'>
+</div>
+
+:: PassageFooter
+这里是footer。每个页面都会运行。<br>
+
+:: PassageReady
+<<run
+    _passageready = true;
+    if($lastsession !== $passage)
+      $lastsession = $passage;
+>>
+这里会在读取文本前执行。
+因为是纯代码区，这里的文字并不会显示在页面上。
+
+
+:: PassageDone
+这里是会在渲染结束时执行。
+因为是纯代码区，这里的文字并不会显示在页面上。
+
+:: StoryHeader
+顶部的标题栏。<br>
+<<test2>>
+
+:: StoryFooter
+底部的菜单栏。

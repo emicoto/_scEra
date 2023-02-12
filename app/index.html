@@ -2270,7 +2270,7 @@ window.parseXml = function (xml, arrayTags) {
 	  defineMacro: { get: () => definemacro }
 	});
 
-	const version = "0.9.5";
+	const version = "1.0.0";
 	scEra.version = version;
 
 	var __async = (__this, __arguments, generator) => {
@@ -3361,6 +3361,7 @@ window.parseXml = function (xml, arrayTags) {
 	    worldMap: worldMap$1
 	  },
 	  classObj: {
+	    GameMap,
 	    Boards,
 	    Spots
 	  },
@@ -9270,7 +9271,240 @@ F.timeEffects = function (t, mode) {
 	//charas = F.getNoActiveChara()
 };
 /* twine-user-script #26: "condition.js" */
-/* twine-user-script #27: "Selection.js" */
+/* twine-user-script #27: "hover.js" */
+/* HoverTxt - Start */
+var HTIntervalID = 0;
+$(document).on(":passagerender", function (ev) {
+	UpdateHoverTxt(ev.content);
+});
+$(window).on("resize scroll", function (ev) {
+	clearInterval(HTIntervalID);
+	HTIntervalID = setInterval(UpdateHoverTxt, 300);
+});
+$("#ui-bar-toggle").on("click", function (ev) {
+	clearInterval(HTIntervalID);
+	HTIntervalID = setInterval(UpdateHoverTxt, 300);
+});
+/* Waits for passage to be fully rendered before doing anything. */
+function UpdateHoverTxt(Container) {
+	if (typeof Container === "undefined") {
+		Container = document;
+	}
+	if (Engine.isIdle()) {
+		clearInterval(HTIntervalID);
+		var i = 1, sum, positionInfo, element = Container.getElementById("hoverTxt" + i);
+		while (element !== null) {
+			positionInfo = element.getBoundingClientRect();  /* Refresh rect */
+			element.style.left = ((Math.round(positionInfo.width / 2) - 11) * -1) + "px";  // Center hoverTxt horizontally over icon.
+			element.style.top = (-1 * parseInt(positionInfo.height) - 3) + "px";  // Position bottom of hoverTxt just above the icon.
+			positionInfo = element.getBoundingClientRect();  /* Refresh rect */
+			sum = Math.round(positionInfo.top + positionInfo.height + 5);
+			if (sum > window.innerHeight) {  /* Make sure the text isn't outside the bottom of the screen. */
+				element.style.top = (parseInt(element.style.top) + window.innerHeight - sum) + "px";
+				positionInfo = element.getBoundingClientRect();  /* Refresh rect */
+			}
+			if (positionInfo.top < 5) {  /* Make sure the text isn't outside the top of the screen. */
+				element.style.top = (parseInt(element.style.top) - positionInfo.top + 5) + "px";
+			}
+			sum = Math.round(positionInfo.left + positionInfo.width + 26);
+			if (sum > window.innerWidth) {  /* Make sure the text isn't outside the right of the screen. */
+				element.style.left = (parseInt(element.style.left) + window.innerWidth - sum) + "px";
+				positionInfo = element.getBoundingClientRect();  /* Refresh rect */
+			}
+			if (positionInfo.left + window.pageXOffset < 10) {  /* Make sure the text isn't outside the left of the screen. */
+				element.style.left = (parseInt(element.style.left) - positionInfo.left - window.pageXOffset + 10) + "px";
+			}
+			element = document.getElementById("hoverTxt" + (++i));
+		}
+	} else {
+		clearInterval(HTIntervalID);
+		HTIntervalID = setInterval(UpdateHoverTxt, 300);
+	}
+}
+/* HoverTxt - End */
+/* twine-user-script #28: "mapeditor.js" */
+F.confirmNewmap = function () {
+	T.mapsizeX = parseInt(T.mapsizeX);
+	T.mapsizeY = parseInt(T.mapsizeY);
+
+	if (T.mapsizeX < 5 || T.mapsizeY < 5) {
+		alert("地图尺寸必须大于等于5");
+	} else if (T.mapsizeX > 42 || T.mapsizeY > 42) {
+		alert("地图尺寸必须小于42");
+	} else {
+		if (T.mapsizeX % 2 === 0) {
+			T.mapsizeX += 1;
+		}
+		if (T.mapsizeY % 2 === 0) {
+			T.mapsizeY += 1;
+		}
+		T.mapdata = F.newMap(T.mapsizeX, T.mapsizeY);
+		F.generateMapField(T.mapdata);
+		console.log(T.mapdata);
+	}
+};
+
+F.newMap = function (x, y) {
+	const grid = [];
+	for (let i = 0; i < x; i++) {
+		grid[i] = [];
+		for (let j = 0; j < y; j++) {
+			grid[i][j] = ".";
+		}
+	}
+	return grid;
+};
+//监控地图选择框，选择地图后，更新地图数据
+F.generateMapField = function (grid) {
+	$("#mapfield").html("");
+
+	for (let x = 0; x < grid.length; x++) {
+		for (let y = 0; y < grid[x].length; y++) {
+			if (!grid[x][y]) {
+				grid[x][y] = ".";
+			}
+			let ctx = grid[x][y];
+
+			$("#mapfield").append(
+				`<div class='mapcell${ctx !== "." ? " fillcell" : ""}' data-row='${x}' data-col='${y}'>${ctx}</div>`
+			);
+		}
+		$("#mapfield").append("<br>");
+	}
+
+	$(".mapcell").on("click", function () {
+		const grid = T.mapdata;
+		const pathmode = T.setStartPoint || T.setGoalPoint;
+
+		const row = $(this).data("row");
+		const col = $(this).data("col");
+
+		T.xpos = row;
+		T.ypos = col;
+
+		if (T.setStartPoint) {
+			T.startPoint = { x: row, y: col };
+			$("#startpos").html(`起点： X${row}, Y${col}"`);
+		} else if (T.setGoalPoint) {
+			T.goalPoint = { x: row, y: col };
+			$("#goalpos").html(`终点： X${row}, Y${col}"`);
+		}
+
+		if (!pathmode) {
+			if (T.destroymode) {
+				grid[row][col] = ".";
+			} else if (T.placemode) {
+				grid[row][col] = T.building;
+			} else if (grid[row][col] === ".") {
+				grid[row][col] = "road";
+			} else if (grid[row][col] === "road") {
+				grid[row][col] = ".";
+			}
+			$("#currentpos").html(
+				`当前位置： X${row - Math.floor(T.mapsizeX / 2)}, Y${
+					col - Math.floor(T.mapsizeY / 2)
+				} 绝对坐标： X${row}, Y${col}`
+			);
+		}
+
+		$(this).html(grid[row][col]);
+		$(this).removeClass("fillcell");
+		$(this).removeClass("pathcell");
+
+		if (pathmode) {
+			$(this).addClass("pathcell");
+		}
+		if (grid[row][col] !== ".") {
+			$(this).addClass("fillcell");
+		}
+	});
+};
+
+F.saveMapConfig = function () {
+	const direction = [
+		[0, 1, "E"],
+		[0, -1, "W"],
+		[1, 0, "S"],
+		[-1, 0, "N"],
+	];
+	let raw = GameMap.convertData(T.mapdata);
+	delete raw["."]; // remove empty space
+	delete raw["road"]; // remove road
+	let arr = [];
+
+	const checkRoad = (key, x, y) => {
+		let result = "";
+		direction.forEach(([dx, dy, dir]) => {
+			if (x + dx < 0 || y + dy < 0 || x + dx >= T.mapsizeX || y + dy >= T.mapsizeY) {
+			} else if (T.mapdata[x + dx][y + dy] == "road") {
+				result += dir;
+			}
+			console.log(key, "x", x + dx, "y", y + dy, dir);
+		});
+		return result;
+	};
+
+	//先排个序，保证从左到右，从上到下
+	let sorted = Object.keys(raw).sort((a, b) => {
+		let [ax, ay] = raw[a][0];
+		let [bx, by] = raw[b][0];
+		if (ay == by) {
+			return ax - bx;
+		} else {
+			return ay - by;
+		}
+	});
+
+	sorted.forEach((key) => {
+		let side = "",
+			x,
+			y;
+		if (raw[key].length == 1) {
+			x = raw[key][0][0];
+			y = raw[key][0][1];
+			side = checkRoad(key, x, y);
+
+			x = x - Math.floor(T.mapsizeX / 2);
+			y = y - Math.floor(T.mapsizeY / 2);
+			arr.push([key, x, y, side]);
+		} else {
+			raw[key].forEach(([x, y], i) => {
+				side = checkRoad(key, x, y);
+				x = x - Math.floor(T.mapsizeX / 2);
+				y = y - Math.floor(T.mapsizeY / 2);
+				arr.push([key, x, y, side]);
+			});
+		}
+	});
+
+	arr = JSON.stringify(arr);
+	//去掉开头和结尾的中括号
+	arr = arr.slice(1, -1);
+	//换行
+	arr = arr.split("],").join("],\n");
+
+	let data = `worldMap['${T.selectMap}'].Spots(\n${arr}\n)`;
+
+	download(data, T.selectMap, "txt");
+};
+
+F.showPathMap = function () {
+	const grid = T.mapdata;
+	const pos1 = T.startPoint;
+	const pos2 = T.goalPoint;
+	const path = F.findPath(grid, pos1, pos2);
+	console.log(path);
+	console.log(F.printPath(grid, path));
+
+	if (!path.length) return;
+
+	path.forEach(([x, y], i) => {
+		setTimeout(() => {
+			$(`.mapcell[data-row=${x}][data-col=${y}]`).addClass("pathcell");
+		}, i * 150);
+	});
+};
+/* twine-user-script #29: "Selection.js" */
 //------------------------------------------------------------
 //
 //  add selection macro
@@ -9410,7 +9644,7 @@ Ui.removelink = function () {
 	$("#contentMsg a").remove();
 };
 DefineMacros("removelink", Ui.removelink);
-/* twine-user-script #28: "startconfig.js" */
+/* twine-user-script #30: "startconfig.js" */
 game.version = "0.0.0";
 l10nStrings.errorTitle = game.version + " Error";
 console.log("Game Version:", game.version);
@@ -10102,10 +10336,207 @@ X5       ,玩私穴(触)</tw-passagedata><tw-passagedata pid="5" name="Species_D
    slog(&#39;log&#39;,&#39;This is the end of StoryInit...&#39;)
 &gt;&gt;</tw-passagedata><tw-passagedata pid="11" name="Start" tags="nosave" position="100,225" size="100,100">&lt;&lt;run
    slog(&#39;log&#39;,&#39;Loading Titlescreen...&#39;);
-   _count = 0
-
 &gt;&gt;
 
+&lt;div id=&#39;gametitle&#39;&gt;
+一个游戏的标题
+&lt;/div&gt;
+&lt;div id=&#39;gamesubtitle&#39;&gt;
+- 副标题 -
+&lt;/div&gt;
+&lt;div id=&#39;gametitle_selection&#39;&gt;
+[[事件测试|DialogTest]]&lt;br&gt;
+[[显示测试|TestStart]]&lt;br&gt;
+&lt;/div&gt;
+
+&lt;div id=&#39;footer&#39;&gt;
+开发者工具：
+&lt;&lt;link &#39;地图编辑器&#39; &#39;MapEditor&#39;&gt;&gt;&lt;&lt;/link&gt;&gt;
+　
+&lt;&lt;link &#39;开发者模式&#39;&gt;&gt;&lt;&lt;run Config.debug = true;  DebugBar.init(); DebugBar.start() &gt;&gt;&lt;&lt;/link&gt;&gt;
+　
+&lt;&lt;link &#39;快速重启&#39;&gt;&gt;&lt;&lt;run Engine.restart()&gt;&gt;&lt;&lt;/link&gt;&gt;&lt;br&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="12" name="MapEditor" tags="nobar" position="225,225" size="100,100">&lt;&lt;set _mapsizeX = 12&gt;&gt;
+&lt;&lt;set _mapsizeY = 32&gt;&gt;
+&lt;&lt;set _placemode = 0&gt;&gt;
+&lt;&lt;set _destroymode = 0&gt;&gt;
+
+&lt;span style=&#39;color:gray;font-size:16px&#39;&gt;
+建筑物输入&#39;.&#39;表示空地。输入任意名称打上勾即可放置。清除模式打勾时，可清除已放置的建筑。&lt;br&gt;
+&lt;/span&gt;
+&lt;&lt;dashline&gt;&gt;
+
+&lt;div id=&#39;editor_menu&#39;&gt;
+    &lt;div id=&#39;currentpos&#39;&gt;
+    &lt;/div&gt;
+    &lt;div&gt;&lt;&lt;set _mapoptions = [&#39;&#39;].concat(Object.keys(worldMap).filter( key=&gt; !groupmatch(key, &#39;get&#39;, &#39;CommonSpots&#39;)))&gt;&gt;
+    选择地图：
+    &lt;&lt;listbox &quot;_selectMap&quot;&gt;&gt;
+        &lt;&lt;optionsfrom _mapoptions&gt;&gt;
+    &lt;&lt;/listbox&gt;&gt;
+
+    &lt;&lt;button &#39;读取地图&#39;&gt;&gt;
+    &lt;&lt;run
+        T.mapdata = GameMap.getBoard(T.selectMap)
+        T.mapsizeX = T.mapdata.length
+        T.mapsizeY = T.mapdata[0].length
+        F.generateMapField(T.mapdata)
+    &gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    
+    &lt;&lt;button &#39;从源档案新建&#39;&gt;&gt;
+    &lt;&lt;run
+        T.mapdata = F.GenerateMap(worldMap[T.selectMap])
+        T.mapsizeX = T.mapdata.length
+        T.mapsizeY = T.mapdata[0].length
+        F.generateMapField(T.mapdata)    
+    &gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+
+    &lt;&lt;button &#39;读取源档案&#39;&gt;&gt;
+    &lt;&lt;run
+        T.mapdata = F.GenerateSpot(worldMap[T.selectMap])[0]
+        T.mapsizeX = T.mapdata.length
+        T.mapsizeY = T.mapdata[0].length
+        F.generateMapField(T.mapdata)    
+    &gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+    新建地图：
+    &lt;&lt;textbox &quot;_mapsizeX&quot; 12&gt;&gt; x &lt;&lt;textbox &#39;_mapsizeY&#39; 32&gt;&gt; 
+    &lt;&lt;button &#39;confirm&#39;&gt;&gt;
+    &lt;&lt;run F.confirmNewmap()&gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+    放置建筑：
+    &lt;&lt;textbox &#39;_building&#39; &#39;.&#39;&gt;&gt;
+    &lt;&lt;checkbox &quot;_placemode&quot; 0 1 autocheck&gt;&gt;
+    清除模式：
+    &lt;&lt;checkbox &#39;_destroymode&#39; 0 1 autocheck&gt;&gt;
+
+    &lt;&lt;button &#39;自动补充道路&#39;&gt;&gt;
+    &lt;&lt;run
+        T.mapdata = F.AutoFillRoads(T.mapdata)
+        T.mapsizeX = T.mapdata.length
+        T.mapsizeY = T.mapdata[0].length
+        F.generateMapField(T.mapdata) 
+    &gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+    &lt;&lt;checkbox &#39;_setStartPoint&#39; 0 1 autocheck&gt;&gt;设置起点：
+    &lt;div id=&#39;startpos&#39;&gt;&lt;/div&gt;
+    &lt;&lt;checkbox &#39;_setGoalPoint&#39; 0 1 autocheck&gt;&gt;设置终点：
+    &lt;div id=&#39;goalpos&#39;&gt;&lt;/div&gt;
+    &lt;&lt;button &#39;创建路线图&#39;&gt;&gt;
+    &lt;&lt;run 
+        if(T.startPoint &amp;&amp; T.goalPoint)
+            F.showPathMap();
+    &gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+
+    &lt;&lt;button &#39;清除路线&#39;&gt;&gt;
+    &lt;&lt;run
+        $(&#39;.mapcell&#39;).removeClass(&#39;pathcell&#39;)
+        T.startPoint = null
+        T.goalPoint = null
+        T.setStartPoint = 0
+        T.setGoalPoint = 0
+    &gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+    &lt;&lt;button &#39;保存地图&#39;&gt;&gt;
+    &lt;&lt;run
+        let mapdata = GameMap.convertData(T.mapdata)
+        delete mapdata[&#39;.&#39;] // remove empty space
+        download(JSON.stringify(mapdata), T.selectMap, &#39;txt&#39;)
+    &gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+
+    &lt;&lt;button &#39;保存为设置文件&#39;&gt;&gt;
+    &lt;&lt;run
+        sF.aveMapConfig()
+    &gt;&gt;
+    &lt;&lt;/button&gt;&gt;
+    &lt;/div&gt;
+    &lt;div&gt;
+    &lt;&lt;button &#39;返回标题&#39;&gt;&gt;&lt;&lt;run Engine.restart()&gt;&gt;&lt;&lt;/button&gt;&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;br&gt;
+&lt;div id=&#39;mapzone&#39;&gt;
+&lt;div id=&quot;mapfield&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;&lt;done&gt;&gt;
+&lt;&lt;script&gt;&gt;
+
+$(&#39;#checkbox--destroymode&#39;).on(&#39;change&#39;,()=&gt;{
+    if(T.placemode){
+        $(&#39;#checkbox--placemode&#39;).prop(&#39;checked&#39;,false)
+        T.placemode = 0
+        console.log(&#39;toggle destroy mode&#39;,T.placemode)
+    }
+})
+
+$(&#39;#checkbox--placemode&#39;).on(&#39;change&#39;,()=&gt;{
+    if(T.destroymode){
+        $(&#39;#checkbox--destroymode&#39;).prop(&#39;checked&#39;,false)
+        T.destroymode = 0
+        console.log(&#39;toggle place mode&#39;,T.placemode)
+    }
+})
+
+
+&lt;&lt;/script&gt;&gt;
+&lt;&lt;/done&gt;&gt;</tw-passagedata><tw-passagedata pid="13" name="PassageHeader" tags="" position="350,225" size="100,100">&lt;&lt;run
+    $passage = passage(); $tags = tags($passage);
+    if($tags.has(&#39;title&#39;,&#39;nobar&#39;)){
+        UIBar.stow();
+        UIBar.hide();
+    }
+    else if(UIBar.isHidden()){
+        UIBar.unstow();
+        UIBar.show();
+    }
+    if($tags.has(&#39;title&#39;,&#39;nobar&#39;)){
+        $(&#39;#story-header&#39;).addClass(&#39;hidden&#39;)
+    }
+    else{
+       $(&#39;#story-header&#39;).removeClass(&#39;hidden&#39;) 
+    }
+&gt;&gt;
+
+
+这里是header. 每个页面都会运行。&lt;br&gt;</tw-passagedata><tw-passagedata pid="14" name="StoryCaption" tags="" position="475,225" size="100,100">一个空白的模板。&lt;br&gt;
+你可以在这里添加你的故事简介。&lt;br&gt;
+&lt;br&gt;
+
+scEra beta 1.0.0&lt;br&gt;
+&lt;a url=&#39;https://github.com/emicoto/_scEra&#39;&gt;github&lt;/a&gt;&lt;br&gt;
+&lt;a url=&#39;https://afdian.net/a/lolidrop&#39;&gt;爱发电&lt;/a&gt;&lt;br&gt;
+
+/* 这里显示目前操作角色的信息 */
+
+
+&lt;div id=&#39;random_tips&#39;&gt;
+&lt;/div&gt;
+&lt;div id=&#39;update_note&#39;&gt;
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="PassageFooter" tags="" position="600,225" size="100,100">&lt;&lt;widget &quot;test2&quot;&gt;&gt;
+   a general widget.&lt;br&gt;
+   ???
+&lt;&lt;/widget&gt;&gt;</tw-passagedata><tw-passagedata pid="16" name="PassageReady" tags="" position="725,225" size="100,100">&lt;&lt;run
+    _passageready = true;
+    if($lastsession !== $passage)
+      $lastsession = $passage;
+&gt;&gt;
+这里会在读取文本前执行。
+因为是纯代码区，这里的文字并不会显示在页面上。</tw-passagedata><tw-passagedata pid="17" name="PassageDone" tags="" position="850,225" size="100,100">这里是会在渲染结束时执行。
+因为是纯代码区，这里的文字并不会显示在页面上。</tw-passagedata><tw-passagedata pid="18" name="StoryHeader" tags="" position="975,225" size="100,100">顶部的标题栏。&lt;br&gt;
+&lt;&lt;test2&gt;&gt;</tw-passagedata><tw-passagedata pid="19" name="StoryFooter" tags="" position="1100,225" size="100,100">底部的菜单栏。</tw-passagedata><tw-passagedata pid="20" name="DialogTest" tags="" position="1225,225" size="100,100">&lt;&lt;set _count to 0&gt;&gt;
 ready to dialog.
 &lt;span id=&#39;counter&#39;&gt;_count&lt;/span&gt;
 
@@ -10116,14 +10547,7 @@ ready to dialog.
       &lt;&lt;run Dialogs.set({tp:&#39;Test&#39;,nm:&#39;Chapter&#39;})&gt;&gt;
       &lt;&lt;stop&gt;&gt;
    &lt;&lt;/if&gt;&gt;
-&lt;&lt;/repeat&gt;&gt;</tw-passagedata><tw-passagedata pid="12" name="PassageHeader" tags="" position="225,225" size="100,100">&lt;&lt;script&gt;&gt;
-if(passage()==&#39;Start&#39;)
-$(&#39;#story-header&#39;).hide();
-else
-$(&#39;#story-header&#39;).show();
-&lt;&lt;/script&gt;&gt;
-
-看看&lt;br&gt;</tw-passagedata><tw-passagedata pid="13" name="TestStart" tags="" position="350,225" size="100,100">&lt;div id=&#39;test&#39;&gt;&lt;/div&gt;
+&lt;&lt;/repeat&gt;&gt;</tw-passagedata><tw-passagedata pid="21" name="TestStart" tags="" position="100,350" size="100,100">&lt;div id=&#39;test&#39;&gt;&lt;/div&gt;
 &lt;&lt;if $mode is &#39;normal&#39;&gt;&gt;
 多了些什么东西吗？&lt;br&gt;
 &lt;&lt;/if&gt;&gt;
@@ -10153,7 +10577,7 @@ $(&#39;#story-header&#39;).show();
 &lt;&lt;/link&gt;&gt;&lt;br&gt;
 
 &lt;&lt;link &#39;测试段落&#39; &#39;Test&#39;&gt;&gt;
-&lt;&lt;/link&gt;&gt;&lt;br&gt;</tw-passagedata><tw-passagedata pid="14" name="Test" tags="" position="475,225" size="100,100">一个测试用段落。&lt;br&gt;
+&lt;&lt;/link&gt;&gt;&lt;br&gt;</tw-passagedata><tw-passagedata pid="22" name="Test" tags="" position="225,350" size="100,100">一个测试用段落。&lt;br&gt;
 看看能不能正常显示。&lt;br&gt;
 
 &lt;&lt;if $mode is &quot;event&quot;&gt;&gt;
@@ -10163,7 +10587,9 @@ $(&#39;#story-header&#39;).show();
 &lt;&lt;/if&gt;&gt;
 
 &lt;&lt;link &#39;back&#39; &#39;Start&#39;&gt;&gt;
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="15" name="Test:EN" tags="" position="600,225" size="100,100">a test passage.&lt;br&gt;
+&lt;&lt;/link&gt;&gt;
+&lt;&lt;link &#39;switch&#39; $passage&gt;&gt;
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="23" name="Test:EN" tags="" position="350,350" size="100,100">a test passage.&lt;br&gt;
 see if it can be displayed normally.&lt;br&gt;
 
 &lt;&lt;if $mode is &quot;event&quot;&gt;&gt;
@@ -10173,35 +10599,22 @@ see if it can be displayed normally.&lt;br&gt;
 &lt;&lt;/if&gt;&gt;
 
 &lt;&lt;link &#39;back&#39; &#39;Start&#39;&gt;&gt;
-&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="16" name="Test:Before" tags="" position="725,225" size="100,100">&lt;&lt;run 
+&lt;&lt;/link&gt;&gt;</tw-passagedata><tw-passagedata pid="24" name="Test:Before" tags="" position="475,350" size="100,100">&lt;&lt;run 
    console.log(&#39;Test:Before is running.&#39;)
 &gt;&gt;
 &lt;&lt;=lan(&#39;测试前置&#39;,&#39;test before&#39;)&gt;&gt;&lt;br&gt;
-&lt;&lt;test &gt;&gt;</tw-passagedata><tw-passagedata pid="17" name="PassageFooter" tags="" position="850,225" size="100,100">&lt;&lt;test2&gt;&gt;</tw-passagedata><tw-passagedata pid="18" name="Widget" tags="widget" position="975,225" size="100,100">&lt;&lt;widget &quot;test&quot;&gt;&gt;
-   &lt;&lt;if $mode is &quot;event&quot;&gt;&gt;
-      &lt;&lt;set $test to &quot;event&quot;&gt;&gt;
-      &lt;&lt;script&gt;&gt;slog(&#39;log&#39;, &#39;test in event&#39;, V.test, T.runningTitle)&lt;&lt;/script&gt;&gt;
-   &lt;&lt;else&gt;&gt;
-      &lt;&lt;set $test to &quot;normal&quot;&gt;&gt;
-      &lt;&lt;script&gt;&gt;slog(&#39;log&#39;, &#39;test in normal&#39;, V.test, T.runningTitle)&lt;&lt;/script&gt;&gt;
-   &lt;&lt;/if&gt;&gt;
-&lt;&lt;/widget&gt;&gt;
-
-&lt;&lt;widget &quot;test2&quot;&gt;&gt;
-   a general widget.&lt;br&gt;
-   ???
-&lt;&lt;/widget&gt;&gt;</tw-passagedata><tw-passagedata pid="19" name="A CSV" tags="csv" position="1100,225" size="100,100">No., Name, Age, Job, Salary
+&lt;&lt;test &gt;&gt;</tw-passagedata><tw-passagedata pid="25" name="A CSV" tags="csv" position="600,350" size="100,100">No., Name, Age, Job, Salary
 1, John, 24, Engineer, 10000
 2, Mary, 23, Designer, 15000
 3, Bob, 25, Engineer, 20000
 4, Alice, 26, Engineer, 25000
-5, Jack, 27, Designer, 30000</tw-passagedata><tw-passagedata pid="20" name="A Table" tags="table" position="1225,225" size="100,100">@Salary
+5, Jack, 27, Designer, 30000</tw-passagedata><tw-passagedata pid="26" name="A Table" tags="table" position="725,350" size="100,100">@Salary
 #No., Name, Age, Job, Salary
 1, John, 24, Engineer, 10000
 2, Mary, 23, Designer, 15000
 3, Bob, 25, Engineer, 20000
 4, Alice, 26, Engineer, 25000
-5, Jack, 27, Designer, 30000</tw-passagedata><tw-passagedata pid="21" name="A Xml" tags="xml" position="100,350" size="100,100">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+5, Jack, 27, Designer, 30000</tw-passagedata><tw-passagedata pid="27" name="A Xml" tags="xml" position="850,350" size="100,100">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;bookstore&gt;
    &lt;book&gt;
       &lt;title lang=&quot;en&quot;&gt;Harry Potter&lt;/title&gt;
@@ -10211,9 +10624,9 @@ see if it can be displayed normally.&lt;br&gt;
       &lt;title lang=&quot;en&quot;&gt;Learning XML&lt;/title&gt;
       &lt;price&gt;39.95&lt;/price&gt;
    &lt;/book&gt;
-&lt;/bookstore&gt;</tw-passagedata><tw-passagedata pid="22" name="Test_Chapter::Before" tags="" position="225,350" size="100,100">&lt;&lt;set $event.exit to &#39;Start&#39;&gt;&gt;
+&lt;/bookstore&gt;</tw-passagedata><tw-passagedata pid="28" name="Test_Chapter::Before" tags="" position="975,350" size="100,100">&lt;&lt;set $event.exit to &#39;Start&#39;&gt;&gt;
 &lt;&lt;set $test to &#39;abc&#39;&gt;&gt;
-&lt;&lt;run console.log(&#39;a test before:&#39;, $event, $test)&gt;&gt;</tw-passagedata><tw-passagedata pid="23" name="Test_Chapter" tags="" position="350,350" size="100,100">下课后，科林被教导主任叫到会客室。
+&lt;&lt;run console.log(&#39;a test before:&#39;, $event, $test)&gt;&gt;</tw-passagedata><tw-passagedata pid="29" name="Test_Chapter" tags="" position="1100,350" size="100,100">下课后，科林被教导主任叫到会客室。
 然后一进去就看到里面坐着的是父亲威尔·埃德瑞，以及埃里克的父亲洛伦斯·霍尔森，
 本区教会的巢司长与礼司长、唯一的主母供仪与圣女队的领头供仪，
 世界银行的银行长，以及格伦特一等学院的院长，大学部的校长。
@@ -10240,7 +10653,7 @@ see if it can be displayed normally.&lt;br&gt;
 
 银行长望向了教会，教会巢司长便说：“教会愿意帮你们抵消5亿债务，但科林，你必须成为供仪为教会与信众们服务，至少12年。”
 “而我花了一亿买下了你的监管权，”霍尔森公爵说道，“以后我就是你的教夫，亦是你的直属债权人，你身上依然有一亿的债务。哦，对了，我的儿子埃里克也共有这份权利。”
-#:{ &quot;type&quot;:&quot;endPhase&quot;}</tw-passagedata><tw-passagedata pid="24" name="Test_Chapter_ep1" tags="" position="475,350" size="100,100">这是一个新的章节。
+#:{ &quot;type&quot;:&quot;endPhase&quot;}</tw-passagedata><tw-passagedata pid="30" name="Test_Chapter_ep1" tags="" position="1225,350" size="100,100">这是一个新的章节。
 看看内容。
 做点选项看看。
 
@@ -10249,9 +10662,9 @@ see if it can be displayed normally.&lt;br&gt;
 &lt;&lt;select &#39;B Choice&#39;&gt;&gt;
 &lt;&lt;/selection&gt;&gt;
 
-#:{ &quot;type&quot;:&quot;selectEnd&quot;}</tw-passagedata><tw-passagedata pid="25" name="Test_Chapter_ep1:sp1" tags="" position="600,350" size="100,100">选择了A， 准备返回上一个选择节点。
-#:{ &quot;type&quot;:&quot;return&quot;}</tw-passagedata><tw-passagedata pid="26" name="Test_Chapter_ep1:sp2" tags="" position="725,350" size="100,100">选择了B，准备跳转到另一个地方。
-#:{ &quot;type&quot;:&quot;jump&quot;, &quot;target&quot;:&quot;Test_Chapter&quot;, &quot;phase&quot;:1}</tw-passagedata><tw-passagedata pid="27" name="Test_Chapter:sp1" tags="" position="850,350" size="100,100">&lt;&lt;run Dialogs.clear(2)&gt;&gt;
+#:{ &quot;type&quot;:&quot;selectEnd&quot;}</tw-passagedata><tw-passagedata pid="31" name="Test_Chapter_ep1:sp1" tags="" position="100,475" size="100,100">选择了A， 准备返回上一个选择节点。
+#:{ &quot;type&quot;:&quot;return&quot;}</tw-passagedata><tw-passagedata pid="32" name="Test_Chapter_ep1:sp2" tags="" position="225,475" size="100,100">选择了B，准备跳转到另一个地方。
+#:{ &quot;type&quot;:&quot;jump&quot;, &quot;target&quot;:&quot;Test_Chapter&quot;, &quot;phase&quot;:1}</tw-passagedata><tw-passagedata pid="33" name="Test_Chapter:sp1" tags="" position="350,475" size="100,100">&lt;&lt;run Dialogs.clear(2)&gt;&gt;
 &lt;fr&gt;
 这是一个途中跳转过来的新分支。
 将会清除最后两个step的内容。

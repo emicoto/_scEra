@@ -23,18 +23,24 @@
 :: Start [nosave]
 <<run
    slog('log','Loading Titlescreen...');
-   _count = 0
-
 >>
 
-ready to dialog.
-<span id='counter'>_count</span>
+<div id='gametitle'>
+一个游戏的标题
+</div>
+<div id='gamesubtitle'>
+- 副标题 -
+</div>
+<div id='gametitle_selection'>
+[[事件测试|DialogTest]]<br>
+[[显示测试|TestStart]]<br>
+</div>
 
-<<repeat 1s>>
-   <<run _count++>>
-   <<replace #counter>>_count<</replace>>
-   <<if _count is 5>>
-      <<run Dialogs.set({tp:'Test',nm:'Chapter'})>>
-      <<stop>>
-   <</if>>
-<</repeat>>
+<div id='footer'>
+开发者工具：
+<<link '地图编辑器' 'MapEditor'>><</link>>
+　
+<<link '开发者模式'>><<run Config.debug = true;  DebugBar.init(); DebugBar.start() >><</link>>
+　
+<<link '快速重启'>><<run Engine.restart()>><</link>><br>
+</div>

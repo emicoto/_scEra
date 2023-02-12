@@ -3,7 +3,7 @@ export * from "./MapUtils";
 
 // Path: _workspace\code\game\Maps\Map.ts
 import { boardtype, spotType } from "../types";
-import { Boards, Spots, Square, typeTags, setTagByBoardType, printMap } from "./Map";
+import { Boards, Spots, Square, typeTags, setTagByBoardType, printMap, GameMap } from "./Map";
 import {
 	moveableTile,
 	GenerateSpot,
@@ -76,6 +76,7 @@ const modules = {
 		worldMap,
 	},
 	classObj: {
+		GameMap,
 		Boards,
 		Spots,
 	},
