@@ -10525,10 +10525,7 @@ scEra beta 1.0.0&lt;br&gt;
 &lt;div id=&#39;random_tips&#39;&gt;
 &lt;/div&gt;
 &lt;div id=&#39;update_note&#39;&gt;
-&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="PassageFooter" tags="" position="600,225" size="100,100">&lt;&lt;widget &quot;test2&quot;&gt;&gt;
-   a general widget.&lt;br&gt;
-   ???
-&lt;&lt;/widget&gt;&gt;</tw-passagedata><tw-passagedata pid="16" name="PassageReady" tags="" position="725,225" size="100,100">&lt;&lt;run
+&lt;/div&gt;</tw-passagedata><tw-passagedata pid="15" name="PassageFooter" tags="" position="600,225" size="100,100">这里是footer。每个页面都会运行。&lt;br&gt;</tw-passagedata><tw-passagedata pid="16" name="PassageReady" tags="" position="725,225" size="100,100">&lt;&lt;run
     _passageready = true;
     if($lastsession !== $passage)
       $lastsession = $passage;
@@ -10603,18 +10600,31 @@ see if it can be displayed normally.&lt;br&gt;
    console.log(&#39;Test:Before is running.&#39;)
 &gt;&gt;
 &lt;&lt;=lan(&#39;测试前置&#39;,&#39;test before&#39;)&gt;&gt;&lt;br&gt;
-&lt;&lt;test &gt;&gt;</tw-passagedata><tw-passagedata pid="25" name="A CSV" tags="csv" position="600,350" size="100,100">No., Name, Age, Job, Salary
+&lt;&lt;test &gt;&gt;</tw-passagedata><tw-passagedata pid="25" name="Widget" tags="widget" position="600,350" size="100,100">&lt;&lt;widget &quot;test&quot;&gt;&gt;
+   &lt;&lt;if $mode is &quot;event&quot;&gt;&gt;
+      &lt;&lt;set $test to &quot;event&quot;&gt;&gt;
+      &lt;&lt;script&gt;&gt;slog(&#39;log&#39;, &#39;test in event&#39;, V.test, T.runningTitle)&lt;&lt;/script&gt;&gt;
+   &lt;&lt;else&gt;&gt;
+      &lt;&lt;set $test to &quot;normal&quot;&gt;&gt;
+      &lt;&lt;script&gt;&gt;slog(&#39;log&#39;, &#39;test in normal&#39;, V.test, T.runningTitle)&lt;&lt;/script&gt;&gt;
+   &lt;&lt;/if&gt;&gt;
+&lt;&lt;/widget&gt;&gt;
+
+&lt;&lt;widget &quot;test2&quot;&gt;&gt;
+   a general widget.&lt;br&gt;
+   ???
+&lt;&lt;/widget&gt;&gt;</tw-passagedata><tw-passagedata pid="26" name="A CSV" tags="csv" position="725,350" size="100,100">No., Name, Age, Job, Salary
 1, John, 24, Engineer, 10000
 2, Mary, 23, Designer, 15000
 3, Bob, 25, Engineer, 20000
 4, Alice, 26, Engineer, 25000
-5, Jack, 27, Designer, 30000</tw-passagedata><tw-passagedata pid="26" name="A Table" tags="table" position="725,350" size="100,100">@Salary
+5, Jack, 27, Designer, 30000</tw-passagedata><tw-passagedata pid="27" name="A Table" tags="table" position="850,350" size="100,100">@Salary
 #No., Name, Age, Job, Salary
 1, John, 24, Engineer, 10000
 2, Mary, 23, Designer, 15000
 3, Bob, 25, Engineer, 20000
 4, Alice, 26, Engineer, 25000
-5, Jack, 27, Designer, 30000</tw-passagedata><tw-passagedata pid="27" name="A Xml" tags="xml" position="850,350" size="100,100">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+5, Jack, 27, Designer, 30000</tw-passagedata><tw-passagedata pid="28" name="A Xml" tags="xml" position="975,350" size="100,100">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;bookstore&gt;
    &lt;book&gt;
       &lt;title lang=&quot;en&quot;&gt;Harry Potter&lt;/title&gt;
@@ -10624,9 +10634,9 @@ see if it can be displayed normally.&lt;br&gt;
       &lt;title lang=&quot;en&quot;&gt;Learning XML&lt;/title&gt;
       &lt;price&gt;39.95&lt;/price&gt;
    &lt;/book&gt;
-&lt;/bookstore&gt;</tw-passagedata><tw-passagedata pid="28" name="Test_Chapter::Before" tags="" position="975,350" size="100,100">&lt;&lt;set $event.exit to &#39;Start&#39;&gt;&gt;
+&lt;/bookstore&gt;</tw-passagedata><tw-passagedata pid="29" name="Test_Chapter::Before" tags="" position="1100,350" size="100,100">&lt;&lt;set $event.exit to &#39;Start&#39;&gt;&gt;
 &lt;&lt;set $test to &#39;abc&#39;&gt;&gt;
-&lt;&lt;run console.log(&#39;a test before:&#39;, $event, $test)&gt;&gt;</tw-passagedata><tw-passagedata pid="29" name="Test_Chapter" tags="" position="1100,350" size="100,100">下课后，科林被教导主任叫到会客室。
+&lt;&lt;run console.log(&#39;a test before:&#39;, $event, $test)&gt;&gt;</tw-passagedata><tw-passagedata pid="30" name="Test_Chapter" tags="" position="1225,350" size="100,100">下课后，科林被教导主任叫到会客室。
 然后一进去就看到里面坐着的是父亲威尔·埃德瑞，以及埃里克的父亲洛伦斯·霍尔森，
 本区教会的巢司长与礼司长、唯一的主母供仪与圣女队的领头供仪，
 世界银行的银行长，以及格伦特一等学院的院长，大学部的校长。
@@ -10653,7 +10663,7 @@ see if it can be displayed normally.&lt;br&gt;
 
 银行长望向了教会，教会巢司长便说：“教会愿意帮你们抵消5亿债务，但科林，你必须成为供仪为教会与信众们服务，至少12年。”
 “而我花了一亿买下了你的监管权，”霍尔森公爵说道，“以后我就是你的教夫，亦是你的直属债权人，你身上依然有一亿的债务。哦，对了，我的儿子埃里克也共有这份权利。”
-#:{ &quot;type&quot;:&quot;endPhase&quot;}</tw-passagedata><tw-passagedata pid="30" name="Test_Chapter_ep1" tags="" position="1225,350" size="100,100">这是一个新的章节。
+#:{ &quot;type&quot;:&quot;endPhase&quot;}</tw-passagedata><tw-passagedata pid="31" name="Test_Chapter_ep1" tags="" position="100,475" size="100,100">这是一个新的章节。
 看看内容。
 做点选项看看。
 
@@ -10662,9 +10672,9 @@ see if it can be displayed normally.&lt;br&gt;
 &lt;&lt;select &#39;B Choice&#39;&gt;&gt;
 &lt;&lt;/selection&gt;&gt;
 
-#:{ &quot;type&quot;:&quot;selectEnd&quot;}</tw-passagedata><tw-passagedata pid="31" name="Test_Chapter_ep1:sp1" tags="" position="100,475" size="100,100">选择了A， 准备返回上一个选择节点。
-#:{ &quot;type&quot;:&quot;return&quot;}</tw-passagedata><tw-passagedata pid="32" name="Test_Chapter_ep1:sp2" tags="" position="225,475" size="100,100">选择了B，准备跳转到另一个地方。
-#:{ &quot;type&quot;:&quot;jump&quot;, &quot;target&quot;:&quot;Test_Chapter&quot;, &quot;phase&quot;:1}</tw-passagedata><tw-passagedata pid="33" name="Test_Chapter:sp1" tags="" position="350,475" size="100,100">&lt;&lt;run Dialogs.clear(2)&gt;&gt;
+#:{ &quot;type&quot;:&quot;selectEnd&quot;}</tw-passagedata><tw-passagedata pid="32" name="Test_Chapter_ep1:sp1" tags="" position="225,475" size="100,100">选择了A， 准备返回上一个选择节点。
+#:{ &quot;type&quot;:&quot;return&quot;}</tw-passagedata><tw-passagedata pid="33" name="Test_Chapter_ep1:sp2" tags="" position="350,475" size="100,100">选择了B，准备跳转到另一个地方。
+#:{ &quot;type&quot;:&quot;jump&quot;, &quot;target&quot;:&quot;Test_Chapter&quot;, &quot;phase&quot;:1}</tw-passagedata><tw-passagedata pid="34" name="Test_Chapter:sp1" tags="" position="475,475" size="100,100">&lt;&lt;run Dialogs.clear(2)&gt;&gt;
 &lt;fr&gt;
 这是一个途中跳转过来的新分支。
 将会清除最后两个step的内容。

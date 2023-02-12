@@ -83,9 +83,16 @@ see if it can be displayed normally.<br>
 >>
 <<=lan('测试前置','test before')>><br>
 <<test >>
-
-:: PassageFooter
-
+:: Widget[widget]
+<<widget "test">>
+   <<if $mode is "event">>
+      <<set $test to "event">>
+      <<script>>slog('log', 'test in event', V.test, T.runningTitle)<</script>>
+   <<else>>
+      <<set $test to "normal">>
+      <<script>>slog('log', 'test in normal', V.test, T.runningTitle)<</script>>
+   <</if>>
+<</widget>>
 
 <<widget "test2">>
    a general widget.<br>
