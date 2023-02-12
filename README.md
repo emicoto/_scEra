@@ -15,7 +15,7 @@ And it allows you to separate scripts from text files and use certain functions 
 并且允许你分离脚本与文本文件，在sugarcube启动前就能使用某些功能对你的脚本、文本进行各种预处理。
 
 
-#ProcessEvent
+## ProcessEvent
 
 The following process events have been added：
 
@@ -48,13 +48,11 @@ Dialogs.set -- global event. on a dialog event to be set
 :initCreature -- when a creature finish init its data, will throw a creature data for modify.
 
 
-local事件：
-
-local evnt:
+### local事件/local evnt:
 
 $(#dialog).trigger('start')  -- local event. on a dialog event had start
 
-#file loader
+## File loader
 
 add functional passage tags: csv, xml, table
 
@@ -77,23 +75,23 @@ those function can let you manage game data in easier way.
 这些函数可以让你以更简单的方式管理游戏数据。
 
 
-#passage editor
+## Passage Editor
 scEra.newPsg(passageTitle, htmltext)  -- dymanic add new passage to 
 scEra.setPsg(passageTitle, htmltext)  -- dymanic set exist passage to story. the html arg will replace all html text of the given passage.
 scEra.patchPsg(passageTitle, htmltext) -- dymanic patch html text to the last line of exist passage .
 
-#dialog system
+## Dialog System
 A flow/bubble style dialog system.
 
-#Species and Creatures/Character
+## Species and Creatures/Character
 this sysem can allow you customize species/creatures/characters, and allow the game automatically generate values, let you make random chara/creatures in easy way.
 
 also includes management function for manage those species/creatures/character
 
-#game map system
+## Game Map system
 a tile/board style map system. includes random generate feature and autopath feature.
 
-#Kojo system
+## Kojo system
 Kojo, means character event and speak out.
 
 this system help you manage chara event and chara feature, like equips preset, schedules, custom action, etc.
