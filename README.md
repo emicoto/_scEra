@@ -12,6 +12,33 @@ And it allows you to separate scripts from text files and use certain functions 
 
 并且允许你分离脚本与文本文件，在 sugarcube 启动前就能使用某些功能对你的脚本、文本进行各种预处理。
 
+## How to Start
+Go to nw.js and download an sdk package and extract it to your hard drive.
+
+Download the master package here, unzip and overwrite the nw files.
+
+Use visual studio code to open the root directory where scEra is located.
+
+Open the game folder under workspace's folder and then open gamestart.twee
+
+Start writing your game.
+
+
+到nw.js下载一个sdk包，解压到你的硬盘中。
+
+下载这里的master包，解压并覆盖nw的文件。
+
+使用visual studio code打开scEra所在的根目录。
+
+打开workspace的文件夹下的game文件夹，找到gamestart.twee
+
+开始编写你的游戏。
+
+
+All functions have detailed notes and js documents. Please check the notes at the ts file in _code for details.
+
+所有的function都有详细的备注与文档。详细请看_code中的ts文件。
+
 ## ProcessEvent
 
 The following process events have been added：
