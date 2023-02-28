@@ -4,8 +4,20 @@
     <meta charset="utf-8">
     <title>My App</title>
     <link rel="stylesheet" href="css/main.css">
-    <script src="./Lib/path.min.js"></script>
+    <script src="./lib/jquery-3.6.3.min.js"></script>
+    <script>
+      var path = require('path');
+    </script>
     <script src="./init.js"></script>
+    <script>
+      scbuild();
+      jQuery(document).on('scbuild', function() {
+         setTimeout(() => {
+         App.win.reload();
+         console.log("App reloaded.");
+      }, 1500);
+      });
+    </script>
 </head>
 <body>
     <div id="app">hello world</div>

@@ -1,15 +1,15 @@
 @font-face {
-  font-family: "筑紫古典";
-  src: url("./font/FZFWZhuZGDSMCJW.otf");
+  font-family: "zhuzigudian";
+  src: url("./font/FZZhuzigudian.otf");
 }
 
 @font-face {
-  font-family: "珍珠体";
+  font-family: "zhenzhu";
   src: url("./font/FZFWZZTJW.otf");
 }
 
 @font-face {
-  font-family: "新综艺";
+  font-family: "zongyi";
   src: url("./font/FZXinZYHJW_M.otf");
 }
 
@@ -19,8 +19,8 @@
 }
 
 @font-face {
-  font-family: "NotoSerifL";
-  src: url("./Font/NotoSerifSC-Light.otf");
+  font-family: "NotoSerifR";
+  src: url("./Font/NotoSerifSC-Regular.otf");
 }
 
 @font-face {
@@ -41,4 +41,9 @@
 @font-face {
   font-family: 'Aboreto';
   src: url("./font/Aboreto-Regular.ttf");
+}
+
+@font-face {
+  font-family: 'lolita';
+  src: url("./font/Lolita.ttf");
 }

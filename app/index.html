@@ -1804,7 +1804,7 @@ Object.defineProperty(String.prototype, "readBracketedList", {
 
 const os = require("os");
 const fs = require("fs");
-//var path = require("path");
+var path = require("path");
 
 defineGlobalNamespaces({ os, fs });
 
@@ -3612,7 +3612,8 @@ window.parseXml = function (xml, arrayTags) {
 	        if (!(trait == null ? void 0 : trait.conflict)) {
 	          trait.conflict = [];
 	        }
-	        trait.conflict = trait.conflict.concat(cf.delete(name));
+	        let conf = cf.filter((traitname) => traitname !== name);
+	        trait.conflict = trait.conflict.concat(conf);
 	        trait.conflict = [...new Set(trait.conflict)];
 	      }
 	    }
@@ -4259,6 +4260,7 @@ window.parseXml = function (xml, arrayTags) {
 	      this.initTrait(trait);
 	    const { adj } = obj;
 	    if (adj) {
+	      console.log(adj);
 	      this.initStats(adj);
 	    }
 	  }
@@ -4291,7 +4293,7 @@ window.parseXml = function (xml, arrayTags) {
 	      this.size[0] = d;
 	    if (l)
 	      this.size[1] = l;
-	    if (size)
+	    if (typeof size == "number")
 	      this.sizeLv = size;
 	    if (adj.trait)
 	      this.initTrait(trait);
@@ -4818,10 +4820,11 @@ window.parseXml = function (xml, arrayTags) {
 	      let adj = {
 	        bodysize: random(5),
 	        breasts: {
-	          sizeLv: this.gender === "male" ? 0 : random(10),
-	          penis: { sizeLv: this.gender === "female" ? 0 : random(7) }
-	        }
+	          size: this.gender === "male" ? 0 : random(10)
+	        },
+	        penis: { size: this.gender === "female" ? 0 : random(7) }
 	      };
+	      console.log(adj);
 	      this.initSpecies(adj);
 	    }
 	  }
@@ -9322,7 +9325,147 @@ function UpdateHoverTxt(Container) {
 	}
 }
 /* HoverTxt - End */
-/* twine-user-script #28: "mapeditor.js" */
+/* twine-user-script #28: "Selection.js" */
+//------------------------------------------------------------
+//
+//  add selection macro
+//
+//------------------------------------------------------------
+
+Macro.add("selection", {
+	tags: ["select"],
+	handler: function () {
+		const len = this.payload.length;
+		let replace = this.payload[0].args.includes("replace");
+		let event = this.payload[0].args.includes("event");
+
+		/*--------------------------------------------
+		 *  check if there is a selection
+		 *--------------------------------------------*/
+		if (len === 1) {
+			return this.error("no selection specified");
+		}
+
+		for (let i = 1; i < len; i++) {
+			for (let i = 1; i < len; i++) {
+				if (this.payload[i].args.length === 0) {
+					return this.error(`no value(s) specified for <<${this.payload[i].name}>> (#${i})`);
+				}
+				if (this.payload[i].args.length > 4) {
+					return this.error("a maxinum of 3 values can be set.");
+				}
+			}
+		}
+
+		/*--------------------------------------------
+		 *  create debug view
+		 *--------------------------------------------*/
+
+		const debugView = this.debugView;
+		if (Config.debug) {
+			debugView.modes({
+				nonvoid: false,
+				hidden: true,
+			});
+		}
+
+		/*--------------------------------------------
+		 *  create selection output
+		 *--------------------------------------------*/
+
+		let output = "";
+		let jump;
+
+		for (let i = 1; i < len; i++) {
+			if (Config.debug) {
+				this.createDebugView(this.payload[i].name, this.payload[i].source).modes({ nonvoid: false });
+				console.log(this.payload[i]);
+			}
+
+			let { args, contents } = this.payload[i];
+			let sid = i;
+
+			//check if there a number in args
+			let arg = args.join("");
+			if (arg.match(/\d+/)) {
+				sid = arg.match(/\d+/)[0];
+				//remove number from args
+				args.delete(sid);
+			}
+
+			//check if there a jump in args
+			if (args.includes("jump")) {
+				jump = true;
+				//remove jump from args
+				args.delete("jump");
+			}
+
+			if (event) {
+				/*--------------------------------------------
+				 *  on event mode
+				 *  add select point to contents
+				 *  let event system automatically handle the selection to next dialog
+				 *--------------------------------------------*/
+				let txt = "";
+				if (Story.has(`${T.eventTitle}:s${sid}`) && V.mode !== "history") {
+					txt = Story.get(`${T.eventTitle}:s${sid}`).text;
+				}
+				contents = `<<set $event.lastPhase to ${T.msgId - 1}>>${txt}\n${contents}`;
+			}
+
+			/*--------------------------------------------
+			 * add common twine script
+			 *--------------------------------------------*/
+			contents = `<<set $selectId to ${sid}>><<unset _selectwait>><<run Ui.removelink();T.afterselect = true>>${contents}`;
+			/*--------------------------------------------
+			 *  on jump mode let the event dialog jump to selected branch
+			 *--------------------------------------------*/
+			if (jump) {
+				console.log(args);
+				let exit = args[1].match(/ep\d+|sp\d+/g);
+				let code = "";
+				if (exit) {
+					exit.forEach((set) => {
+						let id = set.match(/\d+/g)[0];
+						let type = set.match(/[a-z]+/g)[0];
+						code += `V.event.${type} = ${id};`;
+					});
+				}
+
+				contents = `<<link "${args[0]}">>${contents}<<run ${code}Ui.removelink(); Dialogs.start();>><</link>>`;
+			}
+			//--------------------------------------------
+			//  on replace mode
+			//  switch to linkreplace then when player selected
+			//  will replace to the contents
+			//--------------------------------------------
+			else if (replace) {
+				contents = `<<linkreplace "${args[0]}">>${contents}<</linkreplace>>`;
+			}
+			//--------------------------------------------
+			// otherwise just add link
+			//--------------------------------------------
+			else {
+				let exit = "$passage";
+				if (args[1]) exit = `"${args[1]}"`;
+				if (event) exit = "";
+
+				contents = `<<link "${args[0]}" ${exit}>>${contents}<</link>>`;
+			}
+
+			output += `<div class='selection'>${contents}</div>`;
+		}
+		if (Config.debug) console.log(output);
+
+		jQuery(this.output).wiki(`<<set _selectwait to true>><div id='selectzone'>${output}</div>`);
+	},
+});
+
+Ui.removelink = function () {
+	$("#contentMsg a").remove();
+};
+DefineMacros("removelink", Ui.removelink);
+/* twine-user-script #29: "mapeditor.js" */
 F.confirmNewmap = function () {
 	T.mapsizeX = parseInt(T.mapsizeX);
 	T.mapsizeY = parseInt(T.mapsizeY);
@@ -9504,146 +9647,6 @@ F.showPathMap = function () {
 		}, i * 150);
 	});
 };
-/* twine-user-script #29: "Selection.js" */
-//------------------------------------------------------------
-//
-//  add selection macro
-//
-//------------------------------------------------------------
-
-Macro.add("selection", {
-	tags: ["select"],
-	handler: function () {
-		const len = this.payload.length;
-		let replace = this.payload[0].args.includes("replace");
-		let event = this.payload[0].args.includes("event");
-
-		/*--------------------------------------------
-		 *  check if there is a selection
-		 *--------------------------------------------*/
-		if (len === 1) {
-			return this.error("no selection specified");
-		}
-
-		for (let i = 1; i < len; i++) {
-			for (let i = 1; i < len; i++) {
-				if (this.payload[i].args.length === 0) {
-					return this.error(`no value(s) specified for <<${this.payload[i].name}>> (#${i})`);
-				}
-				if (this.payload[i].args.length > 4) {
-					return this.error("a maxinum of 3 values can be set.");
-				}
-			}
-		}
-
-		/*--------------------------------------------
-		 *  create debug view
-		 *--------------------------------------------*/
-
-		const debugView = this.debugView;
-		if (Config.debug) {
-			debugView.modes({
-				nonvoid: false,
-				hidden: true,
-			});
-		}
-
-		/*--------------------------------------------
-		 *  create selection output
-		 *--------------------------------------------*/
-
-		let output = "";
-		let jump;
-
-		for (let i = 1; i < len; i++) {
-			if (Config.debug) {
-				this.createDebugView(this.payload[i].name, this.payload[i].source).modes({ nonvoid: false });
-				console.log(this.payload[i]);
-			}
-
-			let { args, contents } = this.payload[i];
-			let sid = i;
-
-			//check if there a number in args
-			let arg = args.join("");
-			if (arg.match(/\d+/)) {
-				sid = arg.match(/\d+/)[0];
-				//remove number from args
-				args.delete(sid);
-			}
-
-			//check if there a jump in args
-			if (args.includes("jump")) {
-				jump = true;
-				//remove jump from args
-				args.delete("jump");
-			}
-
-			if (event) {
-				/*--------------------------------------------
-				 *  on event mode
-				 *  add select point to contents
-				 *  let event system automatically handle the selection to next dialog
-				 *--------------------------------------------*/
-				let txt = "";
-				if (Story.has(`${T.eventTitle}:s${sid}`) && V.mode !== "history") {
-					txt = Story.get(`${T.eventTitle}:s${sid}`).text;
-				}
-				contents = `<<set $event.lastPhase to ${T.msgId - 1}>>${txt}\n${contents}`;
-			}
-
-			/*--------------------------------------------
-			 * add common twine script
-			 *--------------------------------------------*/
-			contents = `<<set $selectId to ${sid}>><<unset _selectwait>><<run Ui.removelink();T.afterselect = true>>${contents}`;
-			/*--------------------------------------------
-			 *  on jump mode let the event dialog jump to selected branch
-			 *--------------------------------------------*/
-			if (jump) {
-				console.log(args);
-				let exit = args[1].match(/ep\d+|sp\d+/g);
-				let code = "";
-				if (exit) {
-					exit.forEach((set) => {
-						let id = set.match(/\d+/g)[0];
-						let type = set.match(/[a-z]+/g)[0];
-						code += `V.event.${type} = ${id};`;
-					});
-				}
-
-				contents = `<<link "${args[0]}">>${contents}<<run ${code}Ui.removelink(); Dialogs.start();>><</link>>`;
-			}
-			//--------------------------------------------
-			//  on replace mode
-			//  switch to linkreplace then when player selected
-			//  will replace to the contents
-			//--------------------------------------------
-			else if (replace) {
-				contents = `<<linkreplace "${args[0]}">>${contents}<</linkreplace>>`;
-			}
-			//--------------------------------------------
-			// otherwise just add link
-			//--------------------------------------------
-			else {
-				let exit = "$passage";
-				if (args[1]) exit = `"${args[1]}"`;
-				if (event) exit = "";
-
-				contents = `<<link "${args[0]}" ${exit}>>${contents}<</link>>`;
-			}
-
-			output += `<div class='selection'>${contents}</div>`;
-		}
-		if (Config.debug) console.log(output);
-
-		jQuery(this.output).wiki(`<<set _selectwait to true>><div id='selectzone'>${output}</div>`);
-	},
-});
-
-Ui.removelink = function () {
-	$("#contentMsg a").remove();
-};
-DefineMacros("removelink", Ui.removelink);
 /* twine-user-script #30: "startconfig.js" */
 game.version = "0.0.0";
 l10nStrings.errorTitle = game.version + " Error";
@@ -10345,9 +10348,11 @@ X5       ,玩私穴(触)</tw-passagedata><tw-passagedata pid="5" name="Species_D
 - 副标题 -
 &lt;/div&gt;
 &lt;div id=&#39;gametitle_selection&#39;&gt;
+&lt;&lt;link &#39;测试&#39; &#39;Test&#39;&gt;&gt;&lt;&lt;run console.log(T.runningTitle)&gt;&gt;&lt;&lt;/link&gt;&gt;
 [[事件测试|DialogTest]]&lt;br&gt;
 [[显示测试|TestStart]]&lt;br&gt;
 &lt;/div&gt;
+
 
 &lt;div id=&#39;footer&#39;&gt;
 开发者工具：

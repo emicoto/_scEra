@@ -1,5 +1,4 @@
 const { spawn } = require("child_process");
-//const path = require("path");
 const _resolve = (...w) => path.resolve(nw.__dirname, `./`, ...w);
 const { platform, arch } = require("os");
 
@@ -47,7 +46,18 @@ const scbuild = function () {
 	});
 	result.stdout.on("data", (data) => {
 		console.log(data.toString());
+		jQuery(document).trigger("scbuild");
 	});
+
+	result.stderr.on("data", (data) => {
+		const str = data.toString();
+		//console.log(data);
+		console.log(data.toString());
+		if (/BUILDING/.test(str)) {
+			jQuery(document).trigger("scbuild");
+		}
+	});
+
 	window.App = {};
 	nw.Window.open("./app/index.html", {}, (win) => {
 		console.log("App loaded.");
@@ -58,16 +68,4 @@ const scbuild = function () {
 			app.close(true);
 		});
 	});
-	result.stderr.on("data", (data) => {
-		const str = data.toString();
-		console.log(data);
-		console.log(data.toString());
-		if (/BUILDING/.test(str)) {
-			setTimeout(() => {
-				App.win.reload();
-				console.log("App reloaded.");
-			}, 1500);
-		}
-	});
 };
-scbuild();

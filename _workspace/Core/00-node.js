@@ -25,7 +25,7 @@
 
 const os = require("os");
 const fs = require("fs");
-//var path = require("path");
+var path = require("path");
 
 defineGlobalNamespaces({ os, fs });
 

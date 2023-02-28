@@ -1,5 +1,3 @@
 {
-	"loadorder": ["Items", "Traits", "Creatures", "Dialogs", "Kojo", "Command", "Maps"],
-
-	"disable": ["Action"]
+	"loadorder": ["Items", "Traits", "Creatures", "Dialogs", "Kojo", "Command", "Maps"]
 }

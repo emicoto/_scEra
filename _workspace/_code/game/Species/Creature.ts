@@ -162,10 +162,11 @@ export class Creature {
 			let adj = {
 				bodysize: random(5),
 				breasts: {
-					sizeLv: this.gender === "male" ? 0 : random(10),
-					penis: { sizeLv: this.gender === "female" ? 0 : random(7) },
+					size: this.gender === "male" ? 0 : random(10),
 				},
+				penis: { size: this.gender === "female" ? 0 : random(7) },
 			};
+			//console.log(adj);
 			this.initSpecies(adj);
 		}
 	}

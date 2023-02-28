@@ -32,9 +32,11 @@
 - 副标题 -
 </div>
 <div id='gametitle_selection'>
+<<link '测试' 'Test'>><<run console.log(T.runningTitle)>><</link>>
 [[事件测试|DialogTest]]<br>
 [[显示测试|TestStart]]<br>
 </div>
+
 
 <div id='footer'>
 开发者工具：

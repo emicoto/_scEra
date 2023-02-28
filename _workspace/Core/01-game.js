@@ -1165,7 +1165,8 @@
 	        if (!(trait == null ? void 0 : trait.conflict)) {
 	          trait.conflict = [];
 	        }
-	        trait.conflict = trait.conflict.concat(cf.delete(name));
+	        let conf = cf.filter((traitname) => traitname !== name);
+	        trait.conflict = trait.conflict.concat(conf);
 	        trait.conflict = [...new Set(trait.conflict)];
 	      }
 	    }
@@ -1812,6 +1813,7 @@
 	      this.initTrait(trait);
 	    const { adj } = obj;
 	    if (adj) {
+	      console.log(adj);
 	      this.initStats(adj);
 	    }
 	  }
@@ -1844,7 +1846,7 @@
 	      this.size[0] = d;
 	    if (l)
 	      this.size[1] = l;
-	    if (size)
+	    if (typeof size == "number")
 	      this.sizeLv = size;
 	    if (adj.trait)
 	      this.initTrait(trait);
@@ -2371,10 +2373,11 @@
 	      let adj = {
 	        bodysize: random(5),
 	        breasts: {
-	          sizeLv: this.gender === "male" ? 0 : random(10),
-	          penis: { sizeLv: this.gender === "female" ? 0 : random(7) }
-	        }
+	          size: this.gender === "male" ? 0 : random(10)
+	        },
+	        penis: { size: this.gender === "female" ? 0 : random(7) }
 	      };
+	      console.log(adj);
 	      this.initSpecies(adj);
 	    }
 	  }

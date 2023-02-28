@@ -78,6 +78,7 @@ export class Organs {
 
 		const { adj } = obj;
 		if (adj) {
+			//console.log(adj);
 			this.initStats(adj);
 		}
 	}
@@ -107,7 +108,7 @@ export class Organs {
 		if (sens) this.sens = sens;
 		if (d) this.size[0] = d;
 		if (l) this.size[1] = l;
-		if (size) this.sizeLv = size;
+		if (typeof size == "number") this.sizeLv = size;
 
 		if (adj.trait) this.initTrait(trait);
 
@@ -116,12 +117,11 @@ export class Organs {
 
 	initProduce(config) {
 		this.produce = config.type;
-      if(!(config.amountPerDay || config.volumePerSize || config.volume))
-         return this;
+		if (!(config.amountPerDay || config.volumePerSize || config.volume)) return this;
 
 		this.volume = { cur: 0 };
 
-      const { volume=0, amountPerDay=0, volumePerSize=0 } = config
+		const { volume = 0, amountPerDay = 0, volumePerSize = 0 } = config;
 
 		this.volume.day = amountPerDay;
 		this.volume.max = volume || volumePerSize * (this.sizeLv || 1);
@@ -228,7 +228,7 @@ export class Organs {
 		return this;
 	}
 
-	initPenis(scale=1) {
+	initPenis(scale = 1) {
 		const size = D.Psize[this.sizeLv];
 		const d = random(size.d[0], size.d[1]) + random(8);
 		const l = random(size.l[0], size.l[1]) + random(8);
